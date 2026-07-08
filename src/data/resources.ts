@@ -1,0 +1,73 @@
+import type { Resource } from "@/types";
+
+export const resources: Resource[] = [
+  {
+    id: "r1",
+    title: "CA Foundation Law Principles — Complete Study Notes",
+    description:
+      "Comprehensive chapter-wise Mercantile Law notes for CA Foundation. Covers Contract Act, Sale of Goods Act, and Companies Act with sample drafts.",
+    type: "notes",
+    subject: "Business Law",
+    course: "CA Foundation",
+    fileUrl: "#",
+    fileSize: "28 MB",
+    free: false,
+  },
+  {
+    id: "r2",
+    title: "Class 12 Accountancy DPP — Partnership Accounts",
+    description: "Daily Practice Problems for Partnership and Company Accounts. 300+ numerical questions with detailed ledger solutions.",
+    type: "dpp",
+    subject: "Accountancy",
+    course: "Class 12 Commerce",
+    fileUrl: "#",
+    fileSize: "14 MB",
+    free: true,
+  },
+  {
+    id: "r3",
+    title: "Class 12 Economics Previous Year Papers (2015-2024)",
+    description: "Complete collection of CBSE Class 12 board question papers in Economics with solved model answers and graphs.",
+    type: "pyq",
+    subject: "Economics",
+    course: "Class 12 Commerce",
+    fileUrl: "#",
+    fileSize: "45 MB",
+    free: true,
+  },
+  {
+    id: "r4",
+    title: "CS Legal Environment Assignment — Chapter 1-5",
+    description: "Legal theory and corporate compliance assignments for CS Foundation candidates.",
+    type: "assignment",
+    subject: "CS Law",
+    course: "CS Prep",
+    fileUrl: "#",
+    fileSize: "6 MB",
+    free: true,
+  },
+  {
+    id: "r5",
+    title: "CUET Commerce Mock Test Series — 2024 CBT Pattern",
+    description: "10 full-length domain mock tests (Accountancy, Economics, BSt) modeled exactly on the NTA CUET CBT pattern.",
+    type: "test",
+    subject: "Commerce Domain",
+    course: "CUET Prep",
+    fileUrl: "#",
+    fileSize: "18 MB",
+    free: false,
+  },
+  {
+    id: "r6",
+    title: "Class 10 Mathematics Board PYQ Papers (2018-2024)",
+    description: "Complete set of CBSE Class 10 Math board exam questions with step-by-step marking scheme answers.",
+    type: "pyq",
+    subject: "Mathematics",
+    course: "Class 10 Tuition",
+    fileUrl: "#",
+    fileSize: "32 MB",
+    free: true,
+  },
+];
+
+export const resourceTypes = ["all", "notes", "dpp", "assignment", "pyq", "test"];
