@@ -209,7 +209,19 @@ export function Footer() {
               Privacy Policy
             </Link>
           </div>
+        </div>
 
+        {/* Developer Info */}
+        <div className="mt-4 pt-4 border-t border-[var(--border)]/40 text-center">
+          <p className="text-[10px] text-[var(--text-muted)] tracking-wide">
+            Developed by <span className="font-bold text-[var(--accent-500)]">ROUNIT SINGH</span> | For Website Development & Support:{" "}
+            <a
+              href="tel:+919821770032"
+              className="font-medium text-[var(--text-primary)] hover:text-[var(--accent-500)] dark:hover:text-[var(--accent-400)] transition-colors duration-200 underline underline-offset-2 decoration-[var(--border-strong)] hover:decoration-[var(--accent-500)]"
+            >
+              +91 9821770032
+            </a>
+          </p>
         </div>
       </div>
     </footer>

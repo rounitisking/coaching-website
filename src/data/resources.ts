@@ -11,7 +11,7 @@ export const resources: Resource[] = [
     course: "CA Foundation",
     fileUrl: "#",
     fileSize: "28 MB",
-    free: false,
+    free: true,
   },
   {
     id: "r2",
@@ -55,7 +55,7 @@ export const resources: Resource[] = [
     course: "CUET Prep",
     fileUrl: "#",
     fileSize: "18 MB",
-    free: false,
+    free: true,
   },
   {
     id: "r6",
@@ -71,3 +71,4 @@ export const resources: Resource[] = [
 ];
 
 export const resourceTypes = ["all", "notes", "dpp", "assignment", "pyq", "test"];
+

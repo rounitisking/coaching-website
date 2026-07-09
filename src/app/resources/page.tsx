@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Lock, FileText, BookOpen, ClipboardList, Clock } from "lucide-react";
+import { Download, FileText, BookOpen, ClipboardList, Clock } from "lucide-react";
 import { resources, resourceTypes } from "@/data/resources";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -38,7 +38,7 @@ export default function ResourcesPage() {
           eyebrow="Study Material"
           title="Student"
           titleHighlight="Resources"
-          subtitle="Download free notes, DPPs, previous year papers, and test series. Premium material available for enrolled students."
+          subtitle="Download free notes, DPPs, previous year papers, and test series. Access all study materials to help you succeed."
           className="mb-10"
         />
 
@@ -69,7 +69,7 @@ export default function ResourcesPage() {
                 <div className="flex items-start gap-4 mb-4">
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: resource.free ? "var(--gradient-brand)" : "linear-gradient(135deg, #64748b, #475569)" }}
+                    style={{ background: "var(--gradient-brand)" }}
                   >
                     <Icon size={18} className="text-white" />
                   </div>
@@ -78,10 +78,8 @@ export default function ResourcesPage() {
                       {resource.title}
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span
-                        className={`badge text-[10px] ${resource.free ? "badge-success" : "badge-orange"}`}
-                      >
-                        {resource.free ? "✅ Free" : "🔒 Premium"}
+                      <span className="badge badge-success text-[10px]">
+                        ✅ Free
                       </span>
                       <span className="text-[10px] text-[var(--text-muted)]">{resource.fileSize}</span>
                     </div>
@@ -97,28 +95,14 @@ export default function ResourcesPage() {
                   <span className="tag text-[10px]">{resource.course}</span>
                 </div>
 
-                {resource.free ? (
-                  <a
-                    href={resource.fileUrl}
-                    className="btn-primary w-full justify-center text-sm py-2.5"
-                    download
-                  >
-                    <Download size={15} />
-                    Download Free
-                  </a>
-                ) : (
-                  <a
-                    href={buildWhatsAppUrl(
-                      `Hi, I'd like to access the premium resource: "${resource.title}". Please guide me.`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-whatsapp w-full justify-center text-sm py-2.5"
-                  >
-                    <Lock size={15} />
-                    Get Premium Access
-                  </a>
-                )}
+                <a
+                  href={resource.fileUrl}
+                  className="btn-primary w-full justify-center text-sm py-2.5"
+                  download
+                >
+                  <Download size={15} />
+                  Download Free
+                </a>
               </div>
             );
           })}
@@ -133,23 +117,24 @@ export default function ResourcesPage() {
             className="text-2xl md:text-3xl font-black mb-3"
             style={{ fontFamily: "Outfit, sans-serif" }}
           >
-            Get Access to All Premium Resources
+            Looking for More Study Materials?
           </h2>
           <p className="mb-6 opacity-90 max-w-xl mx-auto">
-            Enrolled students get access to our complete library of 500+ resources including notes, DPPs, test series, and recorded lectures.
+            Enrolled students get access to our complete library of 500+ resources including comprehensive worksheets, test series, and live recorded classes.
           </p>
           <a
             href={buildWhatsAppUrl(
-              "Hi, I'd like to enroll at Academica Institute and get access to all premium study resources."
+              "Hi, I'd like to enroll at Academica Institute and get access to the complete student study resources."
             )}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-white text-[var(--brand-700)] hover:bg-white/90 transition-colors"
           >
-            Enroll Now for Full Access
+            Enroll Now for Complete Access
           </a>
         </div>
       </div>
     </div>
   );
 }
+
