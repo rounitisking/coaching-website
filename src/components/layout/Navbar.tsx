@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { institute } from "@/data/institute";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -34,6 +35,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [openMobileAccordion, setOpenMobileAccordion] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -41,22 +43,41 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Body scroll lock when mobile menu is open
+  useEffect(() => {
+    if (isMobileOpen) {
+      document.body.classList.add("menu-open");
+    } else {
+      document.body.classList.remove("menu-open");
+    }
+    return () => {
+      document.body.classList.remove("menu-open");
+    };
+  }, [isMobileOpen]);
 
+  const closeMobileMenu = () => {
+    setIsMobileOpen(false);
+    setOpenMobileAccordion(null);
+  };
 
   return (
     <>
-      {/* Announcement Bar */}
-      <div className="bg-[var(--gradient-brand)] text-white text-xs font-medium py-2 px-4 text-center hidden md:block"
-           style={{ background: "var(--gradient-brand)" }}>
+      {/* Announcement Bar — hidden on very small screens to prevent overflow */}
+      <div
+        className="text-white text-xs font-medium py-2 px-4 text-center hidden sm:block"
+        style={{ background: "var(--gradient-brand)" }}
+      >
         🎉 <span className="font-bold">CA Foundation 2024 Result:</span> Academica Institute produces{" "}
         <span className="font-bold">AIR 1</span>! Admissions open for 2025-26.{" "}
-        <a href={buildWhatsAppUrl("Hi, I want to inquire about admissions at Academica Institute.")}
-           target="_blank" rel="noopener noreferrer"
-           className="underline font-bold hover:text-yellow-200 transition-colors">
+        <a
+          href={buildWhatsAppUrl("Hi, I want to inquire about admissions at Academica Institute.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline font-bold hover:text-yellow-200 transition-colors"
+        >
           Enroll Now →
         </a>
       </div>
-
 
       <nav
         className={cn(
@@ -67,23 +88,29 @@ export function Navbar() {
         )}
       >
         <div className="container-custom">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 flex-shrink-0">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                   style={{ background: "var(--gradient-brand)" }}>
-                <span className="text-white font-black text-sm">A</span>
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0" onClick={closeMobileMenu}>
+              <div
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                <span className="text-white font-black text-xs sm:text-sm">A</span>
               </div>
-              <div className="leading-none">
-                <span className="font-black text-lg tracking-tight text-[var(--text-primary)]"
-                      style={{ fontFamily: "Outfit, sans-serif" }}>
+              <div className="leading-none min-w-0">
+                <span
+                  className="font-black text-base sm:text-lg tracking-tight text-[var(--text-primary)]"
+                  style={{ fontFamily: "Outfit, sans-serif" }}
+                >
                   Academica
                 </span>
-                <span className="gradient-text font-black text-lg ml-1"
-                      style={{ fontFamily: "Outfit, sans-serif" }}>
+                <span
+                  className="gradient-text font-black text-base sm:text-lg ml-1"
+                  style={{ fontFamily: "Outfit, sans-serif" }}
+                >
                   Institute
                 </span>
-                <div className="text-[10px] text-[var(--text-muted)] font-medium leading-none mt-0.5 hidden sm:block">
+                <div className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-medium leading-none mt-0.5 hidden sm:block">
                   Quality Guidance and the Right Direction
                 </div>
               </div>
@@ -138,7 +165,7 @@ export function Navbar() {
             </div>
 
             {/* Right: CTA + Theme */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <ThemeToggle className="hidden sm:flex" />
 
               <a
@@ -153,82 +180,148 @@ export function Navbar() {
                 href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary text-sm py-2 px-4 hidden sm:inline-flex"
+                className="btn-primary text-xs sm:text-sm py-2 px-3 sm:px-4 hidden sm:inline-flex"
               >
                 Enroll Now
               </a>
 
-              {/* Mobile menu toggle */}
+              {/* Mobile menu toggle — 44×44 minimum tap target */}
               <button
-                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-400)]"
+                className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-400)]"
                 onClick={() => setIsMobileOpen(!isMobileOpen)}
-                aria-label="Toggle navigation menu"
+                aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isMobileOpen}
               >
-                {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
+                <AnimatePresence mode="wait" initial={false}>
+                  {isMobileOpen ? (
+                    <motion.span
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X size={20} />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu size={20} />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div
-          className={cn(
-            "lg:hidden overflow-hidden transition-all duration-300 border-t border-[var(--border)]",
-            isMobileOpen ? "max-h-screen" : "max-h-0"
-          )}
-        >
-          <div className="container-custom py-4 space-y-1">
-            {navLinks.map((link) => (
-              <div key={link.label}>
-                <Link
-                  href={link.href}
-                  className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--brand-600)] hover:bg-[var(--brand-50)] dark:hover:bg-[rgba(99,102,241,0.1)] transition-colors"
-                  onClick={() => setIsMobileOpen(false)}
-                >
-                  {link.label}
-                </Link>
-                {link.children && (
-                  <div className="ml-4 mt-1 space-y-1">
-                    {link.children.map((child) => (
+        {/* Mobile Menu — framer-motion height animation */}
+        <AnimatePresence initial={false}>
+          {isMobileOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="lg:hidden overflow-hidden border-t border-[var(--border)]"
+            >
+              <div className="container-custom py-3 space-y-0.5">
+                {navLinks.map((link) => (
+                  <div key={link.label}>
+                    {link.children ? (
+                      <>
+                        {/* Parent row with accordion toggle */}
+                        <button
+                          className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--brand-600)] hover:bg-[var(--brand-50)] dark:hover:bg-[rgba(99,102,241,0.1)] transition-colors min-h-[44px]"
+                          onClick={() =>
+                            setOpenMobileAccordion(
+                              openMobileAccordion === link.label ? null : link.label
+                            )
+                          }
+                          aria-expanded={openMobileAccordion === link.label}
+                        >
+                          <span>{link.label}</span>
+                          <motion.span
+                            animate={{ rotate: openMobileAccordion === link.label ? 180 : 0 }}
+                            transition={{ duration: 0.25 }}
+                          >
+                            <ChevronDown size={16} />
+                          </motion.span>
+                        </button>
+
+                        {/* Sub-items */}
+                        <AnimatePresence initial={false}>
+                          {openMobileAccordion === link.label && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.25, ease: "easeInOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div className="ml-4 pb-1 space-y-0.5">
+                                {link.children.map((child) => (
+                                  <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm text-[var(--text-muted)] hover:text-[var(--brand-600)] hover:bg-[var(--brand-50)] dark:hover:bg-[rgba(99,102,241,0.1)] transition-colors min-h-[44px]"
+                                    onClick={closeMobileMenu}
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-400)] flex-shrink-0" />
+                                    {child.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
                       <Link
-                        key={child.href}
-                        href={child.href}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm text-[var(--text-muted)] hover:text-[var(--brand-600)] hover:bg-[var(--brand-50)] dark:hover:bg-[rgba(99,102,241,0.1)] transition-colors"
-                        onClick={() => setIsMobileOpen(false)}
+                        href={link.href}
+                        className="flex items-center px-4 py-3.5 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--brand-600)] hover:bg-[var(--brand-50)] dark:hover:bg-[rgba(99,102,241,0.1)] transition-colors min-h-[44px]"
+                        onClick={closeMobileMenu}
                       >
-                        <span className="w-1 h-1 rounded-full bg-[var(--brand-400)]" />
-                        {child.label}
+                        {link.label}
                       </Link>
-                    ))}
+                    )}
                   </div>
-                )}
+                ))}
+
+                <div className="pt-3 pb-2 flex flex-col gap-3">
+                  <a
+                    href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary justify-center min-h-[44px]"
+                    onClick={closeMobileMenu}
+                  >
+                    Enroll Now
+                  </a>
+                  <a
+                    href={`tel:${institute.phone[0]}`}
+                    className="btn-secondary justify-center min-h-[44px]"
+                    onClick={closeMobileMenu}
+                  >
+                    <Phone size={16} />
+                    Call Us
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--border)] mt-1">
+                  <span className="text-sm text-[var(--text-muted)]">Theme</span>
+                  <ThemeToggle />
+                </div>
               </div>
-            ))}
-
-            <div className="pt-3 pb-1 flex flex-col gap-3">
-              <a
-                href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary justify-center"
-              >
-                Enroll Now
-              </a>
-              <a
-                href={`tel:${institute.phone[0]}`}
-                className="btn-secondary justify-center"
-              >
-                <Phone size={16} />
-                Call Us
-              </a>
-            </div>
-
-            <div className="flex items-center justify-between px-4 py-2">
-              <span className="text-sm text-[var(--text-muted)]">Theme</span>
-              <ThemeToggle />
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </>
   );

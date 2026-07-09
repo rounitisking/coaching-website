@@ -58,7 +58,7 @@ export default function GalleryPage() {
         </div>
 
         {/* Grid */}
-        <motion.div layout className="columns-2 md:columns-3 gap-4 space-y-4">
+        <motion.div layout className="columns-2 md:columns-3 gap-3 sm:gap-4 space-y-3 sm:space-y-4">
           <AnimatePresence>
             {filtered.map((item, idx) => (
               <motion.div
@@ -106,7 +106,7 @@ export default function GalleryPage() {
             onClick={closeLightbox}
           >
             <button
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               onClick={closeLightbox}
               aria-label="Close lightbox"
             >
@@ -114,7 +114,7 @@ export default function GalleryPage() {
             </button>
 
             <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 prevImage();
@@ -151,7 +151,7 @@ export default function GalleryPage() {
             </motion.div>
 
             <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 nextImage();

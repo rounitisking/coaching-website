@@ -89,7 +89,7 @@ export function WhyChooseUsSection() {
 
         <StaggerContainer
           staggerDelay={0.08}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-10 sm:mt-12"
         >
           {features.map((feature) => {
             const Icon = feature.icon;
@@ -97,7 +97,7 @@ export function WhyChooseUsSection() {
               <motion.div
                 key={feature.title}
                 variants={fadeUpVariant}
-                className="card p-6 group"
+                className="card p-4 sm:p-6 group"
               >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"

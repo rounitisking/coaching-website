@@ -20,9 +20,9 @@ export function FeaturedVideoSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.2}>
-          <div className="mt-12 max-w-4xl mx-auto">
+          <div className="mt-10 sm:mt-12 max-w-4xl mx-auto w-full">
             <div
-              className="relative rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)] group bg-black aspect-video glow-brand"
+              className="relative rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)] group bg-black aspect-video glow-brand w-full"
             >
               {/* Autoplay Muted Responsive YouTube Iframe */}
               <iframe

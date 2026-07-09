@@ -17,7 +17,7 @@ export function ContactSection() {
           />
         </ScrollReveal>
 
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Contact Info */}
           <ScrollReveal direction="left">
             <div className="space-y-5">
@@ -108,12 +108,12 @@ export function ContactSection() {
 
           {/* Map */}
           <ScrollReveal direction="right">
-            <div className="card overflow-hidden h-full min-h-[400px]">
+            <div className="card overflow-hidden h-full min-h-[280px] sm:min-h-[360px] md:min-h-[400px]">
               <iframe
                 src={institute.mapEmbedUrl}
                 width="100%"
                 height="100%"
-                style={{ border: 0, minHeight: "400px" }}
+                style={{ border: 0, minHeight: "280px" }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

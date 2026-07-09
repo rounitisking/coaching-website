@@ -163,7 +163,7 @@ export function Footer() {
                   className="flex items-center gap-3 text-sm text-[var(--text-secondary)] hover:text-[var(--brand-600)] transition-colors"
                 >
                   <Mail size={16} className="text-[var(--brand-500)] flex-shrink-0" />
-                  {institute.email}
+                  <span className="break-all">{institute.email}</span>
                 </a>
               </li>
             </ul>
@@ -191,11 +191,11 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[var(--border)] pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-[var(--border)] pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
           <p className="text-xs text-[var(--text-muted)]">
             © {currentYear} {institute.name}. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
             <Link
               href="/resources"
               className="text-xs text-[var(--text-muted)] hover:text-[var(--brand-600)] transition-colors"

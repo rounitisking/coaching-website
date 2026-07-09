@@ -37,12 +37,12 @@ export function GallerySection() {
 
         {/* Category Filters */}
         <ScrollReveal delay={0.1}>
-          <div className="flex flex-wrap gap-2 justify-center mt-8 mb-10">
+          <div className="flex flex-wrap gap-2 justify-center mt-6 sm:mt-8 mb-8 sm:mb-10">
             {galleryCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+                className="px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 min-h-[40px]"
                 style={{
                   background: activeCategory === cat ? "var(--gradient-brand)" : "var(--bg-card)",
                   color: activeCategory === cat ? "white" : "var(--text-secondary)",
@@ -58,7 +58,7 @@ export function GallerySection() {
         {/* Grid */}
         <motion.div
           layout
-          className="grid grid-cols-2 md:grid-cols-3 gap-4"
+          className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
         >
           <AnimatePresence>
             {filtered.map((item, idx) => (
@@ -115,7 +115,7 @@ export function GallerySection() {
             onClick={closeLightbox}
           >
             <button
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               onClick={closeLightbox}
               aria-label="Close lightbox"
             >
@@ -123,7 +123,7 @@ export function GallerySection() {
             </button>
 
             <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
               aria-label="Previous image"
             >
@@ -155,7 +155,7 @@ export function GallerySection() {
             </motion.div>
 
             <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
               onClick={(e) => { e.stopPropagation(); nextImage(); }}
               aria-label="Next image"
             >

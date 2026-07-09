@@ -97,6 +97,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Prevent horizontal scroll at the root — safety net after fixing root causes */
+  overflow-x: hidden;
 }
 
 body {
@@ -105,6 +107,12 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Mobile nav scroll lock — added/removed via JS on Navbar */
+body.menu-open {
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -180,7 +188,19 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Section */
 .section {
-  padding: 5rem 1.5rem;
+  padding: 3.5rem 1rem;
+}
+
+@media (min-width: 475px) {
+  .section {
+    padding: 4rem 1.25rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .section {
+    padding: 5rem 1.5rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -200,7 +220,25 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
+}
+
+@media (min-width: 475px) {
+  .container-custom {
+    padding: 0 1.25rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding: 0 2rem;
+  }
 }
 
 /* Button styles */
@@ -385,10 +423,55 @@ h1, h2, h3, h4, h5, h6 {
 .marquee-track {
   animation: marquee 35s linear infinite;
   will-change: transform;
+  /* GPU-accelerate the scrolling layer */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .marquee-container:hover .marquee-track {
   animation-play-state: paused;
+}
+
+/*
+  Marquee edge fade via CSS mask — works on any background color.
+  No color overlay needed, so no white/dark flash on either theme.
+  The inner 10%→90% range keeps cards fully visible in the middle.
+*/
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 639px) {
+  /* Narrower mask on small screens so cards don't disappear too early */
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    );
+  }
 }
 
 /* ================================================================

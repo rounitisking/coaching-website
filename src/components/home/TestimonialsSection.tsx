@@ -37,7 +37,7 @@ export function TestimonialsSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="card p-8 md:p-12 relative"
+              className="card p-5 sm:p-8 md:p-12 relative"
             >
               {/* Quote icon */}
               <div
@@ -51,13 +51,13 @@ export function TestimonialsSection() {
               <StarRating rating={t.rating} size={18} className="mb-6" />
 
               {/* Text */}
-              <blockquote className="text-lg md:text-xl text-[var(--text-primary)] leading-relaxed mb-8 italic">
+              <blockquote className="text-base sm:text-lg md:text-xl text-[var(--text-primary)] leading-relaxed mb-6 sm:mb-8 italic">
                 &quot;{t.text}&quot;
               </blockquote>
 
               {/* Author */}
-              <div className="flex items-center gap-4">
-                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[var(--brand-300)] flex-shrink-0">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-[var(--brand-300)] flex-shrink-0">
                   <Image
                     src={t.photo}
                     alt={t.name}
@@ -66,8 +66,8 @@ export function TestimonialsSection() {
                     sizes="64px"
                   />
                 </div>
-                <div>
-                  <p className="font-bold text-[var(--text-primary)]">{t.name}</p>
+                <div className="min-w-0">
+                  <p className="font-bold text-[var(--text-primary)] truncate">{t.name}</p>
                   <p className="text-sm text-[var(--text-muted)]">{t.role}</p>
                   <p className="text-xs text-[var(--brand-600)] font-medium mt-0.5">{t.course} · {t.year}</p>
                 </div>

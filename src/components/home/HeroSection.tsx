@@ -18,10 +18,10 @@ export function HeroSection() {
         }}
       />
 
-      {/* Animated orbs */}
+      {/* Animated orbs — contained so they never bleed outside the section */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-20"
+          className="absolute -top-40 -right-40 w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] rounded-full opacity-20"
           style={{
             background: "radial-gradient(circle, #6366f1 0%, transparent 70%)",
           }}
@@ -29,7 +29,7 @@ export function HeroSection() {
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full opacity-15"
+          className="absolute -bottom-40 -left-40 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full opacity-15"
           style={{
             background: "radial-gradient(circle, #7c3aed 0%, transparent 70%)",
           }}
@@ -37,7 +37,7 @@ export function HeroSection() {
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] sm:w-[800px] sm:h-[800px] rounded-full opacity-10"
           style={{
             background: "radial-gradient(circle, #4f46e5 0%, transparent 60%)",
           }}
@@ -56,7 +56,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="container-custom relative z-10 py-20 md:py-28">
+      <div className="container-custom relative z-10 py-16 sm:py-20 md:py-28">
         <div className="max-w-4xl">
           {/* Badge */}
           <motion.div
@@ -74,7 +74,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.1]"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-5 sm:mb-6 leading-[1.1]"
             style={{ fontFamily: "Outfit, sans-serif" }}
           >
             {hero.headline.split(" ").slice(0, -2).join(" ")}{" "}
@@ -96,7 +96,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg md:text-xl text-white/75 max-w-2xl mb-8 leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-white/75 max-w-2xl mb-7 sm:mb-8 leading-relaxed"
           >
             {hero.subheadline}
           </motion.p>
@@ -106,11 +106,11 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap gap-4 mb-12"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-12"
           >
             <Link
               href={hero.cta1.href}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-1"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-300 hover:-translate-y-1"
               style={{
                 background: "linear-gradient(135deg, #6366f1, #7c3aed)",
                 color: "white",
@@ -125,7 +125,7 @@ export function HeroSection() {
               href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-sm sm:text-base border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm"
             >
               <Play size={18} className="fill-current" />
               {hero.cta2.label}
@@ -137,17 +137,17 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="flex flex-wrap gap-6 md:gap-10"
+            className="flex flex-wrap gap-5 sm:gap-6 md:gap-10"
           >
             {hero.stats.map((stat, i) => (
-              <div key={i} className="flex flex-col">
+              <div key={i} className="flex flex-col min-w-0">
                 <span
-                  className="text-3xl md:text-4xl font-black text-white"
+                  className="text-2xl sm:text-3xl md:text-4xl font-black text-white"
                   style={{ fontFamily: "Outfit, sans-serif" }}
                 >
                   {stat.value}
                 </span>
-                <span className="text-sm text-white/60 font-medium mt-0.5">
+                <span className="text-xs sm:text-sm text-white/60 font-medium mt-0.5">
                   {stat.label}
                 </span>
               </div>

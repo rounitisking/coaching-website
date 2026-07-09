@@ -14,14 +14,14 @@ const iconMap: Record<string, React.ElementType> = {
 
 export function StatsSection() {
   return (
-    <section className="section bg-[var(--bg-primary)] py-12 md:py-16 border-b border-[var(--border)]">
+    <section className="section bg-[var(--bg-primary)] py-8 sm:py-12 md:py-16 border-b border-[var(--border)]">
       <div className="container-custom">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
           {stats.map((stat, i) => {
             const Icon = iconMap[stat.icon] || Trophy;
             return (
               <ScrollReveal key={stat.id} delay={i * 0.08} direction="up">
-                <div className="card p-6 text-center group hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+                <div className="card p-4 sm:p-6 text-center group hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 group-hover:scale-110"
                     style={{ background: "var(--gradient-brand)" }}

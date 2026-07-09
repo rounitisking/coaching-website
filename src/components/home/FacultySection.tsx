@@ -26,7 +26,7 @@ export function FacultySection() {
 
         <StaggerContainer
           staggerDelay={0.1}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-10 sm:mt-12"
         >
           {featuredFaculty.map((f) => (
             <motion.div
@@ -35,7 +35,7 @@ export function FacultySection() {
               className="card overflow-hidden group text-center"
             >
               {/* Photo */}
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-48 sm:h-56 overflow-hidden">
                 <Image
                   src={f.photo}
                   alt={f.name}

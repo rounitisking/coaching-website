@@ -30,7 +30,7 @@ export default function CoursesPage() {
           className="mb-12"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {courses.map((course) => (
             <div key={course.id} className="card overflow-hidden group">
               <div className="relative h-48 overflow-hidden">
@@ -86,7 +86,7 @@ export default function CoursesPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
                   <Link
                     href={`/courses/${course.slug}`}
                     className="flex-1 btn-secondary text-sm py-2.5 px-4 justify-center"

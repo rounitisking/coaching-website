@@ -74,7 +74,7 @@ export function GoogleReviewsSection() {
         </ScrollReveal>
 
         {/* Grid of Reviews */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {googleReviews.map((review, i) => (
             <ScrollReveal key={review.name} delay={i * 0.08} direction="up">
               <div className="card p-6 h-full flex flex-col justify-between bg-[var(--bg-card)]">
