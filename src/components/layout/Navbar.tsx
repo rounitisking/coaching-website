@@ -88,36 +88,104 @@ export function Navbar() {
         )}
       >
         <div className="container-custom">
-          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0" onClick={closeMobileMenu}>
+          {/* ── MOBILE header row (< lg) ──────────────────────────────────── */}
+          <div className="flex lg:hidden items-center h-14 w-full gap-2">
+
+            {/* 1. Hamburger — far left, always visible */}
+            <button
+              className="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-400)]"
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileOpen}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isMobileOpen ? (
+                  <motion.span
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center justify-center"
+                  >
+                    <X size={20} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center justify-center"
+                  >
+                    <Menu size={20} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* 2. Logo — icon + two-line name */}
+            <Link href="/" className="flex items-center gap-2 flex-shrink-0 min-w-0" onClick={closeMobileMenu}>
               <div
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
                 style={{ background: "var(--gradient-brand)" }}
               >
-                <span className="text-white font-black text-xs sm:text-sm">A</span>
+                <span className="text-white font-black text-xs">A</span>
+              </div>
+              {/* Two-line stacked name on mobile */}
+              <div className="leading-tight flex-shrink-0" style={{ fontFamily: "Outfit, sans-serif" }}>
+                <div className="font-black text-sm tracking-tight text-[var(--text-primary)]">Academica</div>
+                <div className="gradient-text font-black text-sm tracking-tight">Institute</div>
+              </div>
+            </Link>
+
+            {/* 3. Spacer — pushes Enroll Now to the right */}
+            <div className="flex-1" />
+
+            {/* 4. Enroll Now — compact, right-aligned */}
+            <a
+              href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 btn-primary text-[10px] py-1 px-2.5 h-8 flex items-center justify-center rounded-lg"
+            >
+              Enroll Now
+            </a>
+          </div>
+
+          {/* ── DESKTOP header row (≥ lg) ─────────────────────────────────── */}
+          <div className="hidden lg:flex items-center justify-between h-20 w-full">
+
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 flex-shrink-0" onClick={closeMobileMenu}>
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                <span className="text-white font-black text-sm">A</span>
               </div>
               <div className="leading-none min-w-0">
                 <span
-                  className="font-black text-base sm:text-lg tracking-tight text-[var(--text-primary)]"
+                  className="font-black text-lg tracking-tight text-[var(--text-primary)]"
                   style={{ fontFamily: "Outfit, sans-serif" }}
                 >
                   Academica
                 </span>
                 <span
-                  className="gradient-text font-black text-base sm:text-lg ml-1"
+                  className="gradient-text font-black text-lg ml-1"
                   style={{ fontFamily: "Outfit, sans-serif" }}
                 >
                   Institute
                 </span>
-                <div className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-medium leading-none mt-0.5 hidden sm:block">
+                <div className="text-[10px] text-[var(--text-muted)] font-medium leading-none mt-0.5">
                   Quality Guidance and the Right Direction
                 </div>
               </div>
             </Link>
 
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-1">
+            {/* Desktop Nav links */}
+            <div className="flex items-center gap-1">
               {navLinks.map((link) =>
                 link.children ? (
                   <div key={link.label} className="relative group">
@@ -164,62 +232,27 @@ export function Navbar() {
               )}
             </div>
 
-            {/* Right: CTA + Theme */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <ThemeToggle className="hidden sm:flex" />
-
+            {/* Desktop right: Theme + Phone + Enroll Now */}
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
               <a
                 href={`tel:${institute.phone[0]}`}
-                className="hidden md:flex items-center gap-2 text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--brand-600)] transition-colors"
+                className="flex items-center gap-2 text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--brand-600)] transition-colors"
               >
                 <Phone size={15} />
-                <span className="hidden lg:inline">{institute.phone[0]}</span>
+                <span className="hidden xl:inline">{institute.phone[0]}</span>
               </a>
-
               <a
                 href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary text-[11px] sm:text-sm py-1.5 px-2.5 sm:py-2 sm:px-4 max-[359px]:hidden flex items-center justify-center h-8 sm:h-10 flex-shrink-0"
+                className="btn-primary text-sm py-2 px-4 inline-flex items-center justify-center"
               >
                 Enroll Now
               </a>
-
-              {/* Mobile menu toggle — 44×44 minimum tap target */}
-              <button
-                className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-400)]"
-                onClick={() => setIsMobileOpen(!isMobileOpen)}
-                aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
-                aria-expanded={isMobileOpen}
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {isMobileOpen ? (
-                    <motion.span
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex items-center justify-center"
-                    >
-                      <X size={20} />
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="menu"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex items-center justify-center"
-                    >
-                      <Menu size={20} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </button>
             </div>
           </div>
+
         </div>
 
         {/* Mobile Menu — framer-motion height animation */}
