@@ -180,7 +180,7 @@ export function Navbar() {
                 href={buildWhatsAppUrl("Hi, I would like to know more about Academica Institute.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary text-xs sm:text-sm py-2 px-3 sm:px-4 hidden sm:inline-flex"
+                className="btn-primary text-[11px] sm:text-sm py-1.5 px-2.5 sm:py-2 sm:px-4 max-[359px]:hidden flex items-center justify-center h-8 sm:h-10 flex-shrink-0"
               >
                 Enroll Now
               </a>
@@ -200,6 +200,7 @@ export function Navbar() {
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
+                      className="flex items-center justify-center"
                     >
                       <X size={20} />
                     </motion.span>
@@ -210,6 +211,7 @@ export function Navbar() {
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: -90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
+                      className="flex items-center justify-center"
                     >
                       <Menu size={20} />
                     </motion.span>
@@ -229,7 +231,7 @@ export function Navbar() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="lg:hidden overflow-hidden border-t border-[var(--border)]"
+              className="lg:hidden overflow-hidden border-t border-[var(--border)] bg-[var(--bg-primary)]"
             >
               <div className="container-custom py-3 space-y-0.5">
                 {navLinks.map((link) => (
