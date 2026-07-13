@@ -81,7 +81,7 @@ export function FacultySection() {
 
                 {/* Subjects */}
                 <div className="flex flex-wrap gap-1.5 justify-center mb-4">
-                  {f.subjects.slice(0, 2).map((s) => (
+                  {f.subjects.slice(0, 2).map((s: string) => (
                     <span key={s} className="tag text-[10px]">{s}</span>
                   ))}
                 </div>

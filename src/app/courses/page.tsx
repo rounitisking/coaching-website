@@ -1,113 +1,80 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Clock, Users, MessageCircle } from "lucide-react";
-import { courses } from "@/data/courses";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { db } from "@/lib/db";
+import { getCategories } from "@/actions/courses";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Metadata } from "next";
 import { institute } from "@/data/institute";
+import CoursesClient from "@/components/courses/CoursesClient";
 
 export const metadata: Metadata = {
-  title: "All Courses",
-  description: `Explore all CA Foundation, CS, CMA, CUET, and School Board Commerce courses at ${institute.name}. Expert faculty, proven results.`,
+  title: "All Courses | Academica Institute",
+  description: `Explore all CA Foundation, CS, CMA, CUET, and School Board Commerce/Science courses at ${institute.name}. Expert faculty, proven results.`,
 };
 
-const categoryColors: Record<string, string> = {
-  commerce: "var(--gradient-brand)",
-  academic: "linear-gradient(135deg, #10b981, #059669)",
-  subject: "linear-gradient(135deg, #f97316, #ea580c)",
-};
+export const dynamic = "force-dynamic";
 
-export default function CoursesPage() {
+export default async function CoursesPage({
+  searchParams,
+}: {
+  searchParams: { category?: string; q?: string };
+}) {
+  let courses: any[] = [];
+  let categories: any[] = [];
+  let faculty: any[] = [];
+
+  try {
+    courses = await db.course.findMany({
+      where: { isActive: true, isPublished: true },
+      include: { category: true, faculty: true },
+      orderBy: { order: "asc" },
+    });
+    categories = await db.category.findMany({ where: { isActive: true } });
+    faculty = await db.faculty.findMany({ where: { isActive: true } });
+  } catch (err) {
+    console.error("Failed to fetch courses data:", err);
+  }
+
+  // Fallbacks if database is empty
+  const FALLBACK_CATEGORIES = [
+    { id: "c_comm", name: "Commerce", type: "COMMERCE" },
+    { id: "c_sci", name: "Science", type: "SCIENCE" },
+    { id: "c_sch", name: "School Coaching", type: "SCHOOL" },
+  ];
+
+  const FALLBACK_FACULTY = [
+    { id: "f1", name: "CA Rajesh Kumar" },
+    { id: "f2", name: "Prof. Priya Sharma" },
+    { id: "f3", name: "CA Amit Verma" },
+  ];
+
+  const FALLBACK_COURSES = [
+    { id: "1", title: "CA Foundation", slug: "ca-foundation", description: "Complete preparation for CA Foundation exams with concept clarity.", price: 12000, mrp: 18000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "f1", name: "CA Rajesh Kumar" }, duration: "6 months", level: "Beginner" },
+    { id: "2", title: "CA Intermediate", slug: "ca-intermediate", description: "Master CA Intermediate with structured modules and mock tests.", price: 18000, mrp: 25000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "f3", name: "CA Amit Verma" }, duration: "12 months", level: "Intermediate" },
+    { id: "3", title: "IIT JEE Main & Advanced", slug: "iit-jee", description: "Cracking JEE Mains and Advanced with specialized math & physics coaches.", price: 45000, mrp: 60000, thumbnail: null, category: { type: "SCIENCE", name: "Science" }, faculty: { id: "f2", name: "Prof. Priya Sharma" }, duration: "2 years", level: "Advanced" },
+    { id: "4", title: "Class 12 Commerce Boards", slug: "class-12-commerce", description: "Class 12 board preparation for Accountancy, Economics & Business Studies.", price: 15000, mrp: 20000, thumbnail: null, category: { type: "SCHOOL", name: "School Coaching" }, faculty: { id: "f1", name: "CA Rajesh Kumar" }, duration: "1 year", level: "Boards" },
+  ];
+
+  const displayCourses = courses.length ? courses : FALLBACK_COURSES;
+  const displayCategories = categories.length ? categories : FALLBACK_CATEGORIES;
+  const displayFaculty = faculty.length ? faculty : FALLBACK_FACULTY;
+
   return (
-    <div className="section bg-[var(--bg-primary)]">
+    <div className="section bg-[var(--bg-primary)] py-12 text-left">
       <div className="container-custom">
         <SectionHeading
-          eyebrow="All Programs"
-          title="Our"
+          eyebrow="Our Programs"
+          title="All"
           titleHighlight="Courses"
-          subtitle="Every course is designed by Chartered Accountants and commerce experts to build strong concepts, improve academic performance, and help every student achieve their career goals."
+          subtitle="Every course is designed by Chartered Accountants and subject matter experts to build strong concepts, improve academic performance, and help every student achieve their career goals."
           className="mb-12"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {courses.map((course) => (
-            <div key={course.id} className="card overflow-hidden group">
-              <div className="relative h-48 overflow-hidden">
-                <Image
-                  src={course.image}
-                  alt={course.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div
-                  className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-wider"
-                  style={{ background: categoryColors[course.category] || categoryColors.commerce }}
-                >
-                  {course.category}
-                </div>
-                <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white text-xs">
-                  <Clock size={12} />
-                  {course.duration}
-                </div>
-              </div>
-
-              <div className="p-6">
-                <h2 className="font-bold text-lg text-[var(--text-primary)] mb-1 group-hover:text-[var(--brand-600)] transition-colors">
-                  {course.title}
-                </h2>
-                <p className="text-sm text-[var(--text-muted)] mb-3 line-clamp-2">{course.tagline}</p>
-
-                <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] mb-4">
-                  <Users size={13} />
-                  {course.eligibility}
-                </div>
-
-                <ul className="space-y-1.5 mb-5">
-                  {course.highlights.slice(0, 3).map((h) => (
-                    <li key={h} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
-                      <span className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                            style={{ background: "var(--gradient-brand)" }}>
-                        <span className="text-white text-[9px]">✓</span>
-                      </span>
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <span className="text-xs text-[var(--text-muted)]">Course Fee</span>
-                    <p className="font-black text-lg gradient-text" style={{ fontFamily: "Outfit, sans-serif" }}>
-                      {course.fee}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
-                  <Link
-                    href={`/courses/${course.slug}`}
-                    className="flex-1 btn-secondary text-sm py-2.5 px-4 justify-center"
-                  >
-                    Learn More
-                    <ArrowRight size={14} />
-                  </Link>
-                  <a
-                    href={buildWhatsAppUrl(course.whatsappMessage)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 btn-whatsapp text-sm py-2.5 px-4 justify-center"
-                  >
-                    <MessageCircle size={14} />
-                    Enroll
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CoursesClient
+          initialCourses={displayCourses}
+          categories={displayCategories}
+          faculty={displayFaculty}
+          initialCategory={searchParams.category}
+          initialSearch={searchParams.q}
+        />
       </div>
     </div>
   );

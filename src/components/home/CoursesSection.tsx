@@ -83,7 +83,7 @@ export function CoursesSection() {
 
                 {/* Highlights */}
                 <ul className="space-y-1.5 mb-5">
-                  {course.highlights.slice(0, 3).map((h) => (
+                  {course.highlights.slice(0, 3).map((h: string) => (
                     <li key={h} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
                       <span className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                             style={{ background: "var(--gradient-brand)" }}>

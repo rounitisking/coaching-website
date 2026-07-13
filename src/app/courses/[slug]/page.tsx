@@ -1,255 +1,378 @@
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { notFound } from "next/navigation";
-import {
-  Clock,
-  Users,
-  CheckCircle,
-  MessageCircle,
-  ArrowLeft,
-  BookOpen,
-} from "lucide-react";
-import { courses, getCourseBySlug } from "@/data/courses";
+import { Clock, Users, CheckCircle, BookOpen, ArrowLeft, Lock, Star, Award, Globe } from "lucide-react";
+import { courses as staticCourses, getCourseBySlug as getStaticCourseBySlug } from "@/data/courses";
 import { faculty as allFaculty } from "@/data/faculty";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { institute } from "@/data/institute";
 import type { Metadata } from "next";
+import { getCourseBySlug } from "@/actions/courses";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 
-// Next.js 15: params is a Promise
 type PageProps = {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 };
 
-export async function generateStaticParams() {
-  return courses.map((c) => ({ slug: c.slug }));
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const course = getCourseBySlug(slug);
+  const { slug } = await Promise.resolve(params);
+  let course: any = null;
+  try { course = await getCourseBySlug(slug); } catch {}
+  if (!course) course = getStaticCourseBySlug(slug);
   if (!course) return {};
   return {
-    title: course.title,
-    description: course.description.slice(0, 160),
+    title: `${course.title} | ${institute.name}`,
+    description: course.description?.slice(0, 160) || "",
     openGraph: {
       title: `${course.title} | ${institute.name}`,
-      description: course.tagline,
-      images: [{ url: course.image }],
+      description: course.description || "",
+      images: course.thumbnail ? [{ url: course.thumbnail }] : [],
     },
   };
 }
 
 export default async function CourseDetailPage({ params }: PageProps) {
-  const { slug } = await params;
-  const course = getCourseBySlug(slug);
+  const { slug } = await Promise.resolve(params);
+  const session = await auth();
+
+  let course: any = null;
+  let isDbCourse = false;
+  let isEnrolled = false;
+
+  try {
+    course = await getCourseBySlug(slug);
+    if (course) isDbCourse = true;
+  } catch {}
+
+  if (!course) course = getStaticCourseBySlug(slug);
   if (!course) notFound();
 
-  const courseFaculty = allFaculty.filter((f) => course.facultyIds.includes(f.id));
-  const relatedCourses = courses.filter((c) => course.relatedCourseIds.includes(c.id));
+  // Check enrollment
+  if (session?.user?.id && isDbCourse) {
+    try {
+      const enr = await db.enrollment.findUnique({
+        where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
+      });
+      isEnrolled = !!enr?.isActive;
+    } catch {}
+  }
+
+  const displayCourse = isDbCourse
+    ? {
+        id: course.id,
+        title: course.title,
+        slug: course.slug,
+        description: course.description,
+        price: course.price,
+        mrp: course.mrp,
+        thumbnail: course.thumbnail,
+        duration: course.duration || "Self-Paced",
+        level: course.level || "All Levels",
+        language: course.language || "Hindi / English",
+        categoryName: course.category?.name || "Commerce",
+        faculty: course.faculty || null,
+        modules: course.modules || [],
+      }
+    : {
+        id: course.id,
+        title: course.title,
+        slug: course.slug,
+        description: course.description,
+        price: parseInt(course.fee?.replace(/[^0-9]/g, "") || "9999") || 9999,
+        mrp: (parseInt(course.fee?.replace(/[^0-9]/g, "") || "9999") || 9999) + 4000,
+        thumbnail: course.image,
+        duration: course.duration,
+        level: course.eligibility,
+        language: "Hindi / English",
+        categoryName: course.category,
+        faculty: allFaculty.find((f: any) => course.facultyIds?.includes(f.id)) || null,
+        modules: (course.syllabus || []).map((s: any, idx: number) => ({
+          id: String(idx),
+          title: s.title,
+          lessons: (s.topics || []).map((t: string, lessonIdx: number) => ({
+            id: `${idx}-${lessonIdx}`,
+            title: t,
+            duration: 45,
+          })),
+        })),
+      };
+
+  const discount = displayCourse.mrp > displayCourse.price
+    ? Math.round(((displayCourse.mrp - displayCourse.price) / displayCourse.mrp) * 100)
+    : 0;
+
+  // JSON-LD schema
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: displayCourse.title,
+    description: displayCourse.description,
+    provider: {
+      "@type": "Organization",
+      name: institute.name,
+      url: "https://academica.in",
+    },
+    offers: {
+      "@type": "Offer",
+      price: displayCourse.price,
+      priceCurrency: "INR",
+    },
+    ...(displayCourse.faculty ? { instructor: { "@type": "Person", name: displayCourse.faculty.name } } : {}),
+  };
+
+  const highlights = [
+    "Structured syllabus aligned with ICAI/board curriculum",
+    "Regular tests & mock papers with solutions",
+    "Expert faculty with 10+ years of teaching experience",
+    "Live doubt-solving sessions",
+    "Study materials & notes included",
+    "Small batch sizes for personalized attention",
+  ];
 
   return (
-    <article>
+    <article className="bg-[var(--bg-primary)] min-h-screen text-left">
+      <Script
+        id="course-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Hero Banner */}
-      <div className="relative h-72 md:h-96 overflow-hidden">
-        <Image
-          src={course.image}
-          alt={course.title}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(to right, rgba(15,23,42,0.9) 40%, rgba(15,23,42,0.4))" }}
-        />
-        <div className="absolute inset-0 flex items-end">
-          <div className="container-custom pb-10">
-            <Link
-              href="/courses"
-              className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm mb-4 transition-colors"
-            >
-              <ArrowLeft size={14} />
-              All Courses
-            </Link>
-            <h1
-              className="text-3xl md:text-5xl font-black text-white mb-2"
-              style={{ fontFamily: "Outfit, sans-serif" }}
-            >
-              {course.title}
-            </h1>
-            <p className="text-white/80 text-lg max-w-2xl">{course.tagline}</p>
+      <div
+        className="relative overflow-hidden flex items-end"
+        style={{
+          minHeight: "340px",
+          background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1e40af 100%)",
+        }}
+      >
+        {displayCourse.thumbnail && (
+          <Image
+            src={displayCourse.thumbnail}
+            alt={displayCourse.title}
+            fill
+            className="object-cover opacity-30"
+            priority
+            sizes="100vw"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent" />
+        <div className="container-custom relative z-10 pb-12 pt-20">
+          <Link
+            href="/courses"
+            className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm mb-5 transition-colors"
+          >
+            <ArrowLeft size={14} /> Back to All Courses
+          </Link>
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className="badge badge-accent text-xs">{displayCourse.categoryName}</span>
+            {displayCourse.level && (
+              <span className="badge badge-muted text-xs">{displayCourse.level}</span>
+            )}
           </div>
+          <h1
+            className="text-3xl md:text-5xl font-black text-white mb-3 leading-tight max-w-3xl"
+            style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)", letterSpacing: "-0.02em" }}
+          >
+            {displayCourse.title}
+          </h1>
+          <p className="text-blue-200 text-base max-w-2xl leading-relaxed">{displayCourse.description?.slice(0, 200)}</p>
+          {displayCourse.faculty && (
+            <div className="flex items-center gap-2 mt-4">
+              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs">
+                {displayCourse.faculty.name?.charAt(0)}
+              </div>
+              <span className="text-white/70 text-sm font-medium">
+                By <strong className="text-white">{displayCourse.faculty.name}</strong>
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-10">
-            {/* Description */}
-            <section>
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">About This Program</h2>
-              <p className="text-[var(--text-secondary)] leading-relaxed">{course.description}</p>
-            </section>
+          {/* ─── Left: Content Panels ─── */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* About */}
+            <section className="card p-7 bg-white dark:bg-slate-950">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
+                <BookOpen size={20} className="text-blue-500" /> About This Program
+              </h2>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{displayCourse.description}</p>
 
-            {/* Highlights */}
-            <section>
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Course Highlights</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {course.highlights.map((h) => (
-                  <div key={h} className="flex items-start gap-3 card p-4">
-                    <CheckCircle size={18} className="text-[var(--success-500)] flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-[var(--text-secondary)]">{h}</span>
+              <h3 className="font-bold text-[var(--text-primary)] mt-6 mb-3 text-sm">What You Will Learn</h3>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {highlights.map((h) => (
+                  <div key={h} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+                    <CheckCircle size={14} className="text-green-500 mt-0.5 shrink-0" />
+                    {h}
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Syllabus */}
-            <section>
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Syllabus Overview</h2>
-              <div className="space-y-4">
-                {course.syllabus.map((section) => (
-                  <div key={section.title} className="card p-5">
-                    <div className="flex items-center gap-3 mb-3">
-                      <BookOpen size={18} className="text-[var(--brand-500)]" />
-                      <h3 className="font-bold text-[var(--text-primary)]">{section.title}</h3>
+            {/* Course Details */}
+            <section className="card p-7 bg-white dark:bg-slate-950">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-5" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
+                Program Details
+              </h2>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {[
+                  { icon: Clock, label: "Duration", value: displayCourse.duration },
+                  { icon: Users, label: "Eligibility", value: displayCourse.level },
+                  { icon: Globe, label: "Language", value: displayCourse.language },
+                  { icon: Award, label: "Certification", value: "Institute Certificate" },
+                  { icon: Star, label: "Batch Size", value: "25–30 Students" },
+                  { icon: CheckCircle, label: "Study Material", value: "Included" },
+                ].map(({ icon: Icon, label, value }) => (
+                  <div key={label} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
+                      <Icon size={14} className="text-blue-600" />
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {section.topics.map((t) => (
-                        <span key={t} className="tag">{t}</span>
-                      ))}
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{label}</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)] mt-0.5">{value}</p>
                     </div>
                   </div>
                 ))}
               </div>
+            </section>
+
+            {/* Curriculum */}
+            <section className="card p-7 bg-white dark:bg-slate-950">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-5" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
+                Curriculum Syllabus
+              </h2>
+              {displayCourse.modules.length === 0 ? (
+                <div className="text-center py-8">
+                  <BookOpen size={36} className="mx-auto text-slate-300 dark:text-slate-700 mb-3" />
+                  <p className="text-sm text-slate-400">Detailed curriculum is being updated. Contact us for the complete syllabus.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {displayCourse.modules.map((mod: any, idx: number) => (
+                    <details key={mod.id} className="group border border-slate-100 dark:border-slate-900 rounded-2xl overflow-hidden" open={idx === 0}>
+                      <summary className="flex items-center justify-between p-4 cursor-pointer list-none font-bold text-sm text-[var(--text-primary)] hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                        <span className="flex items-center gap-2">
+                          <BookOpen size={14} className="text-blue-500" />
+                          {mod.title}
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-semibold">{mod.lessons?.length || 0} Topics</span>
+                      </summary>
+                      <div className="px-4 pb-4 space-y-1">
+                        {(mod.lessons || []).map((les: any) => (
+                          <div key={les.id} className="flex justify-between items-center text-xs text-[var(--text-secondary)] py-1.5 border-b last:border-0 border-slate-50 dark:border-slate-900">
+                            <span className="flex items-center gap-2">
+                              <span className="w-1 h-1 rounded-full bg-blue-400" />
+                              {les.title}
+                            </span>
+                            {les.duration && <span className="text-slate-400 font-semibold">{les.duration} Min</span>}
+                          </div>
+                        ))}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              )}
             </section>
 
             {/* Faculty */}
-            {courseFaculty.length > 0 && (
-              <section>
-                <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Your Faculty</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {courseFaculty.map((f) => (
-                    <Link key={f.id} href={`/faculty/${f.slug}`} className="card p-5 flex items-center gap-4 group">
-                      <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border-2 border-[var(--brand-300)]">
-                        <Image src={f.photo} alt={f.name} fill className="object-cover" sizes="56px" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-600)] transition-colors">
-                          {f.name}
-                        </p>
-                        <p className="text-xs text-[var(--text-muted)]">{f.designation}</p>
-                        <p className="text-xs text-[var(--brand-600)] font-medium mt-0.5">{f.experience} exp.</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* FAQs */}
-            {course.faqs.length > 0 && (
-              <section>
-                <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">FAQs</h2>
-                <div className="space-y-3">
-                  {course.faqs.map((faq, i) => (
-                    <div key={i} className="card p-5">
-                      <p className="font-semibold text-[var(--text-primary)] mb-2">{faq.question}</p>
-                      <p className="text-sm text-[var(--text-secondary)]">{faq.answer}</p>
-                    </div>
-                  ))}
+            {displayCourse.faculty && (
+              <section className="card p-7 bg-white dark:bg-slate-950">
+                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
+                  Your Instructor
+                </h2>
+                <div className="flex items-start gap-5 p-5 border border-slate-100 dark:border-slate-900 rounded-2xl bg-slate-50 dark:bg-slate-900">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-2xl flex-shrink-0" style={{ background: "var(--gradient-brand)" }}>
+                    {displayCourse.faculty.name?.charAt(0)}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base text-[var(--text-primary)]">{displayCourse.faculty.name}</h3>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 font-semibold mt-0.5">{displayCourse.faculty.designation}</p>
+                    {displayCourse.faculty.experience && (
+                      <span className="inline-block mt-2 text-xs bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 rounded-full font-bold">
+                        {displayCourse.faculty.experience}+ Years Experience
+                      </span>
+                    )}
+                  </div>
                 </div>
               </section>
             )}
           </div>
 
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Enrollment Card */}
-            <div className="card p-6 sticky top-24">
-              <div className="mb-5">
-                <span className="text-xs text-[var(--text-muted)]">Fee Starting From</span>
-                <p
-                  className="text-3xl font-black gradient-text mt-1"
-                  style={{ fontFamily: "Outfit, sans-serif" }}
+          {/* ─── Right: Sticky Purchase Sidebar ─── */}
+          <aside>
+            <div className="card p-6 bg-white dark:bg-slate-950 sticky top-24 space-y-5">
+              {/* Pricing */}
+              <div>
+                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider block mb-1">Course Fee</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-black text-blue-600 dark:text-blue-400" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
+                    ₹{displayCourse.price.toLocaleString("en-IN")}
+                  </span>
+                  {displayCourse.mrp > displayCourse.price && (
+                    <span className="text-sm line-through text-slate-400">
+                      ₹{displayCourse.mrp.toLocaleString("en-IN")}
+                    </span>
+                  )}
+                </div>
+                {discount > 0 && (
+                  <span className="inline-block mt-1 text-xs font-bold text-green-700 bg-green-50 dark:bg-green-950/30 dark:text-green-400 px-2.5 py-0.5 rounded-full">
+                    {discount}% Off — Save ₹{(displayCourse.mrp - displayCourse.price).toLocaleString("en-IN")}
+                  </span>
+                )}
+              </div>
+
+              {/* Details */}
+              <div className="space-y-2.5 border-y border-slate-100 dark:border-slate-900 py-4">
+                {[
+                  { label: "Duration", value: displayCourse.duration },
+                  { label: "Language", value: displayCourse.language },
+                  { label: "Level", value: displayCourse.level },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between text-xs">
+                    <span className="text-[var(--text-muted)] font-semibold">{label}</span>
+                    <span className="text-[var(--text-primary)] font-bold">{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              {isEnrolled ? (
+                <Link
+                  href={`/dashboard/courses/${displayCourse.slug}`}
+                  className="btn-primary w-full justify-center font-bold py-3"
                 >
-                  {course.fee}
-                </p>
-              </div>
+                  <CheckCircle size={16} /> Go to My Course
+                </Link>
+              ) : session?.user ? (
+                <Link
+                  href={`/checkout?type=course&id=${displayCourse.id}`}
+                  className="btn-primary w-full justify-center font-bold py-3"
+                >
+                  Enroll Now
+                </Link>
+              ) : (
+                <Link
+                  href={`/auth?callbackUrl=/courses/${displayCourse.slug}`}
+                  className="btn-primary w-full justify-center font-bold py-3"
+                >
+                  <Lock size={16} /> Login to Enroll
+                </Link>
+              )}
 
-              <div className="space-y-3 mb-5">
-                <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                  <Clock size={15} className="text-[var(--brand-500)]" />
-                  <div>
-                    <span className="font-medium text-[var(--text-primary)]">Duration:</span> {course.duration}
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 text-sm text-[var(--text-secondary)]">
-                  <Users size={15} className="text-[var(--brand-500)] mt-0.5" />
-                  <div>
-                    <span className="font-medium text-[var(--text-primary)]">Eligibility:</span>{" "}
-                    {course.eligibility}
-                  </div>
-                </div>
-              </div>
-
-              {/* Batch Timings */}
-              <div className="mb-5">
-                <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">
-                  Batch Timings
-                </p>
-                <ul className="space-y-1.5">
-                  {course.batchTimings.map((b) => (
-                    <li key={b} className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-400)]" />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <a
-                href={buildWhatsAppUrl(course.whatsappMessage)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-whatsapp w-full justify-center mb-3"
+              <Link
+                href="/contact"
+                className="btn-secondary w-full justify-center text-sm py-2.5"
               >
-                <MessageCircle size={18} />
-                Enroll on WhatsApp
-              </a>
-
-              <Link href="/contact" className="btn-secondary w-full justify-center">
-                Visit Our Center
+                Ask a Question
               </Link>
-            </div>
 
-            {/* Related Courses */}
-            {relatedCourses.length > 0 && (
-              <div className="card p-5">
-                <h3 className="font-bold text-[var(--text-primary)] mb-4">Related Courses</h3>
-                <div className="space-y-3">
-                  {relatedCourses.map((rc) => (
-                    <Link
-                      key={rc.id}
-                      href={`/courses/${rc.slug}`}
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors group"
-                    >
-                      <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                        <Image src={rc.image} alt={rc.title} fill className="object-cover" sizes="48px" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--brand-600)] transition-colors line-clamp-1">
-                          {rc.title}
-                        </p>
-                        <p className="text-xs text-[var(--text-muted)]">{rc.duration}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+              <p className="text-[10px] text-center text-[var(--text-muted)]">
+                🔒 Secure checkout · 100% encrypted
+              </p>
+            </div>
           </aside>
         </div>
       </div>

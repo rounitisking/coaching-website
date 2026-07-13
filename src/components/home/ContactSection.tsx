@@ -46,7 +46,7 @@ export function ContactSection() {
                 <div>
                   <h4 className="font-bold text-[var(--text-primary)] mb-1">Call Us</h4>
                   <div className="space-y-1">
-                    {institute.phone.map((ph) => (
+                    {institute.phone.map((ph: string) => (
                       <a
                         key={ph}
                         href={`tel:${ph}`}

@@ -1,0 +1,485 @@
+// Prisma 7 — no url/directUrl in datasource; connection handled via prisma.config.ts
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum CategoryType {
+  COMMERCE
+  SCIENCE
+  SCHOOL
+}
+
+enum ResourceType {
+  PDF
+  VIDEO
+  NOTES
+  BROCHURE
+  OTHER
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum OrderItemType {
+  COURSE
+  RESOURCE
+  TEST_SERIES
+}
+
+// ─── Auth Models (next-auth v5 compatible) ──────────────────────────────────
+
+model User {
+  id                String             @id @default(cuid())
+  name              String?
+  email             String             @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String?
+  role              Role               @default(USER)
+  phone             String?
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  accounts          Account[]
+  sessions          Session[]
+  enrollments       Enrollment[]
+  testPurchases     TestPurchase[]
+  resourcePurchases ResourcePurchase[]
+  orders            Order[]
+  passwordResets    PasswordReset[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  token     String   @unique @default(cuid())
+  userId    String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("password_resets")
+}
+
+// ─── Content Models ──────────────────────────────────────────────────────────
+
+model Category {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  type        CategoryType
+  description String?
+  icon        String?
+  color       String?
+  order       Int          @default(0)
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  courses     Course[]
+  testSeries  TestSeries[]
+  results     Result[]
+  resources   Resource[]
+
+  @@index([slug])
+  @@index([type])
+  @@map("categories")
+}
+
+model Course {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  description   String
+  content       String?
+  price         Float       @default(0)
+  mrp           Float       @default(0)
+  thumbnail     String?
+  brochure      String?
+  videoPreview  String?
+  duration      String?
+  language      String      @default("Hindi/English")
+  level         String      @default("Beginner")
+  featured      Boolean     @default(false)
+  isActive      Boolean     @default(true)
+  isPublished   Boolean     @default(true)
+  order         Int         @default(0)
+  categoryId    String
+  facultyId     String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  category      Category    @relation(fields: [categoryId], references: [id])
+  faculty       Faculty?    @relation(fields: [facultyId], references: [id])
+  modules       CourseModule[]
+  enrollments   Enrollment[]
+  resources     Resource[]
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([featured])
+  @@map("courses")
+}
+
+model CourseModule {
+  id        String   @id @default(cuid())
+  title     String
+  order     Int      @default(0)
+  courseId  String
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons   Lesson[]
+
+  @@index([courseId])
+  @@map("course_modules")
+}
+
+model Lesson {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  videoUrl    String?
+  duration    Int?         // in minutes
+  order       Int          @default(0)
+  isFree      Boolean      @default(false)
+  moduleId    String
+  createdAt   DateTime     @default(now())
+  module      CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId])
+  @@map("lessons")
+}
+
+model Enrollment {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String
+  orderId     String?
+  enrolledAt  DateTime @default(now())
+  expiresAt   DateTime?
+  isActive    Boolean  @default(true)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course   @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@map("enrollments")
+}
+
+model Faculty {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  designation String
+  subjects    String[]
+  photo       String?
+  bio         String?
+  experience  Int      @default(0) // years
+  featured    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  courses     Course[]
+
+  @@index([slug])
+  @@index([featured])
+  @@map("faculty")
+}
+
+model Result {
+  id          String    @id @default(cuid())
+  studentName String
+  photo       String?
+  exam        String
+  score       String?
+  rank        String?
+  year        Int       @default(2024)
+  categoryId  String?
+  isActive    Boolean   @default(true)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([categoryId])
+  @@index([year])
+  @@map("results")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  avatar    String?
+  text      String
+  rating    Int      @default(5)
+  course    String?
+  year      Int      @default(2024)
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@map("testimonials")
+}
+
+model Resource {
+  id           String             @id @default(cuid())
+  title        String
+  description  String?
+  type         ResourceType       @default(PDF)
+  fileUrl      String?
+  thumbnail    String?
+  subject      String?
+  price        Float              @default(0)
+  mrp          Float              @default(0)
+  isFree       Boolean            @default(false)
+  isActive     Boolean            @default(true)
+  featured     Boolean            @default(false)
+  order        Int                @default(0)
+  categoryId   String?
+  courseId     String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  category     Category?          @relation(fields: [categoryId], references: [id])
+  course       Course?            @relation(fields: [courseId], references: [id])
+  purchases    ResourcePurchase[]
+
+  @@index([categoryId])
+  @@index([isFree])
+  @@map("resources")
+}
+
+model TestSeries {
+  id          String         @id @default(cuid())
+  title       String
+  slug        String         @unique
+  description String?
+  price       Float          @default(0)
+  mrp         Float          @default(0)
+  thumbnail   String?
+  totalTests  Int            @default(0)
+  duration    String?
+  featured    Boolean        @default(false)
+  isActive    Boolean        @default(true)
+  categoryId  String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  category    Category?      @relation(fields: [categoryId], references: [id])
+  purchases   TestPurchase[]
+
+  @@index([slug])
+  @@index([featured])
+  @@map("test_series")
+}
+
+model TestPurchase {
+  id           String     @id @default(cuid())
+  userId       String
+  testSeriesId String
+  orderId      String?
+  purchasedAt  DateTime   @default(now())
+  expiresAt    DateTime?
+  isActive     Boolean    @default(true)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  testSeries   TestSeries @relation(fields: [testSeriesId], references: [id])
+
+  @@unique([userId, testSeriesId])
+  @@index([userId])
+  @@map("test_purchases")
+}
+
+model ResourcePurchase {
+  id          String   @id @default(cuid())
+  userId      String
+  resourceId  String
+  orderId     String?
+  purchasedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource    Resource @relation(fields: [resourceId], references: [id])
+
+  @@unique([userId, resourceId])
+  @@index([userId])
+  @@map("resource_purchases")
+}
+
+// ─── CMS / Content ───────────────────────────────────────────────────────────
+
+model HeroBanner {
+  id          String   @id @default(cuid())
+  title       String
+  subtitle    String?
+  description String?
+  ctaText     String?
+  ctaUrl      String?
+  image       String?
+  badgeText   String?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("hero_banners")
+}
+
+model Notice {
+  id        String    @id @default(cuid())
+  title     String
+  content   String?
+  link      String?
+  isUrgent  Boolean   @default(false)
+  isActive  Boolean   @default(true)
+  expiresAt DateTime?
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  @@map("notices")
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([category])
+  @@map("faqs")
+}
+
+model Popup {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  ctaText   String?
+  ctaUrl    String?
+  image     String?
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("popups")
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   // JSON string for complex values
+  label     String?
+  group     String?
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([group])
+  @@map("site_settings")
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String
+  caption   String?
+  category  String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("gallery_images")
+}
+
+// ─── Orders & Payments ───────────────────────────────────────────────────────
+
+model Order {
+  id                 String      @id @default(cuid())
+  userId             String
+  amount             Float
+  currency           String      @default("INR")
+  status             OrderStatus @default(PENDING)
+  razorpayOrderId    String?     @unique
+  razorpayPaymentId  String?
+  razorpaySignature  String?
+  notes              String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  user               User        @relation(fields: [userId], references: [id])
+  items              OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([razorpayOrderId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id           String        @id @default(cuid())
+  orderId      String
+  itemType     OrderItemType
+  // itemId is a polymorphic reference — resolved via application logic using itemType
+  itemId       String
+  title        String        @default("")
+  price        Float
+  order        Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([itemType, itemId])
+  @@map("order_items")
+}
+

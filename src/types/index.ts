@@ -1,3 +1,26 @@
+import type { DefaultSession } from 'next-auth'
+import type { JWT as NextAuthJWT } from 'next-auth/jwt'
+
+// Extend next-auth module
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string
+      role: 'USER' | 'ADMIN'
+    } & DefaultSession['user']
+  }
+  interface User {
+    role: 'USER' | 'ADMIN'
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id: string
+    role: 'USER' | 'ADMIN'
+  }
+}
+
 // ============================================================
 // SHARED TYPESCRIPT TYPES FOR COACHING INSTITUTE WEBSITE
 // ============================================================
@@ -168,4 +191,44 @@ export interface NavItem {
   label: string;
   href: string;
   children?: { label: string; href: string }[];
+}
+
+// Pagination
+export interface PaginationMeta {
+  page: number
+  pageSize: number
+  total: number
+  totalPages: number
+}
+
+export interface ApiResponse<T> {
+  data?: T
+  error?: string
+  success: boolean
+  meta?: PaginationMeta
+}
+
+export interface ActionResult {
+  success?: boolean
+  error?: string
+  data?: unknown
+}
+
+// Dashboard
+export interface DashboardStats {
+  totalStudents: number
+  totalCourses: number
+  totalOrders: number
+  totalRevenue: number
+  recentOrders: unknown[]
+  recentStudents: unknown[]
+}
+
+// Cart
+export interface CartItem {
+  id: string
+  type: 'COURSE' | 'RESOURCE' | 'TEST_SERIES'
+  title: string
+  price: number
+  thumbnail?: string
 }

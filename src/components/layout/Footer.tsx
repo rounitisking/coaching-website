@@ -146,7 +146,7 @@ export function Footer() {
                   {institute.address}
                 </span>
               </li>
-              {institute.phone.map((ph) => (
+              {institute.phone.map((ph: string) => (
                 <li key={ph}>
                   <a
                     href={`tel:${ph}`}
