@@ -24,6 +24,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_APP_URL ||
       "https://coaching-website-liart.vercel.app"
   ),
+  icons: {
+    icon: "/logo.webp",
+    shortcut: "/logo.webp",
+    apple: "/logo.webp",
+  },
   title: {
     default:
       "Academica Institute — Expert Coaching for CA, CS, CMA, CUET & More",

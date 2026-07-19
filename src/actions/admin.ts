@@ -14,24 +14,40 @@ async function requireAdmin() {
 
 export async function getAdminStats() {
   await requireAdmin()
-  const [totalStudents, totalCourses, totalOrders, revenueData, recentOrders, recentStudents] =
-    await Promise.all([
-      db.user.count({ where: { role: 'USER' } }),
-      db.course.count(),
-      db.order.count(),
-      db.order.aggregate({ _sum: { amount: true }, where: { status: 'PAID' } }),
-      db.order.findMany({
-        take: 5,
-        include: { user: true, items: true },
-        orderBy: { createdAt: 'desc' },
-      }),
-      db.user.findMany({
-        take: 5,
-        where: { role: 'USER' },
-        orderBy: { createdAt: 'desc' },
-        select: { id: true, name: true, email: true, createdAt: true },
-      }),
-    ])
+  const [
+    totalStudents,
+    totalCourses,
+    totalOrders,
+    revenueData,
+    recentOrders,
+    recentStudents,
+    totalFaculty,
+    totalBlogs,
+    totalDemoVideos,
+    totalNotes,
+    pendingApplications
+  ] = await Promise.all([
+    db.user.count({ where: { role: 'USER' } }),
+    db.course.count(),
+    db.order.count(),
+    db.order.aggregate({ _sum: { amount: true }, where: { status: 'PAID' } }),
+    db.order.findMany({
+      take: 5,
+      include: { user: true, items: true },
+      orderBy: { createdAt: 'desc' },
+    }),
+    db.user.findMany({
+      take: 5,
+      where: { role: 'USER' },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, name: true, email: true, createdAt: true },
+    }),
+    db.faculty.count(),
+    db.blog.count(),
+    db.demoVideo.count(),
+    db.resource.count(),
+    db.facultyApplication.count({ where: { status: 'PENDING' } }),
+  ])
   return {
     totalStudents,
     totalCourses,
@@ -39,6 +55,11 @@ export async function getAdminStats() {
     totalRevenue: revenueData._sum.amount ?? 0,
     recentOrders,
     recentStudents,
+    totalFaculty,
+    totalBlogs,
+    totalDemoVideos,
+    totalNotes,
+    pendingApplications,
   }
 }
 
@@ -237,7 +258,10 @@ export async function adminDeleteCourse(id: string): Promise<ActionResult> {
 // ─── FACULTY ─────────────────────────────────────────────────────────────────
 export async function adminGetAllFaculty() {
   await requireAdmin()
-  return db.faculty.findMany({ orderBy: { order: 'asc' } })
+  return db.faculty.findMany({
+    include: { courses: true },
+    orderBy: { order: 'asc' },
+  })
 }
 export async function adminCreateFaculty(data: {
   name: string
@@ -246,12 +270,29 @@ export async function adminCreateFaculty(data: {
   subjects?: string[]
   photo?: string
   bio?: string
+  qualification?: string
+  achievements?: string[]
+  specialization?: string
+  languages?: string[]
+  socialLinkedIn?: string
+  socialYoutube?: string
+  resumeUrl?: string
+  category?: 'COMMERCE' | 'SCIENCE' | 'SCHOOL'
   experience?: number
   featured?: boolean
+  courseIds?: string[]
 }): Promise<ActionResult> {
   try {
     await requireAdmin()
-    await db.faculty.create({ data })
+    const { courseIds, ...facultyData } = data
+    await db.faculty.create({
+      data: {
+        ...facultyData,
+        courses: courseIds && courseIds.length > 0 ? {
+          create: courseIds.map(cId => ({ courseId: cId }))
+        } : undefined
+      }
+    })
     revalidatePath('/faculty')
     revalidatePath('/admin/faculty')
     return { success: true }
@@ -268,15 +309,49 @@ export async function adminUpdateFaculty(
     subjects: string[]
     photo: string
     bio: string
+    qualification: string
+    achievements: string[]
+    specialization: string
+    languages: string[]
+    socialLinkedIn: string
+    socialYoutube: string
+    resumeUrl: string
+    category: 'COMMERCE' | 'SCIENCE' | 'SCHOOL'
     experience: number
     featured: boolean
     isActive: boolean
     order: number
+    courseIds: string[]
   }>
 ): Promise<ActionResult> {
   try {
     await requireAdmin()
-    await db.faculty.update({ where: { id }, data })
+    const { courseIds, ...facultyData } = data
+    
+    // Perform updates in transaction
+    await db.$transaction(async (tx) => {
+      // 1. Update basic fields
+      await tx.faculty.update({
+        where: { id },
+        data: facultyData
+      })
+      
+      // 2. If courseIds provided, update many-to-many relation
+      if (courseIds !== undefined) {
+        await tx.courseFaculty.deleteMany({
+          where: { facultyId: id }
+        })
+        if (courseIds.length > 0) {
+          await tx.courseFaculty.createMany({
+            data: courseIds.map(cId => ({
+              facultyId: id,
+              courseId: cId
+            }))
+          })
+        }
+      }
+    })
+    
     revalidatePath('/faculty')
     revalidatePath('/admin/faculty')
     return { success: true }
@@ -677,6 +752,7 @@ export async function adminCreateResource(data: {
   description?: string
   type?: 'PDF' | 'VIDEO' | 'NOTES' | 'BROCHURE' | 'OTHER'
   fileUrl?: string
+  previewUrl?: string
   thumbnail?: string
   subject?: string
   price?: number
@@ -701,6 +777,7 @@ export async function adminUpdateResource(
     description: string
     type: 'PDF' | 'VIDEO' | 'NOTES' | 'BROCHURE' | 'OTHER'
     fileUrl: string
+    previewUrl: string
     thumbnail: string
     subject: string
     price: number
@@ -810,3 +887,197 @@ export async function adminDeleteTestSeries(id: string): Promise<ActionResult> {
     return { error: e instanceof Error ? e.message : String(e) }
   }
 }
+
+// ─── BLOG CRUD ────────────────────────────────────────────────────────────────
+export async function adminGetAllBlogs() {
+  await requireAdmin()
+  return db.blog.findMany({
+    include: { category: { select: { id: true, name: true } }, author: { select: { id: true, name: true } } },
+    orderBy: [{ isPublished: 'desc' }, { createdAt: 'desc' }],
+  })
+}
+export async function adminGetAllBlogCategories() {
+  await requireAdmin()
+  return db.blogCategory.findMany({ orderBy: { order: 'asc' } })
+}
+export async function adminCreateBlog(data: {
+  title: string; slug: string; excerpt?: string; content: string
+  featuredImage?: string; categoryId?: string; tags?: string[]
+  metaTitle?: string; metaDescription?: string; readTime?: number
+  featured?: boolean; isPublished?: boolean
+}): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    const session = await auth()
+    await db.blog.create({
+      data: {
+        title: data.title, slug: data.slug, excerpt: data.excerpt ?? null,
+        content: data.content, featuredImage: data.featuredImage ?? null,
+        categoryId: data.categoryId || null, tags: data.tags ?? [],
+        metaTitle: data.metaTitle ?? null, metaDescription: data.metaDescription ?? null,
+        readTime: data.readTime ?? 5, featured: data.featured ?? false,
+        isPublished: data.isPublished ?? false,
+        publishedAt: data.isPublished ? new Date() : null,
+        authorId: session?.user?.id ?? null,
+      }
+    })
+    revalidatePath('/blog'); revalidatePath('/admin/blogs')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminUpdateBlog(id: string, data: Partial<{
+  title: string; slug: string; excerpt: string; content: string
+  featuredImage: string; categoryId: string; tags: string[]
+  metaTitle: string; metaDescription: string; readTime: number
+  featured: boolean; isPublished: boolean; isActive: boolean
+}>): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    const updateData: Record<string, unknown> = { ...data }
+    if (data.isPublished !== undefined) {
+      updateData.publishedAt = data.isPublished ? new Date() : null
+    }
+    await db.blog.update({ where: { id }, data: updateData })
+    revalidatePath('/blog'); revalidatePath('/admin/blogs')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminDeleteBlog(id: string): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.blog.delete({ where: { id } })
+    revalidatePath('/blog'); revalidatePath('/admin/blogs')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+
+// ─── DEMO VIDEOS CRUD ────────────────────────────────────────────────────────
+export async function adminGetAllDemoVideos() {
+  await requireAdmin()
+  return db.demoVideo.findMany({
+    include: {
+      faculty: { select: { id: true, name: true } },
+      course: { select: { id: true, title: true } },
+    },
+    orderBy: [{ featured: 'desc' }, { order: 'asc' }],
+  })
+}
+export async function adminCreateDemoVideo(data: {
+  title: string; youtubeUrl: string; youtubeVideoId: string; thumbnailUrl?: string
+  subject?: string; duration?: string; description?: string
+  facultyId?: string; courseId?: string; featured?: boolean; order?: number
+}): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.demoVideo.create({
+      data: {
+        title: data.title, youtubeUrl: data.youtubeUrl,
+        youtubeVideoId: data.youtubeVideoId,
+        thumbnailUrl: data.thumbnailUrl ?? `https://img.youtube.com/vi/${data.youtubeVideoId}/maxresdefault.jpg`,
+        subject: data.subject ?? null, duration: data.duration ?? null,
+        description: data.description ?? null,
+        facultyId: data.facultyId || null, courseId: data.courseId || null,
+        featured: data.featured ?? false, order: data.order ?? 0,
+      }
+    })
+    revalidatePath('/demo-classes'); revalidatePath('/admin/demo-videos')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminUpdateDemoVideo(id: string, data: Partial<{
+  title: string; youtubeUrl: string; youtubeVideoId: string; thumbnailUrl: string
+  subject: string; duration: string; description: string
+  facultyId: string; courseId: string; featured: boolean; isActive: boolean; order: number
+}>): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.demoVideo.update({ where: { id }, data })
+    revalidatePath('/demo-classes'); revalidatePath('/admin/demo-videos')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminDeleteDemoVideo(id: string): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.demoVideo.delete({ where: { id } })
+    revalidatePath('/demo-classes'); revalidatePath('/admin/demo-videos')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+
+// ─── FACULTY APPLICATIONS ─────────────────────────────────────────────────────
+export async function adminGetAllApplications() {
+  await requireAdmin()
+  return db.facultyApplication.findMany({ orderBy: { createdAt: 'desc' } })
+}
+export async function adminUpdateApplicationStatus(
+  id: string, status: 'PENDING' | 'REVIEWED' | 'ACCEPTED' | 'REJECTED'
+): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.facultyApplication.update({ where: { id }, data: { status } })
+    revalidatePath('/admin/applications')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminDeleteApplication(id: string): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.facultyApplication.delete({ where: { id } })
+    revalidatePath('/admin/applications')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+
+// ─── GALLERY CRUD ─────────────────────────────────────────────────────────────
+export async function adminGetAllGalleryImages() {
+  await requireAdmin()
+  return db.galleryImage.findMany({ orderBy: { order: 'asc' } })
+}
+export async function adminCreateGalleryImage(data: {
+  url: string; caption?: string; category?: string; order?: number
+}): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.galleryImage.create({
+      data: { url: data.url, caption: data.caption ?? null, category: data.category ?? null, order: data.order ?? 0 }
+    })
+    revalidatePath('/gallery'); revalidatePath('/admin/gallery')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminUpdateGalleryImage(id: string, data: Partial<{
+  url: string; caption: string; category: string; order: number; isActive: boolean
+}>): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.galleryImage.update({ where: { id }, data })
+    revalidatePath('/gallery'); revalidatePath('/admin/gallery')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+export async function adminDeleteGalleryImage(id: string): Promise<ActionResult> {
+  try {
+    await requireAdmin()
+    await db.galleryImage.delete({ where: { id } })
+    revalidatePath('/gallery'); revalidatePath('/admin/gallery')
+    return { success: true }
+  } catch (e: unknown) { return { error: e instanceof Error ? e.message : String(e) } }
+}
+
+// ─── EXTENDED STATS ───────────────────────────────────────────────────────────
+export async function getExtendedAdminStats() {
+  await requireAdmin()
+  const [
+    totalFaculty, totalBlogs, totalDemoVideos, totalNotes,
+    pendingApplications
+  ] = await Promise.all([
+    db.faculty.count({ where: { isActive: true } }),
+    db.blog.count({ where: { isActive: true } }),
+    db.demoVideo.count({ where: { isActive: true } }),
+    db.resource.count({ where: { isActive: true } }),
+    db.facultyApplication.count({ where: { status: 'PENDING' } }),
+  ])
+  return { totalFaculty, totalBlogs, totalDemoVideos, totalNotes, pendingApplications }
+}
+

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
-import { notFound } from "next/navigation";
-import { Clock, Users, CheckCircle, BookOpen, ArrowLeft, Lock, Star, Award, Globe } from "lucide-react";
+import { notFound, redirect } from "next/navigation";
+import { Clock, ArrowLeft, Lock, CheckCircle, Globe, Award, Star, Users } from "lucide-react";
 import { courses as staticCourses, getCourseBySlug as getStaticCourseBySlug } from "@/data/courses";
 import { faculty as allFaculty } from "@/data/faculty";
 import { institute } from "@/data/institute";
@@ -10,30 +10,44 @@ import type { Metadata } from "next";
 import { getCourseBySlug } from "@/actions/courses";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { CourseTabs } from "@/components/courses/CourseTabs";
 
 type PageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await Promise.resolve(params);
+  const { slug } = await params;
+  if (slug === "class-9-tuition") {
+    redirect("/courses/class-9");
+  }
+  if (slug === "class-10-tuition") {
+    redirect("/courses/class-10");
+  }
   let course: any = null;
   try { course = await getCourseBySlug(slug); } catch {}
   if (!course) course = getStaticCourseBySlug(slug);
   if (!course) return {};
+  const ogImage = course.thumbnail || course.image;
   return {
     title: `${course.title} | ${institute.name}`,
     description: course.description?.slice(0, 160) || "",
     openGraph: {
       title: `${course.title} | ${institute.name}`,
       description: course.description || "",
-      images: course.thumbnail ? [{ url: course.thumbnail }] : [],
+      images: ogImage ? [{ url: ogImage }] : [],
     },
   };
 }
 
 export default async function CourseDetailPage({ params }: PageProps) {
-  const { slug } = await Promise.resolve(params);
+  const { slug } = await params;
+  if (slug === "class-9-tuition") {
+    redirect("/courses/class-9");
+  }
+  if (slug === "class-10-tuition") {
+    redirect("/courses/class-10");
+  }
   const session = await auth();
 
   let course: any = null;
@@ -64,6 +78,9 @@ export default async function CourseDetailPage({ params }: PageProps) {
         title: course.title,
         slug: course.slug,
         description: course.description,
+        overview: course.overview,
+        eligibility: course.eligibility,
+        mentorship: course.mentorship,
         price: course.price,
         mrp: course.mrp,
         thumbnail: course.thumbnail,
@@ -73,12 +90,16 @@ export default async function CourseDetailPage({ params }: PageProps) {
         categoryName: course.category?.name || "Commerce",
         faculty: course.faculty || null,
         modules: course.modules || [],
+        faculties: course.faculties || [],
       }
     : {
         id: course.id,
         title: course.title,
         slug: course.slug,
         description: course.description,
+        overview: course.description,
+        eligibility: course.eligibility,
+        mentorship: null,
         price: parseInt(course.fee?.replace(/[^0-9]/g, "") || "9999") || 9999,
         mrp: (parseInt(course.fee?.replace(/[^0-9]/g, "") || "9999") || 9999) + 4000,
         thumbnail: course.image,
@@ -96,6 +117,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
             duration: 45,
           })),
         })),
+        faculties: [],
       };
 
   const discount = displayCourse.mrp > displayCourse.price
@@ -130,12 +152,83 @@ export default async function CourseDetailPage({ params }: PageProps) {
     "Small batch sizes for personalized attention",
   ];
 
+  // Combine primary faculty and multi-faculty list for CourseTabs
+  const facultiesMap = new Map<string, any>();
+  if (displayCourse.faculty) {
+    facultiesMap.set(displayCourse.faculty.id, {
+      id: displayCourse.faculty.id,
+      name: displayCourse.faculty.name,
+      slug: displayCourse.faculty.slug,
+      designation: displayCourse.faculty.designation,
+      photo: displayCourse.faculty.photo || null,
+      experience: displayCourse.faculty.experience || 0,
+    });
+  }
+  if (displayCourse.faculties) {
+    displayCourse.faculties.forEach((join: any) => {
+      if (join.faculty) {
+        facultiesMap.set(join.faculty.id, {
+          id: join.faculty.id,
+          name: join.faculty.name,
+          slug: join.faculty.slug,
+          designation: join.faculty.designation,
+          photo: join.faculty.photo || null,
+          experience: join.faculty.experience || 0,
+        });
+      }
+    });
+  }
+  const facultiesList = Array.from(facultiesMap.values());
+
+  // Fetch FAQs
+  const faqs = await db.fAQ.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
+  }).catch(() => []);
+
+  // Filter FAQs matching this category name (case-insensitive) or general FAQs
+  const filteredFaqs = faqs.filter(
+    (faq) =>
+      !faq.category ||
+      faq.category.toLowerCase() === displayCourse.categoryName.toLowerCase()
+  );
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Courses",
+        "item": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/courses`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": displayCourse.title,
+        "item": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/courses/${displayCourse.slug}`
+      }
+    ]
+  };
+
   return (
     <article className="bg-[var(--bg-primary)] min-h-screen text-left">
       <Script
         id="course-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Hero Banner */}
@@ -158,6 +251,17 @@ export default async function CourseDetailPage({ params }: PageProps) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent" />
         <div className="container-custom relative z-10 pb-12 pt-20">
+          {/* Styled Breadcrumbs */}
+          <nav className="flex items-center gap-1.5 text-xs text-white/50 mb-4 uppercase tracking-wider font-semibold">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <span>/</span>
+            <Link href="/courses" className="hover:text-white transition-colors">Courses</Link>
+            <span>/</span>
+            <span className="text-white/80">{displayCourse.categoryName}</span>
+            <span>/</span>
+            <span className="text-[var(--brand-secondary)] font-bold">{displayCourse.title}</span>
+          </nav>
+
           <Link
             href="/courses"
             className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm mb-5 transition-colors"
@@ -193,112 +297,17 @@ export default async function CourseDetailPage({ params }: PageProps) {
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* ─── Left: Content Panels ─── */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* About */}
-            <section className="card p-7 bg-white dark:bg-slate-950">
-              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
-                <BookOpen size={20} className="text-blue-500" /> About This Program
-              </h2>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{displayCourse.description}</p>
-
-              <h3 className="font-bold text-[var(--text-primary)] mt-6 mb-3 text-sm">What You Will Learn</h3>
-              <div className="grid sm:grid-cols-2 gap-2">
-                {highlights.map((h) => (
-                  <div key={h} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
-                    <CheckCircle size={14} className="text-green-500 mt-0.5 shrink-0" />
-                    {h}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Course Details */}
-            <section className="card p-7 bg-white dark:bg-slate-950">
-              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-5" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
-                Program Details
-              </h2>
-              <div className="grid sm:grid-cols-3 gap-4">
-                {[
-                  { icon: Clock, label: "Duration", value: displayCourse.duration },
-                  { icon: Users, label: "Eligibility", value: displayCourse.level },
-                  { icon: Globe, label: "Language", value: displayCourse.language },
-                  { icon: Award, label: "Certification", value: "Institute Certificate" },
-                  { icon: Star, label: "Batch Size", value: "25–30 Students" },
-                  { icon: CheckCircle, label: "Study Material", value: "Included" },
-                ].map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900">
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
-                      <Icon size={14} className="text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{label}</p>
-                      <p className="text-sm font-semibold text-[var(--text-primary)] mt-0.5">{value}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Curriculum */}
-            <section className="card p-7 bg-white dark:bg-slate-950">
-              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-5" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
-                Curriculum Syllabus
-              </h2>
-              {displayCourse.modules.length === 0 ? (
-                <div className="text-center py-8">
-                  <BookOpen size={36} className="mx-auto text-slate-300 dark:text-slate-700 mb-3" />
-                  <p className="text-sm text-slate-400">Detailed curriculum is being updated. Contact us for the complete syllabus.</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {displayCourse.modules.map((mod: any, idx: number) => (
-                    <details key={mod.id} className="group border border-slate-100 dark:border-slate-900 rounded-2xl overflow-hidden" open={idx === 0}>
-                      <summary className="flex items-center justify-between p-4 cursor-pointer list-none font-bold text-sm text-[var(--text-primary)] hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
-                        <span className="flex items-center gap-2">
-                          <BookOpen size={14} className="text-blue-500" />
-                          {mod.title}
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-semibold">{mod.lessons?.length || 0} Topics</span>
-                      </summary>
-                      <div className="px-4 pb-4 space-y-1">
-                        {(mod.lessons || []).map((les: any) => (
-                          <div key={les.id} className="flex justify-between items-center text-xs text-[var(--text-secondary)] py-1.5 border-b last:border-0 border-slate-50 dark:border-slate-900">
-                            <span className="flex items-center gap-2">
-                              <span className="w-1 h-1 rounded-full bg-blue-400" />
-                              {les.title}
-                            </span>
-                            {les.duration && <span className="text-slate-400 font-semibold">{les.duration} Min</span>}
-                          </div>
-                        ))}
-                      </div>
-                    </details>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            {/* Faculty */}
-            {displayCourse.faculty && (
-              <section className="card p-7 bg-white dark:bg-slate-950">
-                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4" style={{ fontFamily: "var(--font-outfit, Outfit, sans-serif)" }}>
-                  Your Instructor
-                </h2>
-                <div className="flex items-start gap-5 p-5 border border-slate-100 dark:border-slate-900 rounded-2xl bg-slate-50 dark:bg-slate-900">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-2xl flex-shrink-0" style={{ background: "var(--gradient-brand)" }}>
-                    {displayCourse.faculty.name?.charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-base text-[var(--text-primary)]">{displayCourse.faculty.name}</h3>
-                    <p className="text-sm text-blue-600 dark:text-blue-400 font-semibold mt-0.5">{displayCourse.faculty.designation}</p>
-                    {displayCourse.faculty.experience && (
-                      <span className="inline-block mt-2 text-xs bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 rounded-full font-bold">
-                        {displayCourse.faculty.experience}+ Years Experience
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </section>
-            )}
+          <div className="lg:col-span-2">
+            <CourseTabs
+              overview={displayCourse.overview}
+              content={displayCourse.description}
+              eligibility={displayCourse.eligibility}
+              mentorship={displayCourse.mentorship}
+              highlights={highlights}
+              modules={displayCourse.modules}
+              faculties={facultiesList}
+              faqs={filteredFaqs.length > 0 ? filteredFaqs : faqs.slice(0, 5)}
+            />
           </div>
 
           {/* ─── Right: Sticky Purchase Sidebar ─── */}

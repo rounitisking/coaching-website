@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, CheckCircle, Loader2, Shield, CreditCard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createMockOrder } from "@/actions/payments";
+import { createMockOrder, createOrderAction, verifyPaymentAction } from "@/actions/payments";
 
 type Item = {
   id: string;
@@ -22,6 +22,21 @@ export default function CheckoutClient({ item, userId }: { item: Item; userId: s
 
   const discount = item.mrp > item.price ? Math.round(((item.mrp - item.price) / item.mrp) * 100) : 0;
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if ((window as any).Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleMockCheckout = () => {
     setError("");
     startTransition(async () => {
@@ -34,6 +49,89 @@ export default function CheckoutClient({ item, userId }: { item: Item; userId: s
           router.push("/dashboard");
           router.refresh();
         }, 2000);
+      }
+    });
+  };
+
+  const handleRazorpayCheckout = async () => {
+    setError("");
+    const isScriptLoaded = await loadRazorpayScript();
+    if (!isScriptLoaded) {
+      setError("Failed to load Razorpay SDK. Please check your internet connection.");
+      return;
+    }
+
+    startTransition(async () => {
+      // 1. Map item type to CartItem type (capitalized enum)
+      const mappedType =
+        item.type === "resource"
+          ? "RESOURCE"
+          : item.type === "course"
+          ? "COURSE"
+          : "TEST_SERIES";
+
+      const cartItem = {
+        id: item.id,
+        type: mappedType as any,
+        title: item.title,
+        price: item.price,
+      };
+
+      // 2. Create Order Action (on server)
+      const orderResult = await createOrderAction([cartItem]);
+      if (orderResult.error) {
+        setError(orderResult.error);
+        return;
+      }
+
+      // 3. Open Razorpay Widget
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
+        amount: Math.round(item.price * 100),
+        currency: "INR",
+        name: "Academica Institute",
+        description: item.title,
+        order_id: orderResult.razorpayOrderId,
+        handler: async function (response: any) {
+          // 4. Verify signature on server
+          startTransition(async () => {
+            const verifyResult = await verifyPaymentAction({
+              orderId: orderResult.orderId!,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            });
+
+            if (verifyResult.error) {
+              setError(verifyResult.error);
+            } else {
+              setSuccess(true);
+              setTimeout(() => {
+                router.push("/dashboard");
+                router.refresh();
+              }, 2000);
+            }
+          });
+        },
+        prefill: {
+          name: "",
+          email: "",
+        },
+        theme: {
+          color: "#2563eb",
+        },
+        modal: {
+          ondismiss: function () {
+            setError("Payment window was closed.");
+          },
+        },
+      };
+
+      try {
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      } catch (err: any) {
+        setError(`Razorpay Widget Error: ${err.message || err}. (Note: You are likely using placeholder credentials. Please configure real keys in .env.local to test the live checkout. Fallback Mock checkout is available below.)`);
       }
     });
   };
@@ -100,32 +198,48 @@ export default function CheckoutClient({ item, userId }: { item: Item; userId: s
               </div>
             )}
 
-            {/* Payment - Mock mode */}
-            <div className="checkout-card">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-amber-100 dark:bg-amber-950/30 rounded-lg flex items-center justify-center">
-                  <CreditCard size={16} className="text-amber-600" />
+            {/* Payment - Razorpay + Fallback Mock */}
+            <div className="checkout-card space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-950/30 rounded-lg flex items-center justify-center">
+                  <CreditCard size={16} className="text-blue-600" />
                 </div>
                 <div>
                   <h3 className="font-bold text-[var(--text-primary)] text-sm">Payment Gateway</h3>
-                  <p className="text-xs text-[var(--text-muted)]">Razorpay integration — pending setup</p>
+                  <p className="text-xs text-[var(--text-muted)]">Secured by Razorpay</p>
                 </div>
-                <span className="ml-auto text-xs bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-semibold">Sandbox Mode</span>
+                <span className="ml-auto text-xs bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 px-2.5 py-0.5 rounded-full font-semibold">Online Payment</span>
               </div>
-              <p className="text-sm text-[var(--text-muted)] mb-5">
-                Payment gateway will be enabled once Razorpay credentials are configured.
-                For now, use the sandbox checkout to test the enrollment flow.
+
+              <p className="text-xs text-[var(--text-muted)]">
+                Click below to pay via Razorpay (UPI, Card, Netbanking, Wallets).
               </p>
+
               <button
-                onClick={handleMockCheckout}
+                onClick={handleRazorpayCheckout}
                 disabled={isPending}
                 className="btn-primary w-full justify-center text-base py-3.5 font-bold flex items-center gap-2"
               >
                 {isPending ? (
                   <><Loader2 size={18} className="animate-spin" /> Processing...</>
                 ) : (
-                  <><Shield size={18} /> Complete Enrollment (Sandbox)</>
+                  <><Shield size={18} /> Pay Now (Razorpay)</>
                 )}
+              </button>
+
+              <div className="relative flex py-2 items-center">
+                <div className="flex-grow border-t border-[var(--border)]"></div>
+                <span className="flex-shrink mx-4 text-[10px] text-[var(--text-muted)] uppercase font-semibold">or test sandbox</span>
+                <div className="flex-grow border-t border-[var(--border)]"></div>
+              </div>
+
+              <button
+                onClick={handleMockCheckout}
+                disabled={isPending}
+                className="btn-secondary w-full justify-center text-xs py-2.5 font-bold flex items-center gap-1.5"
+                style={{ borderColor: "var(--border)" }}
+              >
+                <Shield size={14} /> Test Mock Checkout (Sandbox)
               </button>
             </div>
 

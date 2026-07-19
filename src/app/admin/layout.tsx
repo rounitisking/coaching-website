@@ -6,7 +6,8 @@ export const dynamic = "force-dynamic";
 import {
   LayoutDashboard, Image, BookOpen, Tag, Users, Trophy, Star,
   FileText, ClipboardList, Bell, HelpCircle, MessageSquare,
-  UserCheck, ShoppingCart, Settings, LogOut, ShieldAlert
+  UserCheck, ShoppingCart, Settings, LogOut, ShieldAlert,
+  Newspaper, Video, ClipboardCheck, GalleryHorizontal
 } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -31,6 +32,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     { label: "Testimonials", href: "/admin/testimonials", icon: Star },
     { label: "Resources", href: "/admin/resources", icon: FileText },
     { label: "Test Series", href: "/admin/test-series", icon: ClipboardList },
+    { label: "Blogs", href: "/admin/blogs", icon: Newspaper },
+    { label: "Demo Videos", href: "/admin/demo-videos", icon: Video },
+    { label: "Applications", href: "/admin/applications", icon: ClipboardCheck },
+    { label: "Gallery", href: "/admin/gallery", icon: GalleryHorizontal },
     { label: "Notices", href: "/admin/notices", icon: Bell },
     { label: "FAQs", href: "/admin/faqs", icon: HelpCircle },
     { label: "Popup", href: "/admin/popup", icon: MessageSquare },

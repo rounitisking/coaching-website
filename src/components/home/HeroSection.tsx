@@ -6,7 +6,6 @@ import {
   ArrowRight, Shield, Sparkles, BookOpen, Trophy, Users, Award,
   GraduationCap, Play
 } from "lucide-react";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const STATS = [
   { value: "10,000+", label: "Students" },
@@ -154,14 +153,12 @@ export function HeroSection() {
               >
                 Explore Courses <ArrowRight size={18} />
               </Link>
-              <a
-                href={buildWhatsAppUrl("Hi, I want to enroll at Academica Institute.")}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/demo-classes"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all hover:-translate-y-1 backdrop-blur-sm"
               >
-                <Play size={16} className="fill-current animate-bounce" /> Talk to Counsellor
-              </a>
+                <Play size={16} className="fill-current animate-bounce" /> Try Demo
+              </Link>
             </motion.div>
 
             {/* Stats */}

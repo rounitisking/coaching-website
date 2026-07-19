@@ -46,6 +46,9 @@ export async function getCourseBySlug(slug: string) {
     include: {
       category: true,
       faculty: true,
+      faculties: {
+        include: { faculty: true }
+      },
       modules: {
         include: { lessons: { orderBy: { order: 'asc' } } },
         orderBy: { order: 'asc' },

@@ -62,11 +62,11 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-[var(--bg-secondary)] border-t border-[var(--border)] overflow-hidden">
-      {/* Top gradient accent */}
+    <footer className="relative overflow-hidden" style={{ background: "#730C02" }}>
+      {/* Top golden accent bar */}
       <div
         className="absolute top-0 left-0 right-0 h-1"
-        style={{ background: "var(--gradient-brand)" }}
+        style={{ background: "linear-gradient(135deg, #F2A74B, #d98b2e)" }}
       />
 
       <div className="container-custom pt-16 pb-8">
@@ -77,20 +77,20 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-3 mb-4">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: "var(--gradient-brand)" }}
+                style={{ background: "rgba(242,167,75,0.2)", border: "1px solid rgba(242,167,75,0.3)" }}
               >
-                <span className="text-white font-black text-base">A</span>
+                <span className="text-[#F2A74B] font-black text-base">A</span>
               </div>
               <span
-                className="font-black text-xl text-[var(--text-primary)]"
+                className="font-black text-xl text-white"
                 style={{ fontFamily: "Outfit, sans-serif" }}
               >
                 Academica{" "}
-                <span className="gradient-text">Institute</span>
+                <span style={{ color: "#F2A74B" }}>Institute</span>
               </span>
             </Link>
 
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-5">
+            <p className="text-sm text-white/70 leading-relaxed mb-5">
               {institute.tagline}. Serving students since {institute.founded}.
             </p>
 
@@ -104,7 +104,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="w-9 h-9 rounded-xl flex items-center justify-center border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--brand-600)] hover:border-[var(--brand-400)] hover:bg-[var(--brand-50)] dark:hover:bg-[rgba(99,102,241,0.1)] transition-all duration-200"
+                    className="w-9 h-9 rounded-xl flex items-center justify-center border border-white/20 bg-white/10 text-white/70 hover:text-[#F2A74B] hover:border-[#F2A74B]/40 hover:bg-[#F2A74B]/10 transition-all duration-200"
                   >
                     <Icon />
                   </a>
@@ -116,7 +116,7 @@ export function Footer() {
           {/* Links Columns */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="font-bold text-sm uppercase tracking-wider text-[var(--text-primary)] mb-4">
+              <h4 className="font-bold text-sm uppercase tracking-wider text-white mb-4">
                 {title}
               </h4>
               <ul className="space-y-2.5">
@@ -124,7 +124,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[var(--text-secondary)] hover:text-[var(--brand-600)] transition-colors duration-200 hover:translate-x-0.5 inline-block"
+                      className="text-sm text-white/70 hover:text-[#F2A74B] transition-colors duration-200 hover:translate-x-0.5 inline-block"
                     >
                       {link.label}
                     </Link>
@@ -136,13 +136,13 @@ export function Footer() {
 
           {/* Contact Column */}
           <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[var(--text-primary)] mb-4">
+            <h4 className="font-bold text-sm uppercase tracking-wider text-white mb-4">
               Contact Us
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin size={16} className="text-[var(--brand-500)] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                <MapPin size={16} className="text-[#F2A74B] flex-shrink-0 mt-0.5" />
+                <span className="text-sm text-white/70 leading-relaxed">
                   {institute.address}
                 </span>
               </li>
@@ -150,9 +150,9 @@ export function Footer() {
                 <li key={ph}>
                   <a
                     href={`tel:${ph}`}
-                    className="flex items-center gap-3 text-sm text-[var(--text-secondary)] hover:text-[var(--brand-600)] transition-colors"
+                    className="flex items-center gap-3 text-sm text-white/70 hover:text-[#F2A74B] transition-colors"
                   >
-                    <Phone size={16} className="text-[var(--brand-500)] flex-shrink-0" />
+                    <Phone size={16} className="text-[#F2A74B] flex-shrink-0" />
                     {ph}
                   </a>
                 </li>
@@ -160,9 +160,9 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${institute.email}`}
-                  className="flex items-center gap-3 text-sm text-[var(--text-secondary)] hover:text-[var(--brand-600)] transition-colors"
+                  className="flex items-center gap-3 text-sm text-white/70 hover:text-[#F2A74B] transition-colors"
                 >
-                  <Mail size={16} className="text-[var(--brand-500)] flex-shrink-0" />
+                  <Mail size={16} className="text-[#F2A74B] flex-shrink-0" />
                   <span className="break-all">{institute.email}</span>
                 </a>
               </li>
@@ -191,20 +191,20 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[var(--border)] pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-          <p className="text-xs text-[var(--text-muted)]">
-            © {currentYear} {institute.name}. All rights reserved.
+        <div className="border-t border-white/20 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <p className="text-xs text-white/50">
+            &copy; {currentYear} {institute.name}. All rights reserved.
           </p>
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
             <Link
               href="/resources"
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--brand-600)] transition-colors"
+              className="text-xs text-white/50 hover:text-[#F2A74B] transition-colors"
             >
               Student Resources
             </Link>
             <Link
               href="/contact"
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--brand-600)] transition-colors"
+              className="text-xs text-white/50 hover:text-[#F2A74B] transition-colors"
             >
               Privacy Policy
             </Link>
@@ -212,12 +212,12 @@ export function Footer() {
         </div>
 
         {/* Developer Info */}
-        <div className="mt-4 pt-4 border-t border-[var(--border)]/40 text-center">
-          <p className="text-[10px] text-[var(--text-muted)] tracking-wide">
-            Developed by <span className="font-bold text-[var(--accent-500)]">ROUNIT SINGH</span> | For Website Development & Support:{" "}
+        <div className="mt-4 pt-4 border-t border-white/10 text-center">
+          <p className="text-[10px] text-white/40 tracking-wide">
+            Developed by <span className="font-bold text-[#F2A74B]">ROUNIT SINGH</span> | For Website Development &amp; Support:{" "}
             <a
               href="tel:+919821770032"
-              className="font-medium text-[var(--text-primary)] hover:text-[var(--accent-500)] dark:hover:text-[var(--accent-400)] transition-colors duration-200 underline underline-offset-2 decoration-[var(--border-strong)] hover:decoration-[var(--accent-500)]"
+              className="font-medium text-white/60 hover:text-[#F2A74B] transition-colors duration-200 underline underline-offset-2"
             >
               +91 9821770032
             </a>

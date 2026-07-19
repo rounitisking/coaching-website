@@ -1,10 +1,16 @@
-import { adminGetAllFaculty } from "@/actions/admin";
+import { adminGetAllFaculty, adminGetAllCourses } from "@/actions/admin";
 import { AdminFacultyClient } from "@/components/admin/AdminFacultyClient";
 
 export default async function AdminFacultyPage() {
   let faculty: any[] = [];
+  let courses: any[] = [];
   try {
-    faculty = await adminGetAllFaculty();
+    const res = await Promise.all([
+      adminGetAllFaculty(),
+      adminGetAllCourses(),
+    ]);
+    faculty = res[0] as any[];
+    courses = res[1] as any[];
   } catch (error) {
     console.error("Admin faculty fetch error:", error);
   }
@@ -18,7 +24,7 @@ export default async function AdminFacultyPage() {
         <p className="text-slate-500 dark:text-slate-400 mt-1">Configure teacher profiles, subjects, experience, and bios.</p>
       </div>
 
-      <AdminFacultyClient initialFaculty={faculty} />
+      <AdminFacultyClient initialFaculty={faculty} courses={courses} />
     </div>
   );
 }

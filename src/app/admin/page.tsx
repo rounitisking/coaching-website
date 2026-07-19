@@ -1,5 +1,5 @@
 import { getAdminStats } from "@/actions/admin";
-import { Users, BookOpen, ShoppingCart, IndianRupee } from "lucide-react";
+import { Users, BookOpen, ShoppingCart, IndianRupee, Newspaper, Video, FileText, ClipboardCheck, GraduationCap } from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminDashboardPage() {
@@ -10,6 +10,11 @@ export default async function AdminDashboardPage() {
     totalRevenue: 0,
     recentOrders: [] as any[],
     recentStudents: [] as any[],
+    totalFaculty: 0,
+    totalBlogs: 0,
+    totalDemoVideos: 0,
+    totalNotes: 0,
+    pendingApplications: 0,
   };
 
   try {
@@ -23,6 +28,11 @@ export default async function AdminDashboardPage() {
     { label: "Total Courses", value: stats.totalCourses, icon: BookOpen, color: "text-amber-600 bg-amber-100 dark:bg-amber-950/40" },
     { label: "Total Orders", value: stats.totalOrders, icon: ShoppingCart, color: "text-purple-600 bg-purple-100 dark:bg-purple-950/40" },
     { label: "Total Revenue", value: `₹${stats.totalRevenue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-950/40" },
+    { label: "Total Faculty", value: stats.totalFaculty, icon: GraduationCap, color: "text-rose-600 bg-rose-100 dark:bg-rose-950/40" },
+    { label: "Blogs", value: stats.totalBlogs, icon: Newspaper, color: "text-sky-600 bg-sky-100 dark:bg-sky-950/40" },
+    { label: "Demo Videos", value: stats.totalDemoVideos, icon: Video, color: "text-indigo-600 bg-indigo-100 dark:bg-indigo-950/40" },
+    { label: "Notes", value: stats.totalNotes, icon: FileText, color: "text-teal-600 bg-teal-100 dark:bg-teal-950/40" },
+    { label: "Pending Apps", value: stats.pendingApplications, icon: ClipboardCheck, color: "text-orange-600 bg-orange-100 dark:bg-orange-950/40" },
   ];
 
   return (
@@ -35,7 +45,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {statCards.map((card) => (
           <div
             key={card.label}

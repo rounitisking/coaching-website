@@ -27,6 +27,7 @@ interface Resource {
   categoryId?: string | null;
   category?: Category | null;
   order: number;
+  previewUrl?: string | null;
 }
 
 export function AdminResourcesClient({ initialResources, categories }: { initialResources: Resource[]; categories: Category[] }) {
@@ -49,6 +50,7 @@ export function AdminResourcesClient({ initialResources, categories }: { initial
   const [active, setActive] = useState(true);
   const [categoryId, setCategoryId] = useState(categories[0]?.id || "");
   const [order, setOrder] = useState(0);
+  const [previewUrl, setPreviewUrl] = useState("");
 
   const resetForm = () => {
     setTitle("");
@@ -63,6 +65,7 @@ export function AdminResourcesClient({ initialResources, categories }: { initial
     setActive(true);
     setCategoryId(categories[0]?.id || "");
     setOrder(0);
+    setPreviewUrl("");
     setActiveResource(null);
   };
 
@@ -85,6 +88,7 @@ export function AdminResourcesClient({ initialResources, categories }: { initial
     setActive(r.isActive);
     setCategoryId(r.categoryId || categories[0]?.id || "");
     setOrder(r.order);
+    setPreviewUrl(r.previewUrl || "");
     setIsModalOpen(true);
   };
 
@@ -105,6 +109,7 @@ export function AdminResourcesClient({ initialResources, categories }: { initial
       isActive: active,
       categoryId: categoryId || undefined,
       order: Number(order),
+      previewUrl: previewUrl || undefined,
     };
 
     startTransition(async () => {
@@ -259,6 +264,11 @@ export function AdminResourcesClient({ initialResources, categories }: { initial
           <div>
             <label className="label">Resource File Link (optional pasted URL)</label>
             <input type="text" className="input" placeholder="e.g. https://supabase.../file.pdf" value={fileUrl} onChange={(e) => setFileUrl(e.target.value)} />
+          </div>
+
+          <div>
+            <label className="label">Preview File Link (optional first-few-pages PDF URL)</label>
+            <input type="text" className="input" placeholder="e.g. https://supabase.../preview.pdf" value={previewUrl} onChange={(e) => setPreviewUrl(e.target.value)} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">

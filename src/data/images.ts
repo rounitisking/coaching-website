@@ -49,14 +49,14 @@ export const images = {
 
   // ── Gallery ────────────────────────────────────────────────
   gallery: {
-    batch2024a: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&q=80",
-    batch2024b: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80",
-    resultCelebration: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&q=80",
-    classroom: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80",
-    lab: "https://images.unsplash.com/photo-1532094349884-543559c80b4b?w=800&q=80",
-    seminar: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-    awards: "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=800&q=80",
-    sports: "https://images.unsplash.com/photo-1546519638405-a9f77ddb24e5?w=800&q=80",
+    batch2024a: "/Unknown.webp",
+    batch2024b: "/Unknown-2.webp",
+    resultCelebration: "/WhatsApp Image 2026-07-19 at 1.35.10 AM.webp",
+    classroom: "/WhatsApp Image 2026-07-19 at 1.35.11 AM.webp",
+    lab: "/WhatsApp Image 2026-07-19 at 1.35.11 AM-2.webp",
+    seminar: "/WhatsApp Image 2026-07-19 at 1.35.11 AM-3.webp",
+    awards: "/WhatsApp Image 2026-07-19 at 1.35.11 AM-4.webp",
+    sports: "/WhatsApp Image 2026-07-19 at 1.35.12 AM.webp",
   },
 
   // ── Courses ────────────────────────────────────────────────
