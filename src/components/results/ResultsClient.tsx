@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Search, Trophy } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getMatchedResultPhoto } from "@/lib/results";
 
 interface Result {
   id: string;
@@ -13,6 +14,7 @@ interface Result {
   rank?: string | null;
   score?: string | null;
   year: number;
+  course?: string | null;
 }
 
 interface ResultsClientProps {
@@ -23,11 +25,15 @@ const exams = ["All", "CA", "CS", "CMA", "CUET", "Boards"];
 const years = ["All", "2024", "2023"];
 
 export function ResultsClient({ initialResults }: ResultsClientProps) {
+  const mappedResults = initialResults.map((r) => ({
+    ...r,
+    photo: getMatchedResultPhoto(r.name, r.course || r.exam, r.photo)
+  }));
   const [examFilter, setExamFilter] = useState("All");
   const [yearFilter, setYearFilter] = useState("All");
   const [search, setSearch] = useState("");
 
-  const filtered = initialResults.filter((r) => {
+  const filtered = mappedResults.filter((r) => {
     const matchExam = examFilter === "All" || r.exam.toUpperCase().includes(examFilter.toUpperCase());
     const matchYear = yearFilter === "All" || r.year.toString() === yearFilter;
     const matchSearch = search === "" || r.name.toLowerCase().includes(search.toLowerCase());

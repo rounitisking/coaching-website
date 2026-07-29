@@ -75,7 +75,7 @@ export function CourseTabs({
               <h3 className="text-lg font-bold mb-3" style={{ color: "var(--text-primary)" }}>
                 Program Overview
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
                 {overview || content || "Detailed program description is being updated. Enroll today to access full course features."}
               </p>
             </div>
@@ -150,7 +150,7 @@ export function CourseTabs({
             <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
               Eligibility Criteria
             </h3>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
               {eligibility || "This program is suitable for students pursuing professional commerce/science tracks or aiming for top school board scores."}
             </p>
           </div>
@@ -163,7 +163,7 @@ export function CourseTabs({
               <h3 className="text-lg font-bold mb-3" style={{ color: "var(--text-primary)" }}>
                 Personal Mentorship &amp; Support
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
                 {mentorship || "Get regular doubt-solving sessions, 1-on-1 mentorship with experts, and weekly practice worksheets tailored to your learning pace."}
               </p>
             </div>

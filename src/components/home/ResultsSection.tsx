@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getFeaturedResults } from "@/data/results";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getMatchedResultPhoto } from "@/lib/results";
 
 const examColors: Record<string, string> = {
   CA: "linear-gradient(135deg, #6366f1, #4f46e5)",
@@ -14,7 +15,10 @@ const examColors: Record<string, string> = {
 };
 
 export function ResultsSection() {
-  const featuredResults = getFeaturedResults();
+  const featuredResults = getFeaturedResults().map((r) => ({
+    ...r,
+    photo: getMatchedResultPhoto(r.name, r.course || r.exam, r.photo)
+  }));
   // Duplicate for seamless infinite scroll — two copies so translateX(-50%) loops perfectly
   const marqueeItems = [...featuredResults, ...featuredResults];
 

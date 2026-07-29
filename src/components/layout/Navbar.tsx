@@ -211,7 +211,7 @@ export function Navbar() {
       {/* ── Announcement Strip ──────────────────────────────────────────── */}
       <div
         className="hidden sm:block text-white text-xs font-medium py-2 px-4 text-center overflow-hidden relative"
-        style={{ background: "#730C02", minHeight: "32px" }}
+        style={{ background: "#875822", minHeight: "32px" }}
       >
         <span className="font-bold tracking-widest uppercase">Choose Professional &middot; Become Professional</span>
       </div>
@@ -221,10 +221,10 @@ export function Navbar() {
         className={cn(
           "sticky top-0 z-50 transition-all duration-300",
           scrolled
-            ? "border-b border-[#5a0901]/40 shadow-lg"
+            ? "border-b border-[#875822]/40 shadow-lg"
             : ""
         )}
-        style={{ background: "#730C02" }}
+        style={{ background: "#A66F2D" }}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -254,20 +254,17 @@ export function Navbar() {
             </button>
 
             {/* Mobile Logo */}
-            <Link href="/" className="flex items-center gap-2 flex-shrink-0" aria-label="Academica Institute Home">
-              <div className="relative h-9 w-9 rounded-full overflow-hidden border-2 border-white/40 flex-shrink-0">
+            <Link href="/" className="flex items-center flex-shrink-0" aria-label="Academica Institute Home">
+              <div className="relative h-10 w-10 rounded-full bg-white border border-[#BF8E34]/20 flex items-center justify-center p-1.5 shadow-sm">
                 <Image
                   src="/logo.webp"
                   alt="Academica Institute"
-                  fill
-                  className="object-cover"
+                  width={32}
+                  height={32}
+                  className="object-contain rounded-full"
                   priority
                 />
               </div>
-              <span className="text-sm font-bold text-white leading-tight">
-                Academica<br />
-                <span className="text-[10px] font-semibold text-white/70">Institute</span>
-              </span>
             </Link>
 
             <div className="flex-1" />
@@ -285,7 +282,7 @@ export function Navbar() {
 
             <Link
               href="/auth"
-              className="flex-shrink-0 text-[10px] py-1 px-2.5 h-8 rounded-lg font-semibold flex items-center justify-center bg-[#F2A74B] text-white hover:bg-[#d98b2e] transition-colors"
+              className="flex-shrink-0 text-[10px] py-1 px-2.5 h-8 rounded-lg font-semibold flex items-center justify-center bg-[#F2CD5E] text-[#2D251E] hover:bg-[#BF8E34] hover:text-white transition-colors"
             >
               Enroll
             </Link>
@@ -294,20 +291,17 @@ export function Navbar() {
           {/* ── DESKTOP HEADER ────────────────────────────────────────── */}
           <div className="hidden lg:flex items-center justify-between h-16">
             {/* Desktop Logo */}
-            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0" aria-label="Academica Institute Home">
-              <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-white/40 flex-shrink-0">
+            <Link href="/" className="flex items-center flex-shrink-0" aria-label="Academica Institute Home">
+              <div className="relative h-11 w-11 rounded-full bg-white border border-[#BF8E34]/20 flex items-center justify-center p-1.5 shadow-sm">
                 <Image
                   src="/logo.webp"
                   alt="Academica Institute"
-                  fill
-                  className="object-cover"
+                  width={36}
+                  height={36}
+                  className="object-contain rounded-full"
                   priority
                 />
               </div>
-              <span className="font-bold text-white leading-tight flex flex-col">
-                <span>Academica</span>
-                <span className="text-xs font-semibold text-white/70">Institute</span>
-              </span>
             </Link>
 
             {/* Desktop nav links */}
@@ -319,8 +313,8 @@ export function Navbar() {
                 className={cn(
                   "px-3 py-2 rounded-lg text-sm font-medium transition-all",
                   pathname === "/"
-                    ? "text-[#F2A74B] bg-white/10"
-                    : "text-white/80 hover:text-[#F2A74B] hover:bg-white/10"
+                    ? "text-[#F2CD5E] bg-white/10"
+                    : "text-white/80 hover:text-[#F2CD5E] hover:bg-white/10"
                 )}
               >
                 Home
@@ -345,8 +339,8 @@ export function Navbar() {
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
                     pathname.startsWith("/courses")
-                      ? "text-[#F2A74B] bg-white/10"
-                      : "text-white/80 hover:text-[#F2A74B] hover:bg-white/10"
+                      ? "text-[#F2CD5E] bg-white/10"
+                      : "text-white/80 hover:text-[#F2CD5E] hover:bg-white/10"
                   )}
                 >
                   Courses
@@ -385,8 +379,8 @@ export function Navbar() {
                                     className={cn(
                                       "w-full flex items-center justify-between text-left py-1.5 px-2 rounded-lg transition-all text-xs font-semibold cursor-pointer",
                                       isExpanded 
-                                        ? "text-[#730C02] bg-[#730C02]/5 font-bold" 
-                                        : "text-[var(--text-secondary)] hover:text-[#730C02] hover:bg-slate-50 dark:hover:bg-white/5"
+                                        ? "text-[#A66F2D] bg-[#A66F2D]/5 font-bold" 
+                                        : "text-[var(--text-secondary)] hover:text-[#A66F2D] hover:bg-slate-50 dark:hover:bg-white/5"
                                     )}
                                     onMouseEnter={() => handleGroupHover(col.label, group.title)}
                                     onClick={() => handleGroupToggle(col.label, group.title)}
@@ -397,7 +391,7 @@ export function Navbar() {
                                       size={12}
                                       className={cn(
                                         "transition-transform duration-200 text-slate-400",
-                                        isExpanded && "rotate-90 text-[#730C02]"
+                                        isExpanded && "rotate-90 text-[#A66F2D]"
                                       )}
                                     />
                                   </button>
@@ -420,14 +414,14 @@ export function Navbar() {
                                             href={item.href}
                                             className={cn(
                                               "mega-menu-item flex items-center gap-1.5 text-xs py-0.5",
-                                              isActive && "text-[#730C02] font-bold"
+                                              isActive && "text-[#A66F2D] font-bold"
                                             )}
-                                            style={isActive ? { color: "#730C02" } : undefined}
+                                            style={isActive ? { color: "#A66F2D" } : undefined}
                                             role="menuitem"
                                           >
                                             <span
                                               className="mega-menu-dot flex-shrink-0"
-                                              style={isActive ? { background: "#730C02" } : undefined}
+                                              style={isActive ? { background: "#A66F2D" } : undefined}
                                             />
                                             {item.label}
                                           </Link>
@@ -455,8 +449,8 @@ export function Navbar() {
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
                     pathname.startsWith("/faculty") || pathname === "/apply-for-job"
-                      ? "text-[#F2A74B] bg-white/10"
-                      : "text-white/80 hover:text-[#F2A74B] hover:bg-white/10"
+                      ? "text-[#F2CD5E] bg-white/10"
+                      : "text-white/80 hover:text-[#F2CD5E] hover:bg-white/10"
                   )}
                 >
                   Faculty
@@ -502,8 +496,8 @@ export function Navbar() {
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap",
                     pathname.startsWith(link.href)
-                      ? "text-[#F2A74B] bg-white/10"
-                      : "text-white/80 hover:text-[#F2A74B] hover:bg-white/10"
+                      ? "text-[#F2CD5E] bg-white/10"
+                      : "text-white/80 hover:text-[#F2CD5E] hover:bg-white/10"
                   )}
                 >
                   {link.label}
@@ -528,14 +522,14 @@ export function Navbar() {
 
               <a
                 href={`tel:${institute.phone[0]}`}
-                className="flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-[#F2A74B] transition-colors"
+                className="flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-[#F2CD5E] transition-colors"
                 aria-label={`Call ${institute.phone[0]}`}
               >
                 <Phone size={14} />
                 <span className="hidden xl:inline">{institute.phone[0]}</span>
               </a>
 
-              <Link href="/auth" className="text-sm py-2 px-5 font-bold rounded-lg bg-[#F2A74B] text-white hover:bg-[#d98b2e] transition-colors">
+              <Link href="/auth" className="text-sm py-2 px-5 font-bold rounded-lg bg-[#F2CD5E] text-[#2D251E] hover:bg-[#BF8E34] hover:text-white transition-colors">
                 Enroll Now
               </Link>
             </div>
@@ -651,14 +645,14 @@ export function Navbar() {
                                             className={cn(
                                               "w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
                                               isGroupExpanded 
-                                                ? "text-[#730C02] bg-[#730C02]/5" 
-                                                : "text-[var(--text-secondary)] hover:text-[#730C02]"
+                                                ? "text-[#A66F2D] bg-[#A66F2D]/5" 
+                                                : "text-[var(--text-secondary)] hover:text-[#A66F2D]"
                                             )}
                                           >
                                             <span className="flex items-center gap-1.5">
                                               <ChevronRight
                                                 size={11}
-                                                className={cn("transition-transform duration-200 text-slate-400", isGroupExpanded && "rotate-90 text-[#730C02]")}
+                                                className={cn("transition-transform duration-200 text-slate-400", isGroupExpanded && "rotate-90 text-[#A66F2D]")}
                                               />
                                               {group.title}
                                             </span>
@@ -685,13 +679,13 @@ export function Navbar() {
                                                       className={cn(
                                                         "flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg min-h-[32px] transition-colors",
                                                         isActive
-                                                          ? "text-[#730C02] font-bold bg-[var(--bg-muted)]"
-                                                          : "text-[var(--text-secondary)] hover:text-[#730C02] hover:bg-[var(--bg-muted)]"
+                                                          ? "text-[#A66F2D] font-bold bg-[var(--bg-muted)]"
+                                                          : "text-[var(--text-secondary)] hover:text-[#A66F2D] hover:bg-[var(--bg-muted)]"
                                                       )}
                                                     >
                                                       <span className={cn(
                                                         "w-1 h-1 rounded-full flex-shrink-0",
-                                                        isActive ? "bg-[#730C02]" : "bg-current opacity-40"
+                                                        isActive ? "bg-[#A66F2D]" : "bg-current opacity-40"
                                                       )} />
                                                       {item.label}
                                                     </Link>

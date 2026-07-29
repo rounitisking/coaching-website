@@ -34,6 +34,7 @@ export default async function ResultsPage() {
         rank: r.rank,
         score: r.score,
         year: r.year,
+        course: r.course,
       }))
     : staticResults.map((r) => ({
         id: r.id,
@@ -43,6 +44,7 @@ export default async function ResultsPage() {
         rank: r.rank,
         score: r.score,
         year: r.year,
+        course: r.course,
       }));
 
   return (

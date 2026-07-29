@@ -19,12 +19,7 @@ interface FacultyMarqueeProps {
 }
 
 const FALLBACK_FACULTY: FacultyMember[] = [
-  { id: "f1", name: "CA Rajesh Kumar", slug: "rajesh-kumar", designation: "CA Foundation Expert", subjects: ["Accounts", "Law"], photo: null, experience: 15 },
-  { id: "f2", name: "Prof. Priya Sharma", slug: "priya-sharma", designation: "Economics Specialist", subjects: ["Economics", "Stats"], photo: null, experience: 12 },
-  { id: "f3", name: "CA Amit Verma", slug: "amit-verma", designation: "Tax & Audit Faculty", subjects: ["Tax", "Audit"], photo: null, experience: 10 },
-  { id: "f4", name: "Dr. Sunita Rao", slug: "sunita-rao", designation: "Science & Math Expert", subjects: ["Physics", "Math"], photo: null, experience: 14 },
-  { id: "f5", name: "Prof. Vikram Singh", slug: "vikram-singh", designation: "Commerce & CUET Coach", subjects: ["BST", "Economics"], photo: null, experience: 11 },
-  { id: "f6", name: "CA Meena Gupta", slug: "meena-gupta", designation: "CS & CMA Expert", subjects: ["Company Law", "Costing"], photo: null, experience: 9 },
+  { id: "f1", name: "Vijay Sharma", slug: "vijay-sharma", designation: "Academic Director", subjects: ["Accounts", "Law"], photo: "/faculty/vijay sharma.webp", experience: 10 },
 ];
 
 const SUBJECT_COLORS: Record<string, string> = {

@@ -46,6 +46,8 @@ export interface Course {
   relatedCourseIds: string[];
   featured: boolean;
   whatsappMessage: string;
+  overview?: string;
+  mentorship?: string;
 }
 
 export interface SyllabusSection {

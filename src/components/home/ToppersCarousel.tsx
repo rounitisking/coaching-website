@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Quote, Trophy } from "lucide-react";
+import { getMatchedResultPhoto } from "@/lib/results";
 
 interface Topper {
   id: string;
@@ -42,7 +43,7 @@ function getGradient(exam: string): string {
   return "linear-gradient(135deg, #2563eb 0%, #4f46e5 100%)";
 }
 
-// Static fallback data if DB is empty
+// Static fallback data if DB is empty (Restored original results data)
 const FALLBACK_TOPPERS: Topper[] = [
   { id: "1", studentName: "Aman Sen", exam: "CA Foundation", rank: "AIR 1", score: "365/400", course: "CA Foundation Program", year: 2024, achievement: "All India Rank 1 — Top performer in the country", quote: "Academica Institute gave me the structured guidance and motivation I needed to achieve this rank." },
   { id: "2", studentName: "Karan Gupta", exam: "CUET", rank: "100%ile", score: "800/800", course: "CUET Prep Program", year: 2024, achievement: "Perfect score — Admitted to SRCC, Delhi University", quote: "The mock tests and CBT practice gave me real exam confidence." },
@@ -51,7 +52,10 @@ const FALLBACK_TOPPERS: Topper[] = [
 ];
 
 export function ToppersCarousel({ toppers }: ToppersCarouselProps) {
-  const displayToppers = toppers.length > 0 ? toppers : FALLBACK_TOPPERS;
+  const displayToppers = (toppers.length > 0 ? toppers : FALLBACK_TOPPERS).map((t) => ({
+    ...t,
+    photo: t.photo && t.photo.startsWith("/result/") ? t.photo : getMatchedResultPhoto(t.studentName, t.course || t.exam, t.photo)
+  }));
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState<"left" | "right" | null>(null);
   const [visible, setVisible] = useState(true);

@@ -122,96 +122,22 @@ async function main() {
   console.log('✅ Created default categories')
 
   // 4. Create Faculty (matching static faculty data catalog exactly)
-  const rajesh = await prisma.faculty.create({
+  const vijay = await prisma.faculty.create({
     data: {
-      name: 'CA Rajesh Kumar',
-      slug: 'rajesh-kumar',
-      designation: 'Head of Accountancy & CA Program',
-      subjects: ['Accountancy', 'CA Foundation', 'Class 11 Commerce', 'Class 12 Commerce'],
-      experience: 18,
+      name: 'Vijay Sharma',
+      slug: 'vijay-sharma',
+      designation: 'Senior Lead Faculty & Academic Director',
+      subjects: ['Accountancy', 'Business Law', 'Economics', 'Class 11 Commerce', 'Class 12 Commerce'],
+      experience: 10,
       featured: true,
-      bio: 'CA Rajesh Kumar is a senior Chartered Accountant and one of the most renowned Accountancy teachers in Delhi. With a Ph.D. from the prestigious Delhi School of Economics, he has mentored over 5,000 students preparing for CA Foundation and Board exams.',
-      qualification: 'FCA (Fellow Chartered Accountant) | Ph.D. in Commerce, Delhi School of Economics',
+      bio: 'Vijay Sharma is a highly experienced Chartered Accountant who has been leading professional CA, CS, and CMA coaching programs for over a decade. His simplified approach to accounting concepts, double-entry ledger methods, and legal frameworks has helped thousands of students secure top board scores and national ranks.',
+      qualification: 'FCA (Fellow Chartered Accountant) | B.Com (Hons), SRCC',
       category: 'COMMERCE',
       order: 1,
+      photo: '/faculty/vijay sharma.webp'
     },
   })
-
-  const priya = await prisma.faculty.create({
-    data: {
-      name: 'CS Priya Sharma',
-      slug: 'priya-sharma',
-      designation: 'Head of Business Law & CS Program',
-      subjects: ['Business Studies', 'CS Preparation', 'Commercial Law'],
-      experience: 15,
-      featured: true,
-      bio: 'CS Priya Sharma is a practicing Company Secretary and senior educator specializing in corporate law and business studies. Her interactive teaching methods, visual law chart mappings, and simplified legal explanations have helped hundreds of students pass.',
-      qualification: 'FCS (Fellow Company Secretary) | LL.M., Delhi University',
-      category: 'COMMERCE',
-      order: 2,
-    },
-  })
-
-  const amit = await prisma.faculty.create({
-    data: {
-      name: 'CMA Amit Verma',
-      slug: 'amit-verma',
-      designation: 'Head of Economics & CMA Program',
-      subjects: ['Economics', 'CMA Preparation', 'Class 11 Commerce', 'Class 12 Commerce'],
-      experience: 14,
-      featured: true,
-      bio: 'CMA Amit Verma is an eminent economist and Cost Accountant who brings rich analytical insights to the classroom. With an M.Phil from JNU, he specializes in Macroeconomics, Microeconomics, and Costing for professional exams.',
-      qualification: 'FCMA (Fellow Cost & Management Accountant) | M.Phil in Economics, JNU',
-      category: 'COMMERCE',
-      order: 3,
-    },
-  })
-
-  const sneha = await prisma.faculty.create({
-    data: {
-      name: 'Dr. Sneha Gupta',
-      slug: 'sneha-gupta',
-      designation: 'Senior Faculty — Accountancy & CUET',
-      subjects: ['Accountancy', 'CUET', 'Class 11 Commerce', 'Class 12 Commerce'],
-      experience: 12,
-      featured: true,
-      bio: 'Dr. Sneha Gupta specializes in Financial Management and advanced accountancy. She is highly passionate about building solid mathematical and accountancy concepts.',
-      qualification: 'Ph.D. in Corporate Finance, Delhi University | M.Com',
-      category: 'COMMERCE',
-      order: 4,
-    },
-  })
-
-  const vikram = await prisma.faculty.create({
-    data: {
-      name: 'Mr. Vikram Singh',
-      slug: 'vikram-singh',
-      designation: 'Senior Educator — Class 9 & 10 Tuition',
-      subjects: ['Mathematics', 'Science', 'Class 9 Tuition', 'Class 10 Tuition'],
-      experience: 10,
-      featured: false,
-      bio: 'Mr. Vikram Singh has been teaching Class 9 and 10 students for over a decade. He specializes in building a robust base in Science and Mathematics.',
-      qualification: 'M.Sc. in Physics, Delhi University | B.Ed.',
-      category: 'SCHOOL',
-      order: 5,
-    },
-  })
-
-  const anita = await prisma.faculty.create({
-    data: {
-      name: 'Mrs. Anita Mehta',
-      slug: 'anita-mehta',
-      designation: 'Senior Educator — Class 9 & 10 Social Science & English',
-      subjects: ['Social Studies', 'English', 'Class 9 Tuition', 'Class 10 Tuition'],
-      experience: 16,
-      featured: false,
-      bio: 'Mrs. Anita Mehta has a legendary reputation for making humanities and English exciting for junior and secondary level students.',
-      qualification: 'M.A. in History, Delhi University | B.Ed.',
-      category: 'SCHOOL',
-      order: 6,
-    },
-  })
-  console.log('✅ Created 6 default faculty members')
+  console.log('✅ Created default faculty member Vijay Sharma')
 
   // 5. Create Courses
   const caFoundation = await prisma.course.create({
@@ -219,16 +145,16 @@ async function main() {
       title: 'CA Foundation Prep Batch',
       slug: 'ca-foundation',
       description: 'All-in-one preparation package covering Accounts, Business Law, Quantitative Aptitude, and Business Economics.',
-      price: 12000,
-      mrp: 18000,
+      price: 5499,
+      mrp: 9499,
       categoryId: commerceCategory.id,
-      facultyId: rajesh.id,
+      facultyId: vijay.id,
       duration: '6 Months',
       level: 'CA Foundation',
       featured: true,
     },
   })
-  console.log('✅ Created sample course')
+  console.log('✅ Created sample course linked to Vijay Sharma')
 
   // 6. Create Course Modules & Lessons
   const module1 = await prisma.courseModule.create({
@@ -483,6 +409,181 @@ async function main() {
     ],
   })
   console.log('✅ Created 6 resources/notes')
+
+  // 12. Create Results
+  await prisma.result.createMany({
+    data: [
+      {
+        id: "anshul-cseet",
+        studentName: "Anshul",
+        photo: "/result/Anshul CSEET.webp",
+        exam: "CSEET",
+        rank: "Distinction",
+        score: "172/200",
+        year: 2025,
+        course: "CS Executive Entrance Test (CSEET)",
+        quote: "Academica's law modules are outstanding and helped me build absolute conceptual clarity in legal aptitude.",
+        achievement: "Passed CSEET",
+        featured: true,
+        order: 1,
+      },
+      {
+        id: "deepanshi-cseet",
+        studentName: "Deepanshi",
+        photo: "/result/Deepanshi CSEET.webp",
+        exam: "CSEET",
+        rank: "Distinction",
+        score: "168/200",
+        year: 2025,
+        course: "CS Executive Entrance Test (CSEET)",
+        quote: "I got complete clarity on logical reasoning and business communication, thanks to regular mock series.",
+        achievement: "Passed CSEET",
+        featured: true,
+        order: 2,
+      },
+      {
+        id: "mahi-ca-found",
+        studentName: "Mahi",
+        photo: "/result/MAhi CA FOUNDATION.webp",
+        exam: "CA Foundation",
+        rank: "AIR 23",
+        score: "348/400",
+        year: 2025,
+        course: "CA Foundation Program",
+        quote: "Regular mock tests and feedback sessions from Vijay Sir helped me manage my exam time effectively.",
+        achievement: "CA Foundation Ranker",
+        featured: true,
+        order: 3,
+      },
+      {
+        id: "rohit-ca-found",
+        studentName: "Rohit Sharma",
+        photo: "/result/Rohit Sharma. CA Foundation.webp",
+        exam: "CA Foundation",
+        rank: "AIR 15",
+        score: "352/400",
+        year: 2025,
+        course: "CA Foundation Program",
+        quote: "Thanks to Academica's structured coaching for accounts and law, I secured AIR 15 in my first attempt.",
+        achievement: "CA Foundation Topper",
+        featured: true,
+        order: 4,
+      },
+      {
+        id: "shivani-cseet",
+        studentName: "Shivani",
+        photo: "/result/Shivani CSEET.webp",
+        exam: "CSEET",
+        rank: "Cleared",
+        score: "155/200",
+        year: 2025,
+        course: "CS Executive Entrance Test (CSEET)",
+        quote: "Very good concept lectures, detailed study guides, and daily practice papers helped me pass.",
+        achievement: "Passed CSEET",
+        featured: true,
+        order: 5,
+      },
+      {
+        id: "shreya-ca-found",
+        studentName: "Shreya",
+        photo: "/result/Shreya CA FOUNDATION.webp",
+        exam: "CA Foundation",
+        rank: "Cleared",
+        score: "312/400",
+        year: 2025,
+        course: "CA Foundation Program",
+        quote: "Conceptual learning was key to clearing CA Foundation, and the faculty here simplifies everything.",
+        achievement: "Cleared CA Foundation",
+        featured: true,
+        order: 6,
+      },
+      {
+        id: "tanishaka-cseet",
+        studentName: "Tanishaka",
+        photo: "/result/Tanishaka CSEET.webp",
+        exam: "CSEET",
+        rank: "Distinction",
+        score: "174/200",
+        year: 2025,
+        course: "CS Executive Entrance Test (CSEET)",
+        quote: "Academica is the best institute for law. Flowcharts and memory keys made law sections easy to remember.",
+        achievement: "Passed CSEET",
+        featured: true,
+        order: 7,
+      },
+      {
+        id: "vidhi-cma-found",
+        studentName: "Vidhi",
+        photo: "/result/Vidhi cma foundation.webp",
+        exam: "CMA Foundation",
+        rank: "AIR 18",
+        score: "344/400",
+        year: 2025,
+        course: "CMA Foundation Prep",
+        quote: "The mock exam portal replicates the actual computer-based test perfectly, boosting my confidence.",
+        achievement: "CMA Foundation Ranker",
+        featured: true,
+        order: 8,
+      },
+      {
+        id: "bhoomi-cma-found",
+        studentName: "Bhoomi",
+        photo: "/result/bhoomi cma foundation.webp",
+        exam: "CMA Foundation",
+        rank: "Cleared",
+        score: "298/400",
+        year: 2025,
+        course: "CMA Foundation Prep",
+        quote: "Special attention was given to costing basics, which helped me clear CMA Foundation easily.",
+        achievement: "Cleared CMA Foundation",
+        featured: true,
+        order: 9,
+      },
+      {
+        id: "ritesh-cma-found",
+        studentName: "Ritesh",
+        photo: "/result/ritesh cma foundation.webp",
+        exam: "CMA Foundation",
+        rank: "AIR 9",
+        score: "360/400",
+        year: 2025,
+        course: "CMA Foundation Prep",
+        quote: "I highly recommend Academica for Costing and Law. The doubt resolution is fast and very helpful.",
+        achievement: "CMA Foundation Top 10",
+        featured: true,
+        order: 10,
+      },
+      {
+        id: "sudhiksha-cma-inter",
+        studentName: "Sudhiksha",
+        photo: "/result/sudhiksha cma inter.webp",
+        exam: "CMA Intermediate",
+        rank: "AIR 12",
+        score: "576/800",
+        year: 2025,
+        course: "CMA Intermediate Prep",
+        quote: "The best environment for professional commerce studies in Delhi. The support system is exceptional.",
+        achievement: "CMA Intermediate Topper",
+        featured: true,
+        order: 11,
+      },
+      {
+        id: "vidhi-sharma-cma-found",
+        studentName: "Vidhi Sharma",
+        photo: "/result/vidhi sharma cma foundation.webp",
+        exam: "CMA Foundation",
+        rank: "Cleared",
+        score: "310/400",
+        year: 2025,
+        course: "CMA Foundation Prep",
+        quote: "Daily revision sheets and mock tests prepared me to handle all cost accountancy models.",
+        achievement: "Cleared CMA Foundation",
+        featured: true,
+        order: 12,
+      },
+    ]
+  })
+  console.log('✅ Created 12 default student results')
 
   console.log('🌱 Seed script successfully finished!')
 }

@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import fs from "fs";
+import path from "path";
 import {
   GraduationCap, Trophy, Target, Shield, Zap, Heart,
   ChevronRight, Users, Award, TrendingUp
@@ -17,6 +19,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { GoogleReviewsSection } from "@/components/home/GoogleReviewsSection";
 import { ToppersCarousel } from "@/components/home/ToppersCarousel";
 import { FacultyMarquee } from "@/components/home/FacultyMarquee";
+import { AdmissionCarousel } from "@/components/home/AdmissionCarousel";
 import { db } from "@/lib/db";
 
 // ─── Fallback Data ──────────────────────────────────────────────────────────
@@ -53,14 +56,13 @@ const STATS = [
 
 export default async function HomePage() {
   // Parallel data fetches with fallbacks
-  const [notices, faqs, popup, toppers, faculty, testimonials] = await Promise.all([
+  const [notices, faqs, popup, dbResults, faculty, testimonials] = await Promise.all([
     getActiveNotices().catch(() => []),
     getActiveFAQs().catch(() => []),
     getActivePopup().catch(() => null),
     db.result.findMany({
-      where: { isActive: true, featured: true },
+      where: { isActive: true },
       orderBy: { order: "asc" },
-      take: 8,
     }).catch(() => []),
     db.faculty.findMany({
       where: { featured: true, isActive: true },
@@ -73,6 +75,139 @@ export default async function HomePage() {
       take: 6,
     }).catch(() => []),
   ]);
+
+  // Construct toppers list dynamically from public/result folder
+  let dynamicToppers: any[] = [];
+  try {
+    const resultDir = path.join(process.cwd(), "public", "result");
+    if (fs.existsSync(resultDir)) {
+      const files = fs.readdirSync(resultDir);
+      
+      const { results: staticResults } = await import("@/data/results");
+      
+      const normalize = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, "").trim();
+      
+      let parsedIndex = 0;
+      for (const file of files) {
+        const fileLower = file.toLowerCase();
+        // Ignore DS_Store, files starting with WhatsApp, and non-image formats
+        if (fileLower.startsWith("whatsapp") || fileLower.startsWith(".") || !/\.(webp|png|jpg|jpeg)$/i.test(fileLower)) {
+          continue;
+        }
+        
+        // Parse details from filename
+        const baseName = file.replace(/\.[^/.]+$/, "").trim();
+        const coursesToMatch = [
+          "ca foundation",
+          "ca intermediate",
+          "ca inter",
+          "ca final",
+          "cs foundation",
+          "cs executive",
+          "cs professional",
+          "cseet",
+          "cma foundation",
+          "cma intermediate",
+          "cma inter",
+          "cma final"
+        ];
+        
+        let matchedCourse = "";
+        let matchedIndex = -1;
+        
+        for (const c of coursesToMatch) {
+          const idx = baseName.toLowerCase().indexOf(c);
+          if (idx !== -1) {
+            matchedCourse = baseName.substring(idx, idx + c.length);
+            matchedIndex = idx;
+            break;
+          }
+        }
+        
+        if (matchedIndex === -1) {
+          const fallbackKeywords = ["ca", "cs", "cma", "jee", "neet", "class"];
+          for (const kw of fallbackKeywords) {
+            const idx = baseName.toLowerCase().indexOf(kw);
+            if (idx !== -1) {
+              matchedCourse = baseName.substring(idx);
+              matchedIndex = idx;
+              break;
+            }
+          }
+        }
+        
+        if (matchedIndex === -1) {
+          const lastSpace = baseName.lastIndexOf(" ");
+          if (lastSpace !== -1) {
+            matchedIndex = lastSpace;
+            matchedCourse = baseName.substring(lastSpace + 1);
+          }
+        }
+        
+        let parsedStudentName = baseName;
+        let parsedCourseName = "Coaching";
+        
+        if (matchedIndex !== -1) {
+          parsedStudentName = baseName.substring(0, matchedIndex).trim().replace(/[\s\.\-_]+$/, "").trim();
+          parsedCourseName = matchedCourse.trim();
+        }
+        
+        // Formatting course name nicely
+        const lowerFC = parsedCourseName.toLowerCase();
+        if (lowerFC === "cseet") parsedCourseName = "CS CSEET";
+        else if (lowerFC === "ca foundation") parsedCourseName = "CA Foundation";
+        else if (lowerFC === "ca intermediate" || lowerFC === "ca inter") parsedCourseName = "CA Intermediate";
+        else if (lowerFC === "ca final") parsedCourseName = "CA Final";
+        else if (lowerFC === "cs foundation") parsedCourseName = "CS Foundation";
+        else if (lowerFC === "cs executive") parsedCourseName = "CS Executive";
+        else if (lowerFC === "cs professional") parsedCourseName = "CS Professional";
+        else if (lowerFC === "cma foundation") parsedCourseName = "CMA Foundation";
+        else if (lowerFC === "cma intermediate" || lowerFC === "cma inter") parsedCourseName = "CMA Intermediate";
+        else if (lowerFC === "cma final") parsedCourseName = "CMA Final";
+        
+        const normParsed = normalize(parsedStudentName);
+        
+        // Find match in DB first, then static fallback data
+        const dbMatch = dbResults.find((r) => normalize(r.studentName) === normParsed);
+        const staticMatch = staticResults.find((r) => normalize(r.name) === normParsed);
+        
+        const match = dbMatch || staticMatch;
+        
+        if (match) {
+          dynamicToppers.push({
+            id: (match as any).id || `dynamic-${parsedIndex}`,
+            studentName: (match as any).studentName || (match as any).name || parsedStudentName,
+            photo: `/result/${file}`,
+            exam: parsedCourseName || (match as any).exam || "Topper",
+            rank: (match as any).rank || null,
+            score: (match as any).score || null,
+            course: (match as any).course || parsedCourseName,
+            batch: (match as any).batch || null,
+            year: (match as any).year || 2024,
+            achievement: (match as any).achievement || (match as any).selectionBadge || null,
+            quote: (match as any).quote || (match as any).successStory || null,
+          });
+        } else {
+          dynamicToppers.push({
+            id: `dynamic-${parsedIndex}`,
+            studentName: parsedStudentName,
+            photo: `/result/${file}`,
+            exam: parsedCourseName,
+            rank: null,
+            score: null,
+            course: parsedCourseName,
+            batch: null,
+            year: 2026,
+            achievement: null,
+            quote: null,
+          });
+        }
+        parsedIndex++;
+      }
+    }
+  } catch (err) {
+    console.error("Failed to generate dynamic toppers list:", err);
+  }
 
   const displayTestimonials = testimonials.length ? testimonials : FALLBACK_TESTIMONIALS;
   const displayFAQs = faqs.length ? faqs : FALLBACK_FAQS;
@@ -103,12 +238,13 @@ export default async function HomePage() {
       )}
 
       {/* 1. Results Slider */}
-      <ToppersCarousel toppers={toppers} />
+      <ToppersCarousel toppers={dynamicToppers} />
 
       {/* 2. Shape Your Future Hero */}
       <HeroSection />
 
-
+      {/* Admissions Open 2026 */}
+      <AdmissionCarousel />
 
       {/* 4. Stats */}
       <section className="section-padding" style={{ background: "var(--bg-primary)" }}>
