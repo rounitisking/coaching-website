@@ -28,7 +28,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[var(--bg-secondary)]">
       {/* Responsive Sidebar */}
       <DashboardSidebar user={user} unreadCount={unreadCount} logoutAction={handleLogout} />
 

@@ -18,10 +18,10 @@ export function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
       {faqs.map((faq) => (
         <div
           key={faq.id}
-          className="rounded-xl overflow-hidden"
+          className="rounded-xl overflow-hidden transition-all duration-300"
           style={{
-            border: `1.5px solid ${open === faq.id ? "var(--brand-secondary)" : "var(--border)"}`,
-            transition: "border-color 0.2s",
+            border: `1.5px solid ${open === faq.id ? "var(--accent)" : "var(--border)"}`,
+            background: open === faq.id ? "var(--bg-muted)" : "var(--bg-card)",
           }}
         >
           <button
@@ -36,7 +36,7 @@ export function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
             </span>
             <motion.div
               animate={{ rotate: open === faq.id ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
               className="flex-shrink-0"
             >
               <ChevronDown
@@ -44,7 +44,7 @@ export function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                 style={{
                   color:
                     open === faq.id
-                      ? "var(--brand-secondary)"
+                      ? "#D4AF37"
                       : "var(--text-muted)",
                 }}
               />
@@ -56,7 +56,7 @@ export function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeInOut" }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 style={{ overflow: "hidden" }}
               >
                 <p

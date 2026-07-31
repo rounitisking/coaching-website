@@ -126,7 +126,7 @@ export function AdminBannersClient({ initialBanners }: { initialBanners: Banner[
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -146,7 +146,7 @@ export function AdminBannersClient({ initialBanners }: { initialBanners: Banner[
               ) : (
                 banners.map((b) => (
                   <tr key={b.id}>
-                    <td className="font-bold text-slate-800 dark:text-slate-200">{b.title}</td>
+                    <td className="font-bold text-[var(--text-primary)]">{b.title}</td>
                     <td>{b.ctaText || "-"}</td>
                     <td>{b.order}</td>
                     <td>
@@ -158,7 +158,7 @@ export function AdminBannersClient({ initialBanners }: { initialBanners: Banner[
                       <div className="flex gap-2">
                         <button
                           onClick={() => openEditModal(b)}
-                          className="p-1.5 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-900"
+                          className="p-1.5 rounded-lg border hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)]"
                           style={{ borderColor: "var(--border)" }}
                         >
                           <Edit2 size={12} className="text-slate-600" />

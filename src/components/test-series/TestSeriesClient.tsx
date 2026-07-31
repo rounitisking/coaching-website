@@ -80,7 +80,7 @@ export default function TestSeriesClient({ testSeries, userPurchases, isLoggedIn
                 className="p-5 flex items-start gap-4"
                 style={{ background: categoryColors[ts.category.type] || categoryColors.COMMERCE }}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-[var(--bg-card)]/20 rounded-xl flex items-center justify-center flex-shrink-0">
                   <ClipboardList size={22} className="text-white" />
                 </div>
                 <div>

@@ -26,17 +26,17 @@ export default async function DashboardOrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-3xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Order &amp; Billing History
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Review receipts, statuses, and transaction details.</p>
+        <p className="text-[var(--text-muted)] mt-1">Review receipts, statuses, and transaction details.</p>
       </div>
 
       {orders.length === 0 ? (
-        <div className="p-12 rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center max-w-xl mx-auto mt-8">
+        <div className="p-12 rounded-3xl bg-[var(--bg-card)] border border-[var(--border)] text-center max-w-xl mx-auto mt-8">
           <ShoppingBag className="mx-auto text-slate-300 dark:text-slate-700 mb-4" size={56} />
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">No transactions found</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">No transactions found</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1 mb-6">
             You haven't purchased any preparatory materials or courses yet.
           </p>
           <Link href="/courses" className="btn-primary">
@@ -44,7 +44,7 @@ export default async function DashboardOrdersPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
           <div className="table-container">
             <table className="table">
               <thead>
@@ -59,7 +59,7 @@ export default async function DashboardOrdersPage() {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id}>
-                    <td className="font-bold text-slate-800 dark:text-slate-200">
+                    <td className="font-bold text-[var(--text-primary)]">
                       #{order.id.slice(-8).toUpperCase()}
                     </td>
                     <td>
@@ -75,14 +75,14 @@ export default async function DashboardOrdersPage() {
                           <span className="text-xs text-slate-400 italic">No details</span>
                         ) : (
                           order.items.map((item: any) => (
-                            <div key={item.id} className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                            <div key={item.id} className="text-xs font-semibold text-[var(--text-secondary)]">
                               • {item.title || "Study Program"}
                             </div>
                           ))
                         )}
                       </div>
                     </td>
-                    <td className="font-bold text-slate-800 dark:text-slate-100">
+                    <td className="font-bold text-[var(--text-primary)]">
                       ₹{order.amount.toLocaleString("en-IN")}
                     </td>
                     <td>

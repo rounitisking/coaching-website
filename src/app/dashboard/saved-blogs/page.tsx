@@ -42,19 +42,19 @@ export default async function SavedBlogsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-2xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Saved Blogs
         </h1>
         <p className="text-slate-555 dark:text-slate-400 text-sm mt-1">Bookmarked articles and preparation tips.</p>
       </div>
 
       {bookmarks.length === 0 ? (
-        <div className="p-12 rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center max-w-xl mx-auto mt-8">
+        <div className="p-12 rounded-3xl bg-[var(--bg-card)] border border-[var(--border)] text-center max-w-xl mx-auto mt-8">
           <div className="w-14 h-14 bg-blue-50 dark:bg-blue-950/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 mx-auto mb-4">
             <Bookmark size={24} />
           </div>
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">No saved blogs</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">No saved blogs</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1 mb-6">
             Bookmark articles from our blog to read them later or save key revision resources.
           </p>
           <Link href="/blog" className="btn-primary btn-sm inline-flex items-center gap-1">
@@ -71,7 +71,7 @@ export default async function SavedBlogsPage() {
             return (
               <div
                 key={blog.id}
-                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group"
+                className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group"
               >
                 <div>
                   {blog.featuredImage && (
@@ -94,10 +94,10 @@ export default async function SavedBlogsPage() {
                       <Clock size={12} /> {blog.readTime || 5} min read
                     </span>
                   </div>
-                  <h3 className="font-bold text-slate-800 dark:text-slate-200 text-sm leading-snug line-clamp-2">
+                  <h3 className="font-bold text-[var(--text-primary)] text-sm leading-snug line-clamp-2">
                     {blog.title}
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">
+                  <p className="text-xs text-[var(--text-muted)] mt-2 line-clamp-2">
                     {blog.excerpt}
                   </p>
                 </div>
@@ -117,7 +117,7 @@ export default async function SavedBlogsPage() {
                     <form action={handleRemoveBookmark.bind(null, blog.id)}>
                       <button
                         type="submit"
-                        className="p-1.5 border border-slate-200 dark:border-slate-800 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-550 rounded-lg transition-colors"
+                        className="p-1.5 border border-[var(--border)] hover:bg-red-50 dark:hover:bg-red-950/20 text-red-550 rounded-lg transition-colors"
                         title="Remove Bookmark"
                       >
                         <Trash2 size={12} />

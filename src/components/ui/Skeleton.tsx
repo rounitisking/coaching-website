@@ -6,7 +6,7 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function CourseCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-4 shadow-sm">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-5 space-y-4 shadow-sm">
       <Skeleton className="w-full h-44 rounded-2xl" />
       <div className="space-y-2">
         <Skeleton className="w-1/3 h-4 rounded" />
@@ -23,7 +23,7 @@ export function CourseCardSkeleton() {
 
 export function BlogCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-4 shadow-sm">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-5 space-y-4 shadow-sm">
       <Skeleton className="w-full h-40 rounded-2xl" />
       <div className="space-y-2">
         <div className="flex justify-between">
@@ -43,7 +43,7 @@ export function BlogCardSkeleton() {
 
 export function DemoCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
       <div>
         <Skeleton className="w-full aspect-video" />
         <div className="p-4 space-y-3">
@@ -65,7 +65,7 @@ export function DemoCardSkeleton() {
 
 export function NoteCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-4 shadow-sm">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-5 space-y-4 shadow-sm">
       <div className="flex items-center gap-3">
         <Skeleton className="w-10 h-10 rounded-xl" />
         <div className="space-y-1.5 flex-1">

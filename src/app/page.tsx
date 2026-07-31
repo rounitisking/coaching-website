@@ -247,15 +247,16 @@ export default async function HomePage() {
       <AdmissionCarousel />
 
       {/* 4. Stats */}
-      <section className="section-padding" style={{ background: "var(--bg-primary)" }}>
+      <section className="section-padding" style={{ background: "var(--bg-secondary)" }}>
         <div className="container-custom">
           <AnimatedStats stats={STATS} />
         </div>
       </section>
 
       {/* 5. Academica Advantage (Why Choose Us) */}
-      <section className="section-padding" style={{ background: "var(--bg-muted)" }}>
-        <div className="container-custom">
+      <section className="section-padding relative overflow-hidden" style={{ background: "var(--bg-muted)" }}>
+        <div className="blur-decoration-left" />
+        <div className="container-custom relative z-10">
           <div className="text-center mb-12">
             <p className="section-eyebrow">Why Academica</p>
             <h2 className="section-title">The Academica Advantage</h2>
@@ -268,9 +269,9 @@ export default async function HomePage() {
               <div key={item.title} className="card-flat p-6">
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: "rgba(37,99,235,0.08)" }}
+                  style={{ background: "rgba(79, 125, 255, 0.08)" }}
                 >
-                  <item.icon size={20} style={{ color: "var(--brand-secondary)" }} />
+                  <item.icon size={20} style={{ color: "var(--accent)" }} />
                 </div>
                 <h3 className="font-bold mb-2" style={{ color: "var(--text-primary)" }}>
                   {item.title}
@@ -302,8 +303,9 @@ export default async function HomePage() {
       <GoogleReviewsSection />
 
       {/* 9. FAQs */}
-      <section className="section-padding" style={{ background: "var(--bg-primary)" }}>
-        <div className="container-custom">
+      <section className="section-padding relative overflow-hidden" style={{ background: "var(--bg-primary)" }}>
+        <div className="blur-decoration-right" />
+        <div className="container-custom relative z-10">
           <div className="text-center mb-12">
             <p className="section-eyebrow">Have Questions?</p>
             <h2 className="section-title">Frequently Asked</h2>

@@ -96,7 +96,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 mb-8 shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-6 mb-8 shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           {/* Search */}
           <div className="relative md:col-span-4">
@@ -151,7 +151,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
 
         {/* Price Slider Overlay */}
         {(showMobileFilters || true) && (
-          <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-5 pt-5 border-t border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex-1 max-w-md">
               <div className="flex justify-between text-xs font-semibold text-[var(--text-secondary)] mb-2">
                 <span>Price Limit</span>
@@ -182,7 +182,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
           return (
             <div key={course.id} className="card overflow-hidden group flex flex-col justify-between text-left">
               <div>
-                <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                <div className="relative h-48 overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center">
                   {course.thumbnail ? (
                     <Image
                       src={course.thumbnail}

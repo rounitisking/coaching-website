@@ -300,18 +300,18 @@ export function NotesClient({ notes, isLoggedIn, purchasedIds = [] }: NotesClien
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-4 py-2 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 disabled:opacity-50 font-semibold text-sm transition-colors text-[var(--text-primary)] cursor-pointer disabled:cursor-not-allowed"
+                  className="px-4 py-2 border rounded-xl hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)] disabled:opacity-50 font-semibold text-sm transition-colors text-[var(--text-primary)] cursor-pointer disabled:cursor-not-allowed"
                   style={{ borderColor: "var(--border)" }}
                 >
                   Previous
                 </button>
-                <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                <span className="text-sm font-semibold text-[var(--text-muted)]">
                   Page {page} of {totalPages}
                 </span>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-4 py-2 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 disabled:opacity-50 font-semibold text-sm transition-colors text-[var(--text-primary)] cursor-pointer disabled:cursor-not-allowed"
+                  className="px-4 py-2 border rounded-xl hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)] disabled:opacity-50 font-semibold text-sm transition-colors text-[var(--text-primary)] cursor-pointer disabled:cursor-not-allowed"
                   style={{ borderColor: "var(--border)" }}
                 >
                   Next

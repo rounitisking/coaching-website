@@ -61,10 +61,10 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       {/* Welcome Header */}
       <div>
-        <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-3xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Welcome back, {session.user.name || "Student"}!
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Track your classes, exams, resources and progress here.</p>
+        <p className="text-[var(--text-muted)] mt-1">Track your classes, exams, resources and progress here.</p>
       </div>
 
       {/* Grid Stats */}
@@ -73,11 +73,11 @@ export default async function DashboardPage() {
           <Link
             key={item.label}
             href={item.href}
-            className="p-5 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between group hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all no-underline"
+            className="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-between group hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all no-underline"
           >
             <div>
-              <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{item.label}</p>
-              <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mt-1 group-hover:scale-105 transition-transform" style={{ fontFamily: "Outfit, sans-serif" }}>{item.value}</h3>
+              <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">{item.label}</p>
+              <h3 className="text-2xl font-black text-[var(--text-primary)] mt-1 group-hover:scale-105 transition-transform" style={{ fontFamily: "Outfit, sans-serif" }}>{item.value}</h3>
             </div>
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${item.color}`}>
               <item.icon size={20} />
@@ -91,7 +91,7 @@ export default async function DashboardPage() {
         {/* Left 2 Cols: My Active Courses */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">My Recent Courses</h2>
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">My Recent Courses</h2>
             <Link href="/dashboard/courses" className="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline">
               View all <ArrowRight size={14} />
             </Link>
@@ -99,25 +99,25 @@ export default async function DashboardPage() {
 
           <div className="space-y-3">
             {recentEnrollments.length === 0 ? (
-              <div className="p-8 rounded-2xl bg-white dark:bg-slate-950 border border-dashed border-slate-200 dark:border-slate-800 text-center">
+              <div className="p-8 rounded-2xl bg-[var(--bg-card)] border border-dashed border-[var(--border)] text-center">
                 <BookOpen className="mx-auto text-slate-300 dark:text-slate-700 mb-3" size={40} />
-                <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200">No active enrollments</h3>
-                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 mb-4">Browse our available coaching programs to begin learning.</p>
+                <h3 className="font-bold text-sm text-[var(--text-primary)]">No active enrollments</h3>
+                <p className="text-xs text-[var(--text-muted)] mt-1 mb-4">Browse our available coaching programs to begin learning.</p>
                 <Link href="/courses" className="btn-primary btn-sm">Browse Courses</Link>
               </div>
             ) : (
               recentEnrollments.map((enr) => (
                 <div
                   key={enr.id}
-                  className="p-4 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between hover:shadow-sm transition-all"
+                  className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-between hover:shadow-sm transition-all"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-blue-600">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-blue-600">
                       <BookOpen size={20} />
                     </div>
                     <div>
-                      <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100">{enr.course.title}</h3>
-                      <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Enrolled on {new Date(enr.enrolledAt).toLocaleDateString("en-IN")}</p>
+                      <h3 className="font-bold text-sm text-[var(--text-primary)]">{enr.course.title}</h3>
+                      <p className="text-xs text-[var(--text-muted)] mt-0.5">Enrolled on {new Date(enr.enrolledAt).toLocaleDateString("en-IN")}</p>
                     </div>
                   </div>
                   <Link href={`/dashboard/courses/${enr.course.slug}`} className="btn-secondary btn-sm">
@@ -132,7 +132,7 @@ export default async function DashboardPage() {
         {/* Right Col: Recent Activity / Orders */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Recent Orders</h2>
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">Recent Orders</h2>
             <Link href="/dashboard/orders" className="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline">
               History <ArrowRight size={14} />
             </Link>
@@ -140,22 +140,22 @@ export default async function DashboardPage() {
 
           <div className="space-y-3">
             {recentOrders.length === 0 ? (
-              <div className="p-8 rounded-2xl bg-white dark:bg-slate-950 border border-dashed border-slate-200 dark:border-slate-800 text-center">
+              <div className="p-8 rounded-2xl bg-[var(--bg-card)] border border-dashed border-[var(--border)] text-center">
                 <ShoppingBag className="mx-auto text-slate-300 dark:text-slate-700 mb-3" size={40} />
-                <p className="text-xs text-slate-400 dark:text-slate-500">No order history found.</p>
+                <p className="text-xs text-[var(--text-muted)]">No order history found.</p>
               </div>
             ) : (
               recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="p-4 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs"
+                  className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-between text-xs"
                 >
                   <div>
-                    <h4 className="font-bold text-slate-800 dark:text-slate-100">Order #{order.id.slice(-6).toUpperCase()}</h4>
-                    <p className="text-slate-400 dark:text-slate-500 mt-0.5">{new Date(order.createdAt).toLocaleDateString("en-IN")}</p>
+                    <h4 className="font-bold text-[var(--text-primary)]">Order #{order.id.slice(-6).toUpperCase()}</h4>
+                    <p className="text-[var(--text-muted)] mt-0.5">{new Date(order.createdAt).toLocaleDateString("en-IN")}</p>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-slate-800 dark:text-slate-100 block">₹{order.amount}</span>
+                    <span className="font-bold text-[var(--text-primary)] block">₹{order.amount}</span>
                     <span
                       className={`inline-block px-2 py-0.5 rounded-full font-bold uppercase mt-1 ${
                         order.status === "PAID"

@@ -71,7 +71,7 @@ export function AdminStudentsClient({ initialData, page }: AdminStudentsClientPr
       </div>
 
       {/* Students list table */}
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -96,11 +96,11 @@ export function AdminStudentsClient({ initialData, page }: AdminStudentsClientPr
                   <tr key={s.id}>
                     <td>
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500">
+                        <div className="w-9 h-9 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center text-slate-500">
                           <User size={16} />
                         </div>
                         <div>
-                          <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">{s.name || "Student"}</h4>
+                          <h4 className="font-bold text-sm text-[var(--text-primary)]">{s.name || "Student"}</h4>
                           <p className="text-[10px] text-slate-400 mt-0.5">{s.email}</p>
                         </div>
                       </div>

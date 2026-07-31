@@ -63,9 +63,9 @@ export default function FacultyClient({ faculty }: { faculty: Teacher[] }) {
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
         {filtered.map((f) => (
-          <div key={f.id} className="card overflow-hidden group flex flex-col justify-between bg-white dark:bg-slate-950">
+          <div key={f.id} className="card overflow-hidden group flex flex-col justify-between bg-[var(--bg-card)]">
             <div>
-              <div className="relative h-56 sm:h-64 overflow-hidden bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+              <div className="relative h-56 sm:h-64 overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center">
                 {f.photo ? (
                   <Image
                     src={f.photo}

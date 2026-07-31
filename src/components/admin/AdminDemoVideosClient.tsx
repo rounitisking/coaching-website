@@ -101,10 +101,10 @@ export function AdminDemoVideosClient({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {videos.length === 0 && (
-          <div className="col-span-2 text-slate-500 text-center py-10 bg-slate-900 rounded-xl">No demo videos yet.</div>
+          <div className="col-span-2 text-slate-500 text-center py-10 bg-[var(--bg-secondary)] rounded-xl">No demo videos yet.</div>
         )}
         {videos.map(v => (
-          <div key={v.id} className="bg-slate-900 rounded-xl overflow-hidden flex flex-col">
+          <div key={v.id} className="bg-[var(--bg-secondary)] rounded-xl overflow-hidden flex flex-col">
             <div className="relative aspect-video bg-slate-800">
               {v.thumbnailUrl && <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-cover" />}
               {v.featured && (

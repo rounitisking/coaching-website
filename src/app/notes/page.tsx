@@ -48,13 +48,13 @@ export default async function NotesPage() {
             First 3 notes are free for everyone.
           </p>
           <div className="flex flex-wrap gap-3 justify-center text-sm">
-            <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-white">
+            <div className="flex items-center gap-2 bg-[var(--bg-card)]/10 rounded-full px-4 py-2 text-white">
               <FileText size={14} /> Free notes available
             </div>
-            <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-white">
+            <div className="flex items-center gap-2 bg-[var(--bg-card)]/10 rounded-full px-4 py-2 text-white">
               <Download size={14} /> Instant download
             </div>
-            <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-white">
+            <div className="flex items-center gap-2 bg-[var(--bg-card)]/10 rounded-full px-4 py-2 text-white">
               <Lock size={14} /> PDF format
             </div>
           </div>

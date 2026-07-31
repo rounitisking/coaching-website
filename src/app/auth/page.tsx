@@ -198,9 +198,9 @@ export default function AuthPage() {
                 </button>
 
                 <div className="relative flex pb-3 items-center">
-                  <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                  <div className="flex-grow border-t border-[var(--border)]"></div>
                   <span className="flex-shrink mx-3 text-[var(--text-muted)] text-[10px] font-bold uppercase tracking-widest">Or</span>
-                  <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                  <div className="flex-grow border-t border-[var(--border)]"></div>
                 </div>
 
                 <div>

@@ -76,7 +76,7 @@ export function ImageUpload({ bucket, value, onChange, label = "Image Asset" }: 
             className={`px-2.5 py-1 text-xs font-semibold rounded-md border ${
               mode === "upload"
                 ? "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950/20 dark:text-blue-400"
-                : "border-slate-200 dark:border-slate-800 text-slate-500"
+                : "border-[var(--border)] text-slate-500"
             }`}
           >
             File Upload
@@ -87,7 +87,7 @@ export function ImageUpload({ bucket, value, onChange, label = "Image Asset" }: 
             className={`px-2.5 py-1 text-xs font-semibold rounded-md border ${
               mode === "url"
                 ? "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950/20 dark:text-blue-400"
-                : "border-slate-200 dark:border-slate-800 text-slate-500"
+                : "border-[var(--border)] text-slate-500"
             }`}
           >
             Pasted URL
@@ -106,9 +106,9 @@ export function ImageUpload({ bucket, value, onChange, label = "Image Asset" }: 
         </p>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-950/20">
+      <div className="flex flex-col sm:flex-row gap-4 items-center p-4 border border-dashed border-[var(--border)] rounded-2xl bg-[var(--bg-secondary)]/50 dark:bg-[var(--bg-primary)]/20">
         {/* Preview image */}
-        <div className="relative w-20 h-20 rounded-xl overflow-hidden border bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
+        <div className="relative w-20 h-20 rounded-xl overflow-hidden border bg-[var(--bg-secondary)] flex items-center justify-center shrink-0">
           {value ? (
             <Image src={value} alt="Preview" fill className="object-cover" sizes="80px" />
           ) : (
@@ -124,7 +124,7 @@ export function ImageUpload({ bucket, value, onChange, label = "Image Asset" }: 
         <div className="flex-1 w-full">
           {mode === "upload" ? (
             <div>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mb-2">JPG, PNG or WebP. Max size 8MB.</p>
+              <p className="text-xs text-[var(--text-muted)] mb-2">JPG, PNG or WebP. Max size 8MB.</p>
               <label className="btn-secondary btn-sm cursor-pointer inline-flex items-center gap-1.5 w-full justify-center">
                 <Camera size={14} /> Upload Image
                 <input

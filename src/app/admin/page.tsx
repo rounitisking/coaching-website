@@ -38,10 +38,10 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-3xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Console Overview
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Real-time statistics and administrative actions.</p>
+        <p className="text-[var(--text-muted)] mt-1">Real-time statistics and administrative actions.</p>
       </div>
 
       {/* Stats Grid */}
@@ -49,11 +49,11 @@ export default async function AdminDashboardPage() {
         {statCards.map((card) => (
           <div
             key={card.label}
-            className="p-5 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between"
+            className="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-between"
           >
             <div>
-              <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{card.label}</p>
-              <h3 className="text-xl md:text-2xl font-black text-slate-800 dark:text-slate-100 mt-1" style={{ fontFamily: "Outfit, sans-serif" }}>{card.value}</h3>
+              <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">{card.label}</p>
+              <h3 className="text-xl md:text-2xl font-black text-[var(--text-primary)] mt-1" style={{ fontFamily: "Outfit, sans-serif" }}>{card.value}</h3>
             </div>
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${card.color}`}>
               <card.icon size={18} />
@@ -66,8 +66,8 @@ export default async function AdminDashboardPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Recent orders */}
         <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Recent Purchase Activities</h2>
-          <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">Recent Purchase Activities</h2>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
             <div className="table-container">
               <table className="table">
                 <thead>
@@ -86,7 +86,7 @@ export default async function AdminDashboardPage() {
                   ) : (
                     stats.recentOrders.map((order: any) => (
                       <tr key={order.id}>
-                        <td className="font-semibold text-slate-700 dark:text-slate-300">
+                        <td className="font-semibold text-[var(--text-secondary)]">
                           #{order.id.slice(-6).toUpperCase()}
                         </td>
                         <td>{order.user?.name || "Student"}</td>
@@ -111,16 +111,16 @@ export default async function AdminDashboardPage() {
 
         {/* Recent student registrations */}
         <div className="space-y-4">
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">New Registrations</h2>
-          <div className="p-5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-3">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">New Registrations</h2>
+          <div className="p-5 bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl space-y-3">
             {stats.recentStudents.length === 0 ? (
               <p className="text-slate-400 text-xs text-center py-4">No recent students.</p>
             ) : (
               stats.recentStudents.map((stud: any) => (
-                <div key={stud.id} className="flex items-center justify-between text-xs py-2 border-b last:border-0 border-slate-100 dark:border-slate-800">
+                <div key={stud.id} className="flex items-center justify-between text-xs py-2 border-b last:border-0 border-[var(--border)]">
                   <div>
-                    <p className="font-bold text-slate-800 dark:text-slate-200">{stud.name || "Unnamed"}</p>
-                    <p className="text-slate-400 dark:text-slate-500 mt-0.5">{stud.email}</p>
+                    <p className="font-bold text-[var(--text-primary)]">{stud.name || "Unnamed"}</p>
+                    <p className="text-[var(--text-muted)] mt-0.5">{stud.email}</p>
                   </div>
                   <span className="text-slate-400">
                     {new Date(stud.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}

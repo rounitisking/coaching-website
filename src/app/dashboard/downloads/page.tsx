@@ -45,7 +45,7 @@ export default async function DashboardDownloadsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-2xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           My Downloads
         </h1>
         <p className="text-slate-550 dark:text-slate-400 text-sm mt-1">
@@ -54,10 +54,10 @@ export default async function DashboardDownloadsPage() {
       </div>
 
       {allAvailable.length === 0 ? (
-        <div className="p-12 rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center max-w-xl mx-auto mt-8">
+        <div className="p-12 rounded-3xl bg-[var(--bg-card)] border border-[var(--border)] text-center max-w-xl mx-auto mt-8">
           <FileText className="mx-auto text-slate-300 dark:text-slate-700 mb-4" size={56} />
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">No downloads available</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">No downloads available</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1 mb-6">
             You don't have any free or premium downloads yet. Browse our Notes section to get started.
           </p>
           <Link href="/notes" className="btn-primary">
@@ -69,10 +69,10 @@ export default async function DashboardDownloadsPage() {
           {allAvailable.map((res) => (
             <div
               key={res.id}
-              className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow"
+              className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow"
             >
               <div>
-                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-blue-600 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-blue-600 mb-4">
                   <FileText size={20} />
                 </div>
                 
@@ -80,7 +80,7 @@ export default async function DashboardDownloadsPage() {
                   {res.type}
                 </span>
 
-                <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100 leading-snug">
+                <h3 className="font-bold text-sm text-[var(--text-primary)] leading-snug">
                   {res.title}
                 </h3>
                 <p className="text-xs text-slate-550 dark:text-slate-400 mt-2 line-clamp-2">
@@ -88,7 +88,7 @@ export default async function DashboardDownloadsPage() {
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-6 flex items-center justify-between">
+              <div className="pt-4 border-t border-[var(--border)] mt-6 flex items-center justify-between">
                 <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 px-2 py-0.5 rounded-md">
                   {res.isFree ? "Free Access" : "Purchased"}
                 </span>

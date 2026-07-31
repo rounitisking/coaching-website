@@ -103,7 +103,7 @@ export function ResultsClient({ initialResults }: ResultsClientProps) {
           filtered.map((r) => (
             <div key={r.id} className="card p-5 text-center flex flex-col items-center justify-between">
               <div className="flex flex-col items-center">
-                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500/20 bg-slate-100 dark:bg-slate-900 flex items-center justify-center mb-4">
+                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500/20 bg-[var(--bg-secondary)] flex items-center justify-center mb-4">
                   {r.photo ? (
                     <Image
                       src={r.photo}

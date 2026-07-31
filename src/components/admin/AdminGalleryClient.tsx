@@ -73,7 +73,7 @@ export function AdminGalleryClient({ initialImages }: { initialImages: GalleryIm
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {images.length === 0 && (
-          <div className="col-span-4 text-slate-500 text-center py-10 bg-slate-900 rounded-xl">No gallery images yet.</div>
+          <div className="col-span-4 text-slate-500 text-center py-10 bg-[var(--bg-secondary)] rounded-xl">No gallery images yet.</div>
         )}
         {images.map(img => (
           <div key={img.id} className={`group relative rounded-xl overflow-hidden bg-slate-800 aspect-square ${!img.isActive ? "opacity-50" : ""}`}>

@@ -81,7 +81,7 @@ export function AdminOrdersClient({ initialData, page }: AdminOrdersClientProps)
               className={`px-2.5 py-1 text-xs font-semibold rounded-md border ${
                 statusFilter === status
                   ? "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950/20 dark:text-blue-400"
-                  : "border-slate-200 dark:border-slate-800 text-slate-500"
+                  : "border-[var(--border)] text-slate-500"
               }`}
             >
               {status}
@@ -91,7 +91,7 @@ export function AdminOrdersClient({ initialData, page }: AdminOrdersClientProps)
       </div>
 
       {/* Orders list table */}
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -114,7 +114,7 @@ export function AdminOrdersClient({ initialData, page }: AdminOrdersClientProps)
               ) : (
                 filtered.map((order) => (
                   <tr key={order.id}>
-                    <td className="font-bold text-slate-800 dark:text-slate-200">
+                    <td className="font-bold text-[var(--text-primary)]">
                       #{order.id.slice(-8).toUpperCase()}
                     </td>
                     <td>

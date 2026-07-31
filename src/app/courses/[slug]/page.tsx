@@ -312,7 +312,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
           {/* ─── Right: Sticky Purchase Sidebar ─── */}
           <aside>
-            <div className="card p-6 bg-white dark:bg-slate-950 sticky top-24 space-y-5">
+            <div className="card p-6 bg-[var(--bg-card)] sticky top-24 space-y-5">
               {/* Pricing */}
               <div>
                 <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider block mb-1">Course Fee</span>

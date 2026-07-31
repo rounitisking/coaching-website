@@ -50,7 +50,7 @@ export function CoursePlayer({ course }: CoursePlayerProps) {
         {activeLesson ? (
           <div className="space-y-4">
             {/* Video Box */}
-            <div className="relative aspect-video rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center">
+            <div className="relative aspect-video rounded-3xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] flex items-center justify-center">
               {activeLesson.videoUrl ? (
                 <iframe
                   src={activeLesson.videoUrl}
@@ -68,48 +68,48 @@ export function CoursePlayer({ course }: CoursePlayerProps) {
             </div>
 
             {/* Lesson Info */}
-            <div className="p-6 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl">
-              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{activeLesson.title}</h2>
+            <div className="p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl">
+              <h2 className="text-xl font-bold text-[var(--text-primary)]">{activeLesson.title}</h2>
               {activeLesson.duration && (
                 <span className="inline-block mt-2 px-2.5 py-1 text-xs font-semibold bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 rounded-lg">
                   ⏱ {activeLesson.duration} Minutes
                 </span>
               )}
               {activeLesson.description && (
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-4 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-4">
+                <p className="text-sm text-[var(--text-muted)] mt-4 leading-relaxed border-t border-[var(--border)] pt-4">
                   {activeLesson.description}
                 </p>
               )}
             </div>
           </div>
         ) : (
-          <div className="p-12 rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+          <div className="p-12 rounded-3xl bg-[var(--bg-card)] border border-[var(--border)] text-center">
             <GraduationCap className="mx-auto text-slate-300 dark:text-slate-700 mb-4" size={56} />
-            <h3 className="font-bold text-slate-800 dark:text-slate-200">No modules or lessons</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Check back later for uploaded course videos.</p>
+            <h3 className="font-bold text-[var(--text-primary)]">No modules or lessons</h3>
+            <p className="text-xs text-[var(--text-muted)] mt-1">Check back later for uploaded course videos.</p>
           </div>
         )}
       </div>
 
       {/* Playlist sidebar */}
       <div className="space-y-4">
-        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Course Syllabus</h2>
+        <h2 className="text-lg font-bold text-[var(--text-primary)]">Course Syllabus</h2>
 
         <div className="space-y-3">
           {course.modules.length === 0 ? (
-            <p className="text-xs text-slate-400 dark:text-slate-500">No syllabus loaded.</p>
+            <p className="text-xs text-[var(--text-muted)]">No syllabus loaded.</p>
           ) : (
             course.modules.map((mod) => {
               const isExpanded = !!expandedModules[mod.id];
               return (
                 <div
                   key={mod.id}
-                  className="rounded-2xl border bg-white dark:bg-slate-950 overflow-hidden"
+                  className="rounded-2xl border bg-[var(--bg-card)] overflow-hidden"
                   style={{ borderColor: "var(--border)" }}
                 >
                   <button
                     onClick={() => toggleModule(mod.id)}
-                    className="w-full flex items-center justify-between p-4 font-bold text-sm text-left text-slate-800 dark:text-slate-200"
+                    className="w-full flex items-center justify-between p-4 font-bold text-sm text-left text-[var(--text-primary)]"
                   >
                     <span>{mod.title}</span>
                     {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -122,10 +122,10 @@ export function CoursePlayer({ course }: CoursePlayerProps) {
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="border-t border-slate-100 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800"
+                        className="border-t border-[var(--border)] divide-y divide-slate-100 dark:divide-slate-800"
                       >
                         {mod.lessons.length === 0 ? (
-                          <div className="p-3 text-xs text-slate-400 dark:text-slate-500 italic">No lessons in this module.</div>
+                          <div className="p-3 text-xs text-[var(--text-muted)] italic">No lessons in this module.</div>
                         ) : (
                           mod.lessons.map((les) => {
                             const isActive = activeLesson?.id === les.id;
@@ -136,7 +136,7 @@ export function CoursePlayer({ course }: CoursePlayerProps) {
                                 className={`w-full flex items-center gap-3 p-3.5 text-left text-xs transition-colors ${
                                   isActive
                                     ? "bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold"
-                                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900"
+                                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)]"
                                 }`}
                               >
                                 <Play
@@ -145,7 +145,7 @@ export function CoursePlayer({ course }: CoursePlayerProps) {
                                 />
                                 <span className="flex-1 line-clamp-1">{les.title}</span>
                                 {les.duration && (
-                                  <span className="text-[10px] text-slate-400 dark:text-slate-500">{les.duration}m</span>
+                                  <span className="text-[10px] text-[var(--text-muted)]">{les.duration}m</span>
                                 )}
                               </button>
                             );

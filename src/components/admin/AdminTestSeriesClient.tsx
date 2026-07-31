@@ -141,7 +141,7 @@ export function AdminTestSeriesClient({ initialTestSeries, categories }: { initi
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -165,7 +165,7 @@ export function AdminTestSeriesClient({ initialTestSeries, categories }: { initi
                     <td>
                       <div className="flex items-center gap-2">
                         <ClipboardList size={16} className="text-blue-500" />
-                        <span className="font-bold text-slate-800 dark:text-slate-200">{ts.title}</span>
+                        <span className="font-bold text-[var(--text-primary)]">{ts.title}</span>
                       </div>
                     </td>
                     <td>
@@ -174,7 +174,7 @@ export function AdminTestSeriesClient({ initialTestSeries, categories }: { initi
                       </span>
                     </td>
                     <td>{ts.totalTests || 0} Papers</td>
-                    <td className="font-semibold text-slate-800 dark:text-slate-100">
+                    <td className="font-semibold text-[var(--text-primary)]">
                       ₹{ts.price} <span className="text-[10px] line-through text-slate-400 font-normal">₹{ts.mrp}</span>
                     </td>
                     <td>
@@ -186,7 +186,7 @@ export function AdminTestSeriesClient({ initialTestSeries, categories }: { initi
                       <div className="flex gap-2">
                         <button
                           onClick={() => openEditModal(ts)}
-                          className="p-1.5 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-900"
+                          className="p-1.5 rounded-lg border hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)]"
                           style={{ borderColor: "var(--border)" }}
                         >
                           <Edit2 size={12} className="text-slate-600" />

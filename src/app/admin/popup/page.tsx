@@ -23,10 +23,10 @@ export default async function AdminPopupPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-3xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Campaign Popups
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Configure the early registration campaign modal shown to users after 10 seconds.</p>
+        <p className="text-[var(--text-muted)] mt-1">Configure the early registration campaign modal shown to users after 10 seconds.</p>
       </div>
 
       {popup && <AdminPopupClient popup={popup} />}

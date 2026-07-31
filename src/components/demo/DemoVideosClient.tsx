@@ -45,7 +45,7 @@ function DemoVideoCard({ video }: { video: DemoVideo }) {
         />
         {/* Play overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-xl">
+          <div className="w-14 h-14 rounded-full bg-[var(--bg-card)]/90 flex items-center justify-center shadow-xl">
             <Play size={22} className="text-[var(--brand-secondary)] ml-1" fill="currentColor" />
           </div>
         </div>

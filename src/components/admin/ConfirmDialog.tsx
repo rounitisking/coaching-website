@@ -28,7 +28,7 @@ export function ConfirmDialog({
             <AlertTriangle size={24} />
           </div>
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className="text-sm text-[var(--text-muted)] leading-relaxed">
               {message}
             </p>
           </div>

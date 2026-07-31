@@ -241,7 +241,7 @@ export function AdminFacultyClient({
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -268,7 +268,7 @@ export function AdminFacultyClient({
                     <td>
                       <div className="flex items-center gap-2">
                         <Users size={16} className="text-blue-500" />
-                        <span className="font-bold text-slate-800 dark:text-slate-200">
+                        <span className="font-bold text-[var(--text-primary)]">
                           {f.name}
                         </span>
                       </div>
@@ -302,7 +302,7 @@ export function AdminFacultyClient({
                       <div className="flex gap-2">
                         <button
                           onClick={() => openEditModal(f)}
-                          className="p-1.5 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-900"
+                          className="p-1.5 rounded-lg border hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)]"
                           style={{ borderColor: "var(--border)" }}
                         >
                           <Edit2 size={12} className="text-slate-600" />
@@ -497,11 +497,11 @@ export function AdminFacultyClient({
           {/* Multi-course assignment checkboxes */}
           <div>
             <label className="label mb-2 block font-bold">Assigned Courses</label>
-            <div className="grid grid-cols-2 gap-2 max-h-36 overflow-y-auto p-3 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-900/50">
+            <div className="grid grid-cols-2 gap-2 max-h-36 overflow-y-auto p-3 border border-[var(--border)] rounded-xl bg-[var(--bg-secondary)]/50">
               {courses.map((course) => (
                 <label
                   key={course.id}
-                  className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer hover:text-blue-500"
+                  className="flex items-center gap-2 text-xs text-[var(--text-secondary)] cursor-pointer hover:text-blue-500"
                 >
                   <input
                     type="checkbox"

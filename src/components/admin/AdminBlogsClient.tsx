@@ -108,10 +108,10 @@ export function AdminBlogsClient({
 
       <div className="space-y-3">
         {blogs.length === 0 && (
-          <div className="text-slate-500 text-center py-10 bg-slate-900 rounded-xl">No blog posts yet. Click "New Post" to create one.</div>
+          <div className="text-slate-500 text-center py-10 bg-[var(--bg-secondary)] rounded-xl">No blog posts yet. Click "New Post" to create one.</div>
         )}
         {blogs.map(b => (
-          <div key={b.id} className="bg-slate-900 rounded-xl p-4 flex items-start gap-4">
+          <div key={b.id} className="bg-[var(--bg-secondary)] rounded-xl p-4 flex items-start gap-4">
             {b.featuredImage && (
               <img src={b.featuredImage} alt={b.title} className="w-16 h-12 object-cover rounded-lg shrink-0" />
             )}

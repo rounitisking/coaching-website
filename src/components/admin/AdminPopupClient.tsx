@@ -49,7 +49,7 @@ export function AdminPopupClient({ popup }: { popup: PopupData }) {
   };
 
   return (
-    <div className="p-6 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl">
+    <div className="p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl">
       <form onSubmit={handleSave} className="space-y-5">
         {error && (
           <div className="p-3 rounded-lg text-sm bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400">

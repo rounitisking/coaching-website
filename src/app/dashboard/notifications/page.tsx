@@ -17,7 +17,7 @@ export default async function NotificationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-2xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Notifications
         </h1>
         <p className="text-slate-555 dark:text-slate-400 text-sm mt-1">

@@ -132,7 +132,7 @@ export function AdminResultsClient({ initialResults, categories }: { initialResu
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -156,7 +156,7 @@ export function AdminResultsClient({ initialResults, categories }: { initialResu
                     <td>
                       <div className="flex items-center gap-2">
                         <Trophy size={16} className="text-amber-500" />
-                        <span className="font-bold text-slate-800 dark:text-slate-200">{r.studentName}</span>
+                        <span className="font-bold text-[var(--text-primary)]">{r.studentName}</span>
                       </div>
                     </td>
                     <td>{r.exam}</td>
@@ -176,7 +176,7 @@ export function AdminResultsClient({ initialResults, categories }: { initialResu
                       <div className="flex gap-2">
                         <button
                           onClick={() => openEditModal(r)}
-                          className="p-1.5 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-900"
+                          className="p-1.5 rounded-lg border hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)]"
                           style={{ borderColor: "var(--border)" }}
                         >
                           <Edit2 size={12} className="text-slate-600" />

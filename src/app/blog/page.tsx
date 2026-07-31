@@ -261,19 +261,19 @@ export default async function BlogPage({
                   {currentPage > 1 && (
                     <Link
                       href={`/blog?${category ? `category=${category}&` : ""}page=${currentPage - 1}`}
-                      className="px-4 py-2 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 font-semibold text-sm transition-colors text-[var(--text-primary)]"
+                      className="px-4 py-2 border rounded-xl hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)] font-semibold text-sm transition-colors text-[var(--text-primary)]"
                       style={{ borderColor: "var(--border)" }}
                     >
                       Previous
                     </Link>
                   )}
-                  <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                  <span className="text-sm font-semibold text-[var(--text-muted)]">
                     Page {currentPage} of {totalPages}
                   </span>
                   {currentPage < totalPages && (
                     <Link
                       href={`/blog?${category ? `category=${category}&` : ""}page=${currentPage + 1}`}
-                      className="px-4 py-2 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 font-semibold text-sm transition-colors text-[var(--text-primary)]"
+                      className="px-4 py-2 border rounded-xl hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)] font-semibold text-sm transition-colors text-[var(--text-primary)]"
                       style={{ borderColor: "var(--border)" }}
                     >
                       Next

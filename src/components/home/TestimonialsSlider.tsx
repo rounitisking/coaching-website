@@ -35,9 +35,12 @@ export function TestimonialsSlider({ testimonials }: { testimonials: Testimonial
 
   return (
     <div className="relative max-w-4xl mx-auto px-4 py-8">
-      <div className="relative rounded-3xl p-8 md:p-12 border overflow-hidden" style={{ background: "var(--bg-card)", borderColor: "var(--border)" }}>
+      <div 
+        className="relative rounded-3xl p-8 md:p-12 border overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg hover:border-[#D4AF37]/30" 
+        style={{ background: "var(--bg-card)", borderColor: "var(--border)" }}
+      >
         <div className="absolute top-6 right-8 opacity-10 pointer-events-none">
-          <Quote size={120} className="text-blue-500" />
+          <Quote size={120} style={{ color: "#D4AF37" }} />
         </div>
 
         <AnimatePresence mode="wait">
@@ -63,8 +66,8 @@ export function TestimonialsSlider({ testimonials }: { testimonials: Testimonial
                   <Star
                     key={i}
                     size={16}
-                    fill={i < current.rating ? "#f59e0b" : "none"}
-                    stroke={i < current.rating ? "#f59e0b" : "#cbd5e1"}
+                    fill={i < current.rating ? "#D4AF37" : "none"}
+                    stroke={i < current.rating ? "#D4AF37" : "#cbd5e1"}
                   />
                 ))}
               </div>
@@ -85,14 +88,14 @@ export function TestimonialsSlider({ testimonials }: { testimonials: Testimonial
         <div className="flex justify-center md:justify-end gap-3 mt-8">
           <button
             onClick={prev}
-            className="w-10 h-10 rounded-full flex items-center justify-center border transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            className="w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-[#D4AF37] hover:text-[#D4AF37] hover:shadow-[0_0_10px_rgba(212,175,55,0.25)]"
             style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={next}
-            className="w-10 h-10 rounded-full flex items-center justify-center border transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            className="w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-[#D4AF37] hover:text-[#D4AF37] hover:shadow-[0_0_10px_rgba(212,175,55,0.25)]"
             style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}
           >
             <ChevronRight size={18} />

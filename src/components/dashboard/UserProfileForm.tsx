@@ -119,8 +119,8 @@ export function UserProfileForm({ initialUser }: UserProfileFormProps) {
       )}
 
       {/* Avatar upload */}
-      <div className="flex flex-col items-center sm:flex-row gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="flex flex-col items-center sm:flex-row gap-6 pb-6 border-b border-[var(--border)]">
+        <div className="relative w-24 h-24 rounded-full overflow-hidden border border-[var(--border)] bg-[var(--bg-secondary)] flex items-center justify-center">
           {avatar ? (
             <Image
               src={avatar}
@@ -144,8 +144,8 @@ export function UserProfileForm({ initialUser }: UserProfileFormProps) {
         </div>
 
         <div className="space-y-1">
-          <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200">Avatar Image</h3>
-          <p className="text-xs text-slate-400 dark:text-slate-500">Supports JPG, PNG or WebP. Max size of 5MB.</p>
+          <h3 className="font-bold text-sm text-[var(--text-primary)]">Avatar Image</h3>
+          <p className="text-xs text-[var(--text-muted)]">Supports JPG, PNG or WebP. Max size of 5MB.</p>
           <div className="pt-2">
             <label className="btn-secondary btn-sm cursor-pointer inline-flex items-center gap-1.5">
               <Camera size={14} />
@@ -182,7 +182,7 @@ export function UserProfileForm({ initialUser }: UserProfileFormProps) {
           <label className="label">Email Address (Read-only)</label>
           <input
             type="email"
-            className="input opacity-65 cursor-not-allowed bg-slate-50 dark:bg-slate-900"
+            className="input opacity-65 cursor-not-allowed bg-[var(--bg-secondary)]"
             value={initialUser.email}
             disabled
           />

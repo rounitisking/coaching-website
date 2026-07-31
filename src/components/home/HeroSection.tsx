@@ -116,7 +116,7 @@ export function HeroSection() {
               Shape Your Future{" "}
               <span
                 style={{
-                  background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+                  background: "linear-gradient(135deg, #D4AF37, #E8C76A)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -145,10 +145,19 @@ export function HeroSection() {
             >
               <Link
                 href="/courses"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white transition-all hover:-translate-y-1"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold transition-all duration-300 hover:-translate-y-0.5"
                 style={{
-                  background: "linear-gradient(135deg, #f59e0b, #d97706)",
-                  boxShadow: "0 12px 32px -8px rgba(245,158,11,0.5)",
+                  background: "linear-gradient(135deg, #D4AF37, #E8C76A)",
+                  color: "#0F172A",
+                  boxShadow: "0 4px 14px rgba(212, 175, 55, 0.2)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = "0 10px 20px rgba(212, 175, 55, 0.3)";
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = "0 4px 14px rgba(212, 175, 55, 0.2)";
+                  e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 Explore Courses <ArrowRight size={18} />

@@ -175,7 +175,7 @@ export function AdminCoursesClient({ initialCourses, categories }: AdminCoursesC
       </div>
 
       {/* Courses Table */}
-      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm">
         <div className="table-container">
           <table className="table">
             <thead>
@@ -200,11 +200,11 @@ export function AdminCoursesClient({ initialCourses, categories }: AdminCoursesC
                   <tr key={course.id}>
                     <td>
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-blue-600">
+                        <div className="w-10 h-10 rounded-lg bg-[var(--bg-secondary)] flex items-center justify-center text-blue-600">
                           <BookOpen size={18} />
                         </div>
                         <div>
-                          <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">{course.title}</h4>
+                          <h4 className="font-bold text-sm text-[var(--text-primary)]">{course.title}</h4>
                           <p className="text-[10px] text-slate-400 mt-0.5 truncate max-w-[150px]">{course.description}</p>
                         </div>
                       </div>
@@ -235,7 +235,7 @@ export function AdminCoursesClient({ initialCourses, categories }: AdminCoursesC
                       <div className="flex gap-2">
                         <button
                           onClick={() => openEditModal(course)}
-                          className="p-1.5 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-900"
+                          className="p-1.5 rounded-lg border hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)]"
                           style={{ borderColor: "var(--border)" }}
                         >
                           <Edit2 size={12} className="text-slate-600" />
@@ -314,7 +314,7 @@ export function AdminCoursesClient({ initialCourses, categories }: AdminCoursesC
                   onChange={(e) => setFeatured(e.target.checked)}
                   className="w-4 h-4 text-blue-600 border-slate-300 rounded"
                 />
-                <label htmlFor="featured-check" className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                <label htmlFor="featured-check" className="text-xs font-semibold text-[var(--text-secondary)]">
                   Featured Product
                 </label>
               </div>
@@ -364,7 +364,7 @@ export function AdminCoursesClient({ initialCourses, categories }: AdminCoursesC
               onChange={(e) => setActive(e.target.checked)}
               className="w-4 h-4 text-blue-600 border-slate-300 rounded"
             />
-            <label htmlFor="active-check" className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+            <label htmlFor="active-check" className="text-xs font-semibold text-[var(--text-secondary)]">
               Publish directly to catalog (Active)
             </label>
           </div>

@@ -39,7 +39,7 @@ export function ContactSection() {
               <div className="card p-6 flex items-start gap-4">
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}
+                  style={{ background: "var(--gradient-brand)" }}
                 >
                   <Phone size={20} className="text-white" />
                 </div>
@@ -50,7 +50,7 @@ export function ContactSection() {
                       <a
                         key={ph}
                         href={`tel:${ph}`}
-                        className="block text-sm text-[var(--brand-600)] font-semibold hover:text-[var(--brand-700)] transition-colors"
+                        className="block text-sm text-[var(--brand-primary)] font-semibold hover:text-[var(--brand-secondary)] transition-colors"
                       >
                         {ph}
                       </a>
@@ -63,7 +63,7 @@ export function ContactSection() {
               <div className="card p-6 flex items-start gap-4">
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
+                  style={{ background: "var(--gradient-brand)" }}
                 >
                   <Mail size={20} className="text-white" />
                 </div>
@@ -71,7 +71,7 @@ export function ContactSection() {
                   <h4 className="font-bold text-[var(--text-primary)] mb-1">Email Us</h4>
                   <a
                     href={`mailto:${institute.email}`}
-                    className="text-sm text-[var(--brand-600)] font-semibold hover:text-[var(--brand-700)] transition-colors"
+                    className="text-sm text-[var(--brand-primary)] font-semibold hover:text-[var(--brand-secondary)] transition-colors"
                   >
                     {institute.email}
                   </a>
@@ -82,7 +82,7 @@ export function ContactSection() {
               <div className="card p-6 flex items-start gap-4">
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg, #8b5cf6, #7c3aed)" }}
+                  style={{ background: "var(--gradient-brand)" }}
                 >
                   <Clock size={20} className="text-white" />
                 </div>

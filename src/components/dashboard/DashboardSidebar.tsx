@@ -41,18 +41,18 @@ export function DashboardSidebar({ user, unreadCount, logoutAction }: DashboardS
   return (
     <>
       {/* Mobile Top Bar */}
-      <header className="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 w-full shrink-0">
+      <header className="md:hidden flex items-center justify-between px-6 py-4 bg-[var(--bg-card)] border-b border-[var(--border)] w-full shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm">
             {user.name?.charAt(0) || "U"}
           </div>
           <div>
-            <h2 className="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[140px]">{user.name}</h2>
+            <h2 className="font-bold text-xs text-[var(--text-primary)] truncate max-w-[140px]">{user.name}</h2>
           </div>
         </div>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-600 dark:text-slate-400"
+          className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
           aria-label="Toggle Navigation Menu"
         >
           {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -63,7 +63,7 @@ export function DashboardSidebar({ user, unreadCount, logoutAction }: DashboardS
       <aside
         className={`${
           isOpen ? "block" : "hidden"
-        } md:flex w-full md:w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex-col justify-between shrink-0 transition-all duration-300 ease-in-out`}
+        } md:flex w-full md:w-64 bg-[var(--bg-card)] border-r border-[var(--border)] flex-col justify-between shrink-0 transition-all duration-300 ease-in-out`}
       >
         <div className="p-6 overflow-y-auto max-h-[calc(100vh-140px)] md:max-h-none">
           <div className="hidden md:flex items-center gap-3 mb-8">
@@ -71,8 +71,8 @@ export function DashboardSidebar({ user, unreadCount, logoutAction }: DashboardS
               {user.name?.charAt(0) || "U"}
             </div>
             <div>
-              <h2 className="font-bold text-sm text-slate-800 dark:text-slate-200 truncate max-w-[140px]">{user.name}</h2>
-              <p className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[140px]">{user.email}</p>
+              <h2 className="font-bold text-sm text-[var(--text-primary)] truncate max-w-[140px]">{user.name}</h2>
+              <p className="text-xs text-[var(--text-muted)] truncate max-w-[140px]">{user.email}</p>
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export function DashboardSidebar({ user, unreadCount, logoutAction }: DashboardS
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                     isActive
                       ? "bg-blue-50/80 text-blue-600 dark:bg-blue-950/20 dark:text-blue-450"
-                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-950 dark:hover:text-slate-100"
+                      : "text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-secondary)] hover:text-slate-950 dark:hover:text-slate-100"
                   }`}
                 >
                   <link.icon size={18} />
@@ -103,7 +103,7 @@ export function DashboardSidebar({ user, unreadCount, logoutAction }: DashboardS
           </nav>
         </div>
 
-        <div className="p-6 border-t border-slate-200 dark:border-slate-800 space-y-2">
+        <div className="p-6 border-t border-[var(--border)] space-y-2">
           {user.role === "ADMIN" && (
             <Link
               href="/admin"

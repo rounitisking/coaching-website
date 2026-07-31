@@ -43,17 +43,17 @@ export default async function DashboardResourcesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <h1 className="text-3xl font-black text-[var(--text-primary)]" style={{ fontFamily: "Outfit, sans-serif" }}>
           Syllabus &amp; Resource Guides
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Download reference materials, notes, templates, and revision guides.</p>
+        <p className="text-[var(--text-muted)] mt-1">Download reference materials, notes, templates, and revision guides.</p>
       </div>
 
       {allAvailable.length === 0 ? (
-        <div className="p-12 rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center max-w-xl mx-auto mt-8">
+        <div className="p-12 rounded-3xl bg-[var(--bg-card)] border border-[var(--border)] text-center max-w-xl mx-auto mt-8">
           <FileText className="mx-auto text-slate-300 dark:text-slate-700 mb-4" size={56} />
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">No resources available</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">No resources available</h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1 mb-6">
             You don't have any premium downloads yet. Browse our free and paid study guides.
           </p>
           <Link href="/resources" className="btn-primary">
@@ -65,10 +65,10 @@ export default async function DashboardResourcesPage() {
           {allAvailable.map((res) => (
             <div
               key={res.id}
-              className="card flex flex-col bg-white dark:bg-slate-950 p-5 justify-between"
+              className="card flex flex-col bg-[var(--bg-card)] p-5 justify-between"
             >
               <div>
-                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-blue-600 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-blue-600 mb-4">
                   <FileText size={20} />
                 </div>
                 
@@ -76,15 +76,15 @@ export default async function DashboardResourcesPage() {
                   {res.type}
                 </span>
 
-                <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100 leading-snug">
+                <h3 className="font-bold text-sm text-[var(--text-primary)] leading-snug">
                   {res.title}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">
+                <p className="text-xs text-[var(--text-muted)] mt-2 line-clamp-2">
                   {res.description || "Comprehensive syllabus notes prepared by experts."}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-6 flex items-center justify-between">
+              <div className="pt-4 border-t border-[var(--border)] mt-6 flex items-center justify-between">
                 <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 px-2 py-0.5 rounded-md">
                   {res.isFree ? "Free Access" : "Purchased"}
                 </span>

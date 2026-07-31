@@ -5,9 +5,9 @@ export default function NotesLoading() {
     <main>
       <section className="section-padding" style={{ background: "var(--gradient-hero)" }}>
         <div className="container-custom text-center animate-pulse">
-          <div className="w-24 h-4 bg-white/20 mx-auto rounded mb-3" />
-          <div className="w-64 h-10 bg-white/20 mx-auto rounded mb-4" />
-          <div className="w-96 h-6 bg-white/20 mx-auto rounded" />
+          <div className="w-24 h-4 bg-[var(--bg-card)]/20 mx-auto rounded mb-3" />
+          <div className="w-64 h-10 bg-[var(--bg-card)]/20 mx-auto rounded mb-4" />
+          <div className="w-96 h-6 bg-[var(--bg-card)]/20 mx-auto rounded" />
         </div>
       </section>
 

@@ -62,12 +62,12 @@ export function AdminApplicationsClient({ initialApplications }: { initialApplic
 
       <div className="space-y-3">
         {apps.length === 0 && (
-          <div className="text-slate-500 text-center py-10 bg-slate-900 rounded-xl">No applications received yet.</div>
+          <div className="text-slate-500 text-center py-10 bg-[var(--bg-secondary)] rounded-xl">No applications received yet.</div>
         )}
         {apps.map(app => {
           const s = STATUS_MAP[app.status];
           return (
-            <div key={app.id} className="bg-slate-900 rounded-xl p-4 flex items-center gap-4">
+            <div key={app.id} className="bg-[var(--bg-secondary)] rounded-xl p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-blue-900/40 flex items-center justify-center text-blue-400 font-bold text-sm shrink-0">
                 {app.name.charAt(0).toUpperCase()}
               </div>
