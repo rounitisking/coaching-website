@@ -49,7 +49,11 @@ export default async function TestSeriesPage() {
     { id: "6", title: "Class 10 Science Mock Series", description: "CBSE Class 10 Science mock tests with NCERT solutions.", price: 399, mrp: 799, category: { type: "SCHOOL", name: "School" }, fileUrl: null, totalTests: 5, duration: "2 hours" },
   ];
 
-  const displaySeries = testSeries.length ? testSeries : FALLBACK;
+  // Original assignment:
+  // const displaySeries = testSeries.length ? testSeries : FALLBACK;
+  const displaySeries = (testSeries.length ? testSeries : FALLBACK).filter(
+    (ts: any) => ts.category?.type !== "SCIENCE"
+  );
 
   return (
     <div className="section bg-[var(--bg-primary)] py-12 text-left">

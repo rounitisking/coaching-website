@@ -19,7 +19,9 @@ type Teacher = {
   whatsappNumber?: string;
 };
 
-const TABS = ["All", "Commerce", "Science", "School Coaching"];
+// Original tabs:
+// const TABS = ["All", "Commerce", "Science", "School Coaching"];
+const TABS = ["All", "Commerce", "School Coaching"];
 
 // Classification helper
 function getFacultyCategory(subjects: string[]): string {
@@ -37,10 +39,12 @@ export default function FacultyClient({ faculty }: { faculty: Teacher[] }) {
   const [activeTab, setActiveTab] = useState("All");
 
   const filtered = faculty.filter((f) => {
-    if (activeTab === "All") return true;
     const cat = getFacultyCategory(f.subjects);
+    if (cat === "SCIENCE") return false; // Hide Science faculty from live list
+    if (activeTab === "All") return true;
     if (activeTab === "Commerce") return cat === "COMMERCE";
-    if (activeTab === "Science") return cat === "SCIENCE";
+    // Original tab matching condition:
+    // if (activeTab === "Science") return cat === "SCIENCE";
     if (activeTab === "School Coaching") return cat === "SCHOOL";
     return true;
   });

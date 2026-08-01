@@ -53,6 +53,7 @@ const COURSES_MEGA = [
       },
     ],
   },
+  /*
   {
     label: "Science",
     icon: FlaskConical,
@@ -74,6 +75,7 @@ const COURSES_MEGA = [
       },
     ],
   },
+  */
   {
     label: "School Coaching",
     icon: School,
@@ -86,9 +88,9 @@ const COURSES_MEGA = [
           { label: "Class 9", href: "/courses/class-9" },
           { label: "Class 10", href: "/courses/class-10" },
           { label: "Class 11 Commerce", href: "/courses/class-11-commerce" },
-          { label: "Class 11 Science", href: "/courses/class-11-science" },
+          /* { label: "Class 11 Science", href: "/courses/class-11-science" }, */
           { label: "Class 12 Commerce", href: "/courses/class-12-commerce" },
-          { label: "Class 12 Science", href: "/courses/class-12-science" },
+          /* { label: "Class 12 Science", href: "/courses/class-12-science" }, */
         ],
       },
     ],
@@ -99,7 +101,7 @@ const COURSES_MEGA = [
 
 const FACULTY_DROPDOWN = [
   { label: "Commerce Faculty", href: "/faculty/commerce", icon: BookOpen, color: "#2563eb" },
-  { label: "Science Faculty", href: "/faculty/science", icon: FlaskConical, color: "#7c3aed" },
+  /* { label: "Science Faculty", href: "/faculty/science", icon: FlaskConical, color: "#7c3aed" }, */
   { label: "School Faculty", href: "/faculty/school", icon: School, color: "#059669" },
   { label: "Apply For Job", href: "/apply-for-job", icon: Briefcase, color: "#d97706" },
 ];

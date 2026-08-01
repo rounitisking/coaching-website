@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { FacultyListPage } from "@/components/faculty/FacultyListPage";
 import type { Metadata } from "next";
 
@@ -7,6 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default function ScienceFacultyPage() {
+  notFound();
+  /*
   return (
     <FacultyListPage
       category="SCIENCE"
@@ -15,4 +18,5 @@ export default function ScienceFacultyPage() {
       description="Our Science faculty are experienced IIT and NEET coaches dedicated to helping students crack competitive engineering and medical entrance exams."
     />
   );
+  */
 }

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Calendar, Clock, Tag, ChevronRight } from "lucide-react";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
+import { FALLBACK_BLOGS } from "@/data/fallback-blogs";
 
 export const metadata = {
   title: "Blog — Academica Institute",
@@ -180,9 +181,22 @@ export default async function BlogPage({
     }).catch(() => []),
   ]);
 
-  const totalPages = Math.ceil(totalCount / pageSize);
-  const featuredBlog = allBlogs.find((b) => b.featured);
-  const restBlogs = allBlogs.filter((b) => !b.featured || b.id !== featuredBlog?.id);
+  const displayCategories = categories.length > 0 ? categories : [
+    { name: "Exam Prep", slug: "exam-prep" },
+    { name: "Career Guide", slug: "career-guide" },
+    { name: "Study Tips", slug: "study-tips" },
+  ];
+
+  const displayBlogsRaw = allBlogs.length > 0 ? allBlogs : FALLBACK_BLOGS;
+  const displayBlogs = displayBlogsRaw.filter((b: any) =>
+    !category || category === "all" ? true : b.category?.slug === category
+  );
+
+  const displayTotalCount = displayBlogs.length;
+  const totalPages = Math.ceil(displayTotalCount / pageSize);
+  const paginatedBlogs = displayBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const featuredBlog = paginatedBlogs.find((b: any) => b.featured) || paginatedBlogs[0];
+  const restBlogs = paginatedBlogs.filter((b: any) => b.id !== featuredBlog?.id);
 
   return (
     <main>
@@ -207,7 +221,7 @@ export default async function BlogPage({
       <section className="section-padding" style={{ background: "var(--bg-primary)" }}>
         <div className="container-custom">
           {/* Category filter tabs */}
-          {categories.length > 0 && (
+          {displayCategories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-10 pb-6 border-b border-[var(--border)]">
               <Link
                 href="/blog"
@@ -219,7 +233,7 @@ export default async function BlogPage({
               >
                 All
               </Link>
-              {categories.map((cat) => (
+              {displayCategories.map((cat) => (
                 <Link
                   key={cat.slug}
                   href={`/blog?category=${cat.slug}`}
@@ -235,7 +249,7 @@ export default async function BlogPage({
             </div>
           )}
 
-          {allBlogs.length === 0 ? (
+          {displayBlogs.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-[var(--text-muted)] text-lg">No articles published yet. Check back soon!</p>
             </div>

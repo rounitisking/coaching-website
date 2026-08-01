@@ -36,8 +36,8 @@ const footerLinks = {
     { label: "Company Secretary (CS)", href: "/courses/cs" },
     { label: "Cost and Management Accountancy (CMA)", href: "/courses/cma" },
     { label: "CUET ", href: "/courses/cuet" },
-    { label: "Class 11 Commerce", href: "/courses/class-11-commerce" },
-    { label: "Class 12 Commerce", href: "/courses/class-12-commerce" },
+    { label: "Class 11", href: "/courses/class-11-commerce" },
+    { label: "Class 12", href: "/courses/class-12-commerce" },
   ],
   "Quick Links": [
     { label: "About Us", href: "/#why-us" },

@@ -190,7 +190,7 @@ async function main() {
     data: [
       { key: 'contact_phone', value: '+91 83750 60247', label: 'Support Phone', group: 'Contact Info' },
       { key: 'contact_email', value: 'info@academicainstitute.in', label: 'Support Email', group: 'Contact Info' },
-      { key: 'contact_address', value: 'Building No. 45, Kalu Sarai, Near Hauz Khas Metro Station, New Delhi — 110016', label: 'Office Address', group: 'Contact Info' },
+      { key: 'contact_address', value: 'C-10, 2nd Floor, RDC Rajnagar, Ghaziabad - 201002', label: 'Office Address', group: 'Contact Info' },
       { key: 'whatsapp_url', value: 'https://wa.me/918375060247', label: 'WhatsApp direct link', group: 'Integrations' },
     ],
   })

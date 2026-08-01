@@ -53,8 +53,15 @@ export default async function CoursesPage({
     { id: "4", title: "Class 12 Commerce Boards", slug: "class-12-commerce", description: "Class 12 board preparation for Accountancy, Economics & Business Studies.", price: 15000, mrp: 20000, thumbnail: null, category: { type: "SCHOOL", name: "School Coaching" }, faculty: { id: "f1", name: "CA Rajesh Kumar" }, duration: "1 year", level: "Boards" },
   ];
 
-  const displayCourses = courses.length ? courses : FALLBACK_COURSES;
-  const displayCategories = categories.length ? categories : FALLBACK_CATEGORIES;
+  // Original assignments commented out:
+  // const displayCourses = courses.length ? courses : FALLBACK_COURSES;
+  // const displayCategories = categories.length ? categories : FALLBACK_CATEGORIES;
+  const displayCourses = (courses.length ? courses : FALLBACK_COURSES).filter(
+    (c: any) => (c.category?.type ?? c.categoryType) !== "SCIENCE" && !c.slug?.includes("science")
+  );
+  const displayCategories = (categories.length ? categories : FALLBACK_CATEGORIES).filter(
+    (c: any) => c.type !== "SCIENCE"
+  );
   const displayFaculty = faculty.length ? faculty : FALLBACK_FACULTY;
 
   return (

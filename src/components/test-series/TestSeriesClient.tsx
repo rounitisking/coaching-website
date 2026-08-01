@@ -22,7 +22,9 @@ type Props = {
   isLoggedIn: boolean;
 };
 
-const TABS = ["All", "Commerce", "Science", "School"];
+// Original tabs:
+// const TABS = ["All", "Commerce", "Science", "School"];
+const TABS = ["All", "Commerce", "School"];
 
 const categoryColors: Record<string, string> = {
   COMMERCE: "linear-gradient(135deg, #1e40af, #2563eb)",
@@ -35,6 +37,7 @@ export default function TestSeriesClient({ testSeries, userPurchases, isLoggedIn
   const [search, setSearch] = useState("");
 
   const filtered = testSeries.filter((ts) => {
+    if (ts.category.type === "SCIENCE") return false; // Hide Science test series entirely
     const matchCategory = activeTab === "All" || ts.category.type === activeTab.toUpperCase();
     const matchSearch = ts.title.toLowerCase().includes(search.toLowerCase()) ||
       ts.description.toLowerCase().includes(search.toLowerCase());

@@ -16,6 +16,29 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+function getCourseBannerImage(slug: string): string {
+  const norm = slug.toLowerCase();
+  
+  if (norm.includes("ca-foundation") || norm.includes("ca_foundation")) return "/bg/ca foundation.png";
+  if (norm.includes("ca-intermediate") || norm.includes("ca_intermediate")) return "/bg/ca intermediate.png";
+  if (norm.includes("ca-final") || norm.includes("ca_final")) return "/bg/ca final.png";
+  
+  if (norm.includes("cs-foundation") || norm.includes("cs_foundation") || norm.includes("cseet")) return "/bg/cs foundation.png";
+  if (norm.includes("cs-executive") || norm.includes("cs_executive")) return "/bg/cs executive.png";
+  if (norm.includes("cs-professional") || norm.includes("cs_professional")) return "/bg/cs professional.png";
+  
+  if (norm.includes("cma-foundation") || norm.includes("cma_foundation")) return "/bg/cma foundation.png";
+  if (norm.includes("cma-intermediate") || norm.includes("cma_intermediate")) return "/bg/cma intermediate.png";
+  if (norm.includes("cma-final") || norm.includes("cma_final")) return "/bg/cma final.png";
+  
+  if (norm.includes("class-9") || norm.includes("class_9")) return "/bg/class 9.png";
+  if (norm.includes("class-10") || norm.includes("class_10")) return "/bg/class 10.png";
+  if (norm.includes("class-11") || norm.includes("class_11")) return "/bg/class 11.png";
+  if (norm.includes("class-12") || norm.includes("class_12")) return "/bg/class 12.png";
+  
+  return "/bg/ca foundation.png";
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   if (slug === "class-9-tuition") {
@@ -28,7 +51,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try { course = await getCourseBySlug(slug); } catch {}
   if (!course) course = getStaticCourseBySlug(slug);
   if (!course) return {};
-  const ogImage = course.thumbnail || course.image;
+  const courseCat = course.category?.type ?? course.category;
+  if (courseCat === "SCIENCE" || course.slug?.includes("science")) return {};
+  const ogImage = getCourseBannerImage(slug);
   return {
     title: `${course.title} | ${institute.name}`,
     description: course.description?.slice(0, 160) || "",
@@ -61,6 +86,12 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
   if (!course) course = getStaticCourseBySlug(slug);
   if (!course) notFound();
+
+  // Prevent Science courses from rendering:
+  const courseCat = course.category?.type ?? course.category;
+  if (courseCat === "SCIENCE" || course.slug?.includes("science")) {
+    notFound();
+  }
 
   // Check enrollment
   if (session?.user?.id && isDbCourse) {
@@ -239,16 +270,14 @@ export default async function CourseDetailPage({ params }: PageProps) {
           background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1e40af 100%)",
         }}
       >
-        {displayCourse.thumbnail && (
-          <Image
-            src={displayCourse.thumbnail}
-            alt={displayCourse.title}
-            fill
-            className="object-cover opacity-30"
-            priority
-            sizes="100vw"
-          />
-        )}
+        <Image
+          src={getCourseBannerImage(displayCourse.slug)}
+          alt={displayCourse.title}
+          fill
+          className="object-cover opacity-30"
+          priority
+          sizes="100vw"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent" />
         <div className="container-custom relative z-10 pb-12 pt-20">
           {/* Styled Breadcrumbs */}

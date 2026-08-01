@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Calendar, Clock, ChevronLeft, Bookmark, Share2, ChevronRight, User } from "lucide-react";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { FALLBACK_BLOGS } from "@/data/fallback-blogs";
 import { formatDistanceToNow, format } from "date-fns";
 import type { Metadata } from "next";
 
@@ -12,10 +13,21 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const blog = await db.blog.findUnique({
+  let blog = await db.blog.findUnique({
     where: { slug, isPublished: true, isActive: true },
     select: { title: true, metaDescription: true, featuredImage: true },
   }).catch(() => null);
+
+  if (!blog) {
+    const fallback = FALLBACK_BLOGS.find((b) => b.slug === slug);
+    if (fallback) {
+      blog = {
+        title: fallback.title,
+        metaDescription: fallback.excerpt,
+        featuredImage: fallback.featuredImage,
+      } as any;
+    }
+  }
 
   if (!blog) return { title: "Article Not Found" };
 
@@ -52,7 +64,7 @@ function renderMarkdown(content: string): string {
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  const [blog, session] = await Promise.all([
+  const [blogResult, session] = await Promise.all([
     db.blog.findUnique({
       where: { slug, isPublished: true, isActive: true },
       include: {
@@ -63,34 +75,51 @@ export default async function BlogDetailPage({ params }: Props) {
     auth(),
   ]);
 
-  if (!blog) notFound();
+  let blogData: any = blogResult;
+  let relatedData: any[] = [];
+  let recentData: any[] = [];
 
-  // Increment view count (fire-and-forget)
-  db.blog.update({
-    where: { id: blog.id },
-    data: { viewCount: { increment: 1 } },
-  }).catch(() => {});
+  if (!blogData) {
+    const fallback = FALLBACK_BLOGS.find((b) => b.slug === slug);
+    if (fallback) {
+      blogData = fallback;
+      relatedData = FALLBACK_BLOGS.filter((b) => b.slug !== slug);
+      recentData = FALLBACK_BLOGS.filter((b) => b.slug !== slug);
+    }
+  } else {
+    // Increment view count (fire-and-forget)
+    db.blog.update({
+      where: { id: blogData.id },
+      data: { viewCount: { increment: 1 } },
+    }).catch(() => {});
 
-  // Related posts (same category, exclude current)
-  const related = await db.blog.findMany({
-    where: {
-      isPublished: true,
-      isActive: true,
-      categoryId: blog.categoryId ?? undefined,
-      id: { not: blog.id },
-    },
-    include: { category: { select: { name: true, slug: true } } },
-    orderBy: { publishedAt: "desc" },
-    take: 3,
-  }).catch(() => []);
+    // Related posts (same category, exclude current)
+    relatedData = await db.blog.findMany({
+      where: {
+        isPublished: true,
+        isActive: true,
+        categoryId: blogData.categoryId ?? undefined,
+        id: { not: blogData.id },
+      },
+      include: { category: { select: { name: true, slug: true } } },
+      orderBy: { publishedAt: "desc" },
+      take: 3,
+    }).catch(() => []);
 
-  // Recent posts
-  const recent = await db.blog.findMany({
-    where: { isPublished: true, isActive: true, id: { not: blog.id } },
-    orderBy: { publishedAt: "desc" },
-    take: 5,
-    select: { id: true, title: true, slug: true, publishedAt: true, readTime: true },
-  }).catch(() => []);
+    // Recent posts
+    recentData = await db.blog.findMany({
+      where: { isPublished: true, isActive: true, id: { not: blogData.id } },
+      orderBy: { publishedAt: "desc" },
+      take: 5,
+      select: { id: true, title: true, slug: true, publishedAt: true, readTime: true },
+    }).catch(() => []);
+  }
+
+  if (!blogData) notFound();
+
+  const blog = blogData;
+  const related = relatedData;
+  const recent = recentData;
 
   const isLoggedIn = !!session?.user;
   const isBookmarked = isLoggedIn
@@ -178,7 +207,7 @@ export default async function BlogDetailPage({ params }: Props) {
               {/* Tags */}
               {blog.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {blog.tags.map((tag) => (
+                  {blog.tags.map((tag: string) => (
                     <span key={tag} className="badge badge-muted text-xs">{tag}</span>
                   ))}
                 </div>

@@ -13,7 +13,9 @@ const CATEGORY_TITLES: Record<string, string> = {
   ca: "Chartered Accountancy (CA)",
   cs: "Company Secretary (CS) Preparation",
   cma: "Cost and Management Accountancy (CMA) Preparation",
-  cuet: "CUET Preparation",
+  jee: "JEE Preparation",
+  neet: "NEET Preparation",
+  tuition: "Tuition / Secondary School Coaching",
 };
 
 function getCategoryDisplayName(slug: string): string {
@@ -35,6 +37,11 @@ function resolvePathAndNames(segments: string[]): { resolvedPath: string; displa
     displayNames.push(matched);
   }
   return { resolvedPath: current, displayNames };
+}
+
+// Natural numeric sorting helper (e.g. Paper 1, Paper 2, Paper 10)
+function naturalSort(a: string, b: string): number {
+  return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -79,15 +86,18 @@ export default async function DynamicNotesPage({ params }: Props) {
     .filter(item => item.isFile() && item.name.toLowerCase().endsWith(".pdf") && !item.name.startsWith("."))
     .map(item => item.name);
 
+  // Apply natural numeric sorting
+  folders.sort(naturalSort);
+  pdfs.sort(naturalSort);
+
   // Build Breadcrumbs
-  // Each segment links to its parent folder path
   const breadcrumbs = [
     { label: "Notes", href: "/notes" }
   ];
   
   let currentHref = "/notes";
   displayNames.forEach((name, index) => {
-    currentHref += `/${encodeURIComponent(slug[index])}`;
+    currentHref += `/${encodeURIComponent(name)}`;
     const displayLabel = index === 0 ? getCategoryDisplayName(name) : name;
     breadcrumbs.push({ label: displayLabel, href: currentHref });
   });
@@ -138,11 +148,11 @@ export default async function DynamicNotesPage({ params }: Props) {
           {!isLeafLevel && (
             <div className="space-y-4 mb-10">
               <h2 className="text-sm font-bold uppercase tracking-wider mb-4" style={{ color: "var(--text-muted)" }}>
-                Folders / Chapters
+                Folders
               </h2>
               <div className="grid gap-4">
                 {folders.map((folder) => {
-                  const linkPath = `/notes/${slug.map(encodeURIComponent).join("/")}/${encodeURIComponent(folder)}`;
+                  const linkPath = `/notes/${displayNames.map(encodeURIComponent).join("/")}/${encodeURIComponent(folder)}`;
                   return (
                     <Link
                       key={folder}
@@ -178,8 +188,8 @@ export default async function DynamicNotesPage({ params }: Props) {
               </h2>
               <div className="grid gap-4">
                 {pdfs.map((pdf) => {
-                  // File URL served statically from the public folder mapping
-                  const fileUrl = `/notes/${slug.map(encodeURIComponent).join("/")}/${encodeURIComponent(pdf)}`;
+                  // File URL served statically from public folder
+                  const fileUrl = `/notes/${displayNames.map(encodeURIComponent).join("/")}/${encodeURIComponent(pdf)}`;
                   const cleanTitle = pdf.replace(/\.pdf$/i, "");
                   
                   return (
@@ -236,7 +246,7 @@ export default async function DynamicNotesPage({ params }: Props) {
                 This Folder is Empty
               </h3>
               <p className="text-sm max-w-md mx-auto mb-6" style={{ color: "var(--text-muted)" }}>
-                No folders or PDFs were found in this notes subdirectory. Add PDF notes inside <code>public/notes{slug.join("/")}/</code> to start displaying them dynamically.
+                No folders or PDFs were found in this notes subdirectory. Add PDF notes inside <code>public/notes/{slug.join("/")}/</code> to start displaying them dynamically.
               </p>
               <Link href="/notes" className="btn-secondary">
                 Back to Notes Home

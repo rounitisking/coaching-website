@@ -28,9 +28,9 @@ const COL_A = [
 const COL_B = [
   { icon: Trophy, label: "Toppers 2024", color: "#f59e0b", bg: "rgba(245,158,11,0.15)" },
   { icon: BookOpen, label: "CUET Prep", color: "#2563eb", bg: "rgba(37,99,235,0.15)" },
-  { icon: GraduationCap, label: "IIT JEE", color: "#7c3aed", bg: "rgba(124,58,237,0.15)" },
+  /* { icon: GraduationCap, label: "IIT JEE", color: "#7c3aed", bg: "rgba(124,58,237,0.15)" }, */
   { icon: Users, label: "Parents Trust", color: "#059669", bg: "rgba(5,150,105,0.15)" },
-  { icon: Award, label: "NEET", color: "#dc2626", bg: "rgba(220,38,38,0.15)" },
+  /* { icon: Award, label: "NEET", color: "#dc2626", bg: "rgba(220,38,38,0.15)" }, */
   { icon: BookOpen, label: "Class 12", color: "#0891b2", bg: "rgba(8,145,178,0.15)" },
 ];
 const COL_C = [
@@ -133,7 +133,7 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-white/70 text-lg mb-8 leading-relaxed max-w-lg"
             >
-              Academica Institute provides structured coaching for CA, CS, CMA, IIT JEE, NEET &amp; School Boards.
+              Academica Institute provides structured coaching for CA, CS, CMA, &amp; School Boards. {/* Science hidden: IIT JEE, NEET */}
               Join thousands of successful students with our proven methodology.
             </motion.p>
 

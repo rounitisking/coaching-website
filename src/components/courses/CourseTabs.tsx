@@ -75,9 +75,15 @@ export function CourseTabs({
               <h3 className="text-lg font-bold mb-3" style={{ color: "var(--text-primary)" }}>
                 Program Overview
               </h3>
-              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
-                {overview || content || "Detailed program description is being updated. Enroll today to access full course features."}
-              </p>
+              <div className="text-left">
+                {overview || content ? (
+                  renderFormattedOverview(overview || content)
+                ) : (
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                    Detailed program description is being updated. Enroll today to access full course features.
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="card p-6">
@@ -254,4 +260,83 @@ export function CourseTabs({
       </div>
     </div>
   );
+}
+
+// Markdown parser helpers to render Course Overview dynamically with premium styles
+function renderFormattedOverview(text: string | null) {
+  if (!text) return null;
+
+  const lines = text.split("\n");
+  const elements: React.ReactNode[] = [];
+  let currentList: React.ReactNode[] = [];
+
+  const flushList = (keyPrefix: string | number) => {
+    if (currentList.length > 0) {
+      elements.push(
+        <ul key={`list-${keyPrefix}`} className="list-disc pl-5 mb-4 space-y-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+          {currentList}
+        </ul>
+      );
+      currentList = [];
+    }
+  };
+
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushList(idx);
+      return;
+    }
+
+    // Check if line is a header (starts and ends with **)
+    const headerMatch = trimmed.match(/^\*\*(.*?)\*\*$/);
+    if (headerMatch) {
+      flushList(idx);
+      elements.push(
+        <h4
+          key={`h-${idx}`}
+          className="text-base sm:text-lg font-extrabold mt-6 mb-3 first:mt-0 flex items-center gap-2 border-b border-slate-100 pb-1.5"
+          style={{ color: "var(--brand-primary)", fontFamily: "Outfit, sans-serif" }}
+        >
+          {headerMatch[1]}
+        </h4>
+      );
+      return;
+    }
+
+    // Check if list item (starts with - or *)
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+      const content = trimmed.substring(2);
+      currentList.push(
+        <li key={`li-${idx}`} className="hover:text-[var(--text-primary)] transition-colors">
+          {parseInlineFormatting(content)}
+        </li>
+      );
+      return;
+    }
+
+    // Otherwise, normal paragraph
+    flushList(idx);
+    elements.push(
+      <p key={`p-${idx}`} className="text-sm leading-relaxed mb-4 text-[var(--text-secondary)] whitespace-pre-line">
+        {parseInlineFormatting(trimmed)}
+      </p>
+    );
+  });
+
+  flushList("final");
+
+  return <div className="space-y-1">{elements}</div>;
+}
+
+function parseInlineFormatting(text: string): React.ReactNode {
+  const parts = text.split(/\*\*([^*]+)\*\*/g);
+  if (parts.length === 1) return text;
+  
+  return parts.map((part, idx) => {
+    if (idx % 2 === 1) {
+      return <strong key={idx} className="font-extrabold text-[var(--brand-primary)] bg-blue-50/50 px-1.5 py-0.5 rounded">{part}</strong>;
+    }
+    return part;
+  });
 }

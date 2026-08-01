@@ -27,6 +27,18 @@ interface DemoVideo {
   course: Course | null;
 }
 
+function classifyVideoCategory(video: DemoVideo): "CA" | "CS" | "CMA" | "Tuition" {
+  const title = (video.title || "").toLowerCase();
+  const subject = (video.subject || "").toLowerCase();
+  const courseTitle = (video.course?.title || "").toLowerCase();
+
+  if (title.includes("ca ") || title.includes("ca-") || courseTitle.includes("ca ") || courseTitle.includes("ca-") || subject.includes("ca ")) return "CA";
+  if (title.includes("cs ") || title.includes("cs-") || courseTitle.includes("cs ") || courseTitle.includes("cs-") || subject.includes("cs ")) return "CS";
+  if (title.includes("cma ") || title.includes("cma-") || courseTitle.includes("cma ") || courseTitle.includes("cma-") || subject.includes("cma ")) return "CMA";
+  
+  return "Tuition";
+}
+
 function DemoVideoCard({ video }: { video: DemoVideo }) {
   return (
     <a
@@ -134,7 +146,7 @@ export function DemoVideosClient({ videos }: { videos: DemoVideo[] }) {
         v.description?.toLowerCase().includes(search.toLowerCase());
 
       const matchCourse = courseFilter === "all" || v.course?.title === courseFilter;
-      const matchSubject = subjectFilter === "all" || v.subject === subjectFilter;
+      const matchSubject = subjectFilter === "all" || classifyVideoCategory(v) === subjectFilter;
       const matchFaculty = facultyFilter === "all" || v.faculty?.name === facultyFilter;
 
       return matchSearch && matchCourse && matchSubject && matchFaculty;
@@ -187,11 +199,10 @@ export function DemoVideosClient({ videos }: { videos: DemoVideo[] }) {
           aria-label="Filter by subject"
         >
           <option value="all">All Subjects</option>
-          {subjects.filter(s => s !== "all").map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
+          <option value="CA">CA</option>
+          <option value="CS">CS</option>
+          <option value="CMA">CMA</option>
+          <option value="Tuition">Tuition</option>
         </select>
 
         {/* Faculty Filter */}

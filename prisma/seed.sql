@@ -74,7 +74,7 @@ INSERT INTO "site_settings" ("id", "key", "value", "label", "group", "updatedAt"
 VALUES
 ('set_phone', 'contact_phone', '"+91 83750 60247"', 'Contact Phone', 'General', NOW()),
 ('set_email', 'contact_email', '"info@academicainstitute.in"', 'Contact Email', 'General', NOW()),
-('set_address', 'contact_address', '"Building No. 45, Kalu Sarai, Near Hauz Khas Metro Station, New Delhi — 110016"', 'Office Address', 'General', NOW());
+('set_address', 'contact_address', '"C-10, 2nd Floor, RDC Rajnagar, Ghaziabad - 201002"', 'Office Address', 'General', NOW());
 
 -- 12. Insert Testimonials
 INSERT INTO "testimonials" ("id", "name", "avatar", "text", "rating", "course", "year", "isActive", "order", "createdAt")
