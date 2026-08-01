@@ -124,20 +124,20 @@ async function main() {
   // 4. Create Faculty (matching static faculty data catalog exactly)
   const vijay = await prisma.faculty.create({
     data: {
-      name: 'Vijay Sharma',
+      name: 'Vijay Sir',
       slug: 'vijay-sharma',
       designation: 'Senior Lead Faculty & Academic Director',
       subjects: ['Accountancy', 'Business Law', 'Economics', 'Class 11 Commerce', 'Class 12 Commerce'],
       experience: 10,
       featured: true,
-      bio: 'Vijay Sharma is a highly experienced Chartered Accountant who has been leading professional CA, CS, and CMA coaching programs for over a decade. His simplified approach to accounting concepts, double-entry ledger methods, and legal frameworks has helped thousands of students secure top board scores and national ranks.',
+      bio: 'Vijay Sir is a highly experienced Chartered Accountant who has been leading professional CA, CS, and CMA coaching programs for over a decade. His simplified approach to accounting concepts, double-entry ledger methods, and legal frameworks has helped thousands of students secure top board scores and national ranks.',
       qualification: 'FCA (Fellow Chartered Accountant) | B.Com (Hons), SRCC',
       category: 'COMMERCE',
       order: 1,
       photo: '/faculty/vijay sharma.webp'
     },
   })
-  console.log('✅ Created default faculty member Vijay Sharma')
+  console.log('✅ Created default faculty member Vijay Sir')
 
   // 5. Create Courses
   const caFoundation = await prisma.course.create({
@@ -442,23 +442,23 @@ async function main() {
         order: 2,
       },
       {
-        id: "mahi-ca-found",
+        id: "mahi-cma-found",
         studentName: "Mahi",
-        photo: "/result/MAhi CA FOUNDATION.webp",
-        exam: "CA Foundation",
+        photo: "/result/Mahi CMA FOUNDATION.webp",
+        exam: "CMA Foundation",
         rank: "AIR 23",
         score: "348/400",
         year: 2025,
-        course: "CA Foundation Program",
+        course: "CMA Foundation Prep",
         quote: "Regular mock tests and feedback sessions from Vijay Sir helped me manage my exam time effectively.",
-        achievement: "CA Foundation Ranker",
+        achievement: "CMA Foundation Ranker",
         featured: true,
         order: 3,
       },
       {
         id: "rohit-ca-found",
         studentName: "Rohit Sharma",
-        photo: "/result/Rohit Sharma. CA Foundation.webp",
+        photo: "/result/Rohit Sharma CA FOUNDATION.webp",
         exam: "CA Foundation",
         rank: "AIR 15",
         score: "352/400",
@@ -514,7 +514,7 @@ async function main() {
       {
         id: "vidhi-cma-found",
         studentName: "Vidhi",
-        photo: "/result/Vidhi cma foundation.webp",
+        photo: "/result/Vidhi CMA FOUNDATION.webp",
         exam: "CMA Foundation",
         rank: "AIR 18",
         score: "344/400",
@@ -526,23 +526,23 @@ async function main() {
         order: 8,
       },
       {
-        id: "bhoomi-cma-found",
-        studentName: "Bhoomi",
-        photo: "/result/bhoomi cma foundation.webp",
-        exam: "CMA Foundation",
+        id: "priya-cseet",
+        studentName: "Priya",
+        photo: "/result/Priya CSEET.webp",
+        exam: "CSEET",
         rank: "Cleared",
-        score: "298/400",
+        score: "158/200",
         year: 2025,
-        course: "CMA Foundation Prep",
-        quote: "Special attention was given to costing basics, which helped me clear CMA Foundation easily.",
-        achievement: "Cleared CMA Foundation",
+        course: "CS Executive Entrance Test (CSEET)",
+        quote: "The teachers are extremely supportive and clarify every single doubt, no matter how small.",
+        achievement: "Passed CSEET",
         featured: true,
         order: 9,
       },
       {
         id: "ritesh-cma-found",
         studentName: "Ritesh",
-        photo: "/result/ritesh cma foundation.webp",
+        photo: "/result/Ritesh CMA FOUNDATION.webp",
         exam: "CMA Foundation",
         rank: "AIR 9",
         score: "360/400",
@@ -556,7 +556,7 @@ async function main() {
       {
         id: "sudhiksha-cma-inter",
         studentName: "Sudhiksha",
-        photo: "/result/sudhiksha cma inter.webp",
+        photo: "/result/Sudhiksha CMA INTERN.webp",
         exam: "CMA Intermediate",
         rank: "AIR 12",
         score: "576/800",
@@ -570,7 +570,7 @@ async function main() {
       {
         id: "vidhi-sharma-cma-found",
         studentName: "Vidhi Sharma",
-        photo: "/result/vidhi sharma cma foundation.webp",
+        photo: "/result/Vidhi Sharma CMA FOUNDATION.webp",
         exam: "CMA Foundation",
         rank: "Cleared",
         score: "310/400",

@@ -19,7 +19,7 @@ interface FacultyMarqueeProps {
 }
 
 const FALLBACK_FACULTY: FacultyMember[] = [
-  { id: "f1", name: "Vijay Sharma", slug: "vijay-sharma", designation: "Academic Director", subjects: ["Accounts", "Law"], photo: "/faculty/vijay sharma.webp", experience: 10 },
+  { id: "f1", name: "Vijay Sir", slug: "vijay-sharma", designation: "Academic Director", subjects: ["Accounts", "Law"], photo: "/faculty/vijay sharma.webp", experience: 10 },
 ];
 
 const SUBJECT_COLORS: Record<string, string> = {

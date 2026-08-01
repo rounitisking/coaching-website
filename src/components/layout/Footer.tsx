@@ -32,10 +32,10 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const footerLinks = {
   Courses: [
-    { label: "CA Foundation", href: "/courses/ca-foundation" },
-    { label: "CS Preparation", href: "/courses/cs" },
-    { label: "CMA Preparation", href: "/courses/cma" },
-    { label: "CUET Prep", href: "/courses/cuet" },
+    { label: "Chartered Accountancy (CA)", href: "/courses/ca-foundation" },
+    { label: "Company Secretary (CS)", href: "/courses/cs" },
+    { label: "Cost and Management Accountancy (CMA)", href: "/courses/cma" },
+    { label: "CUET ", href: "/courses/cuet" },
     { label: "Class 11 Commerce", href: "/courses/class-11-commerce" },
     { label: "Class 12 Commerce", href: "/courses/class-12-commerce" },
   ],

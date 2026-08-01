@@ -11,16 +11,16 @@ export function getMatchedResultPhoto(
   const RESULT_FILES = [
     { filename: "Anshul CSEET.webp", namePart: "anshul", examPart: "cs" },
     { filename: "Deepanshi CSEET.webp", namePart: "deepanshi", examPart: "cs" },
-    { filename: "MAhi CA FOUNDATION.webp", namePart: "mahi", examPart: "ca" },
-    { filename: "Rohit Sharma. CA Foundation.webp", namePart: "rohitsharma", examPart: "ca" },
+    { filename: "Mahi CMA FOUNDATION.webp", namePart: "mahi", examPart: "cma" },
+    { filename: "Priya CSEET.webp", namePart: "priya", examPart: "cs" },
+    { filename: "Ritesh CMA FOUNDATION.webp", namePart: "ritesh", examPart: "cma" },
+    { filename: "Rohit Sharma CA FOUNDATION.webp", namePart: "rohit", examPart: "ca" },
     { filename: "Shivani CSEET.webp", namePart: "shivani", examPart: "cs" },
     { filename: "Shreya CA FOUNDATION.webp", namePart: "shreya", examPart: "ca" },
+    { filename: "Sudhiksha CMA INTERN.webp", namePart: "sudhiksha", examPart: "cma" },
     { filename: "Tanishaka CSEET.webp", namePart: "tanishaka", examPart: "cs" },
-    { filename: "Vidhi cma foundation.webp", namePart: "vidhi", examPart: "cma" },
-    { filename: "bhoomi cma foundation.webp", namePart: "bhoomi", examPart: "cma" },
-    { filename: "ritesh cma foundation.webp", namePart: "ritesh", examPart: "cma" },
-    { filename: "sudhiksha cma inter.webp", namePart: "sudhiksha", examPart: "cma" },
-    { filename: "vidhi sharma cma foundation.webp", namePart: "vidhisharma", examPart: "cma" },
+    { filename: "Vidhi CMA FOUNDATION.webp", namePart: "vidhi", examPart: "cma" },
+    { filename: "Vidhi Sharma CMA FOUNDATION.webp", namePart: "vidhisharma", examPart: "cma" },
   ];
   
   // A match must satisfy:

@@ -57,15 +57,15 @@
 
 /* ─── CSS Custom Properties (Light/Dark) ────────────────────────────────── */
 :root {
-  --bg-primary:   #F8FAFC;
+  --bg-primary:   #FFFFFF;
   --bg-secondary: #FFFFFF;
   --bg-card:      #FFFFFF;
-  --bg-muted:     #EEF4FF;
+  --bg-muted:     #FFFFFF;
   --text-primary:   #0F172A;
   --text-secondary: #334155;
   --text-muted:     #64748B;
   --border:         #E2E8F0;
-  --border-subtle:  #F1F5F9;
+  --border-subtle:  #FFFFFF;
   --brand-primary:   #1E3259;
   --brand-secondary: #2F4B7C;
   --accent:          #4F7DFF;
