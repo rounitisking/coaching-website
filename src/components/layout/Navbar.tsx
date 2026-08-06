@@ -100,10 +100,8 @@ const COURSES_MEGA = [
 // ── Faculty Dropdown Data ────────────────────────────────────────────────────
 
 const FACULTY_DROPDOWN = [
-  { label: "Commerce Faculty", href: "/faculty/commerce", icon: BookOpen, color: "#2563eb" },
-  /* { label: "Science Faculty", href: "/faculty/science", icon: FlaskConical, color: "#7c3aed" }, */
-  { label: "School Faculty", href: "/faculty/school", icon: School, color: "#059669" },
-  { label: "Apply For Job", href: "/apply-for-job", icon: Briefcase, color: "#d97706" },
+  { label: "Our Faculty", href: "/faculty", icon: Users, color: "#2563eb" },
+  { label: "Become a Faculty", href: "/become-a-faculty", icon: Briefcase, color: "#d97706" },
 ];
 
 // ── Flat Navigation Links ────────────────────────────────────────────────────
@@ -126,6 +124,36 @@ export function Navbar() {
   const [activeMobileSection, setActiveMobileSection] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
+  const renderFlatLink = (href: string, label: string) => {
+    const isActive = pathname.startsWith(href);
+    return (
+      <Link
+        key={href}
+        href={href}
+        role="menuitem"
+        className={cn(
+          "px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap nav-link-premium",
+          isActive
+            ? "active text-[#D4AF37] bg-white/10"
+            : "text-white/80 hover:text-[#D4AF37] hover:bg-white/10"
+        )}
+      >
+        {label}
+      </Link>
+    );
+  };
+  const renderMobileFlatLink = (href: string, label: string) => {
+    return (
+      <Link
+        key={href}
+        href={href}
+        onClick={() => setMobileOpen(false)}
+        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-muted)] min-h-[44px]"
+      >
+        {label}
+      </Link>
+    );
+  };
   const coursesTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const facultyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -256,7 +284,7 @@ export function Navbar() {
             </button>
 
             {/* Mobile Logo */}
-            <Link href="/" className="flex items-center flex-shrink-0" aria-label="Academica Institute Home">
+            <Link href="/" className="flex items-center gap-2 flex-shrink-0" aria-label="Academica Institute Home">
               <div className="relative h-10 w-10 rounded-full bg-white border border-[var(--brand-secondary)]/20 flex items-center justify-center p-1.5 shadow-sm">
                 <Image
                   src="/logo.webp"
@@ -267,6 +295,10 @@ export function Navbar() {
                   priority
                 />
               </div>
+              <span className="flex flex-col text-left font-black text-white leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>
+                <span className="text-[11px] tracking-wide">Academica</span>
+                <span className="text-[9px] text-blue-200">Institute</span>
+              </span>
             </Link>
 
             <div className="flex-1" />
@@ -293,7 +325,7 @@ export function Navbar() {
           {/* ── DESKTOP HEADER ────────────────────────────────────────── */}
           <div className="hidden lg:flex items-center justify-between h-16">
             {/* Desktop Logo */}
-            <Link href="/" className="flex items-center flex-shrink-0" aria-label="Academica Institute Home">
+            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0" aria-label="Academica Institute Home">
               <div className="relative h-11 w-11 rounded-full bg-white border border-[var(--brand-secondary)]/20 flex items-center justify-center p-1.5 shadow-sm">
                 <Image
                   src="/logo.webp"
@@ -304,6 +336,10 @@ export function Navbar() {
                   priority
                 />
               </div>
+              <span className="flex flex-col text-left font-black text-white leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>
+                <span className="text-sm tracking-wide">Academica</span>
+                <span className="text-xs text-blue-200">Institute</span>
+              </span>
             </Link>
 
             {/* Desktop nav links */}
@@ -442,6 +478,14 @@ export function Navbar() {
                 </AnimatePresence>
               </div>
 
+
+
+              {/* Notes */}
+              {renderFlatLink("/notes", "Notes")}
+
+              {/* Test Series */}
+              {renderFlatLink("/test-series", "Test Series")}
+
               {/* Faculty Dropdown */}
               <div className="relative" onMouseEnter={openFaculty} onMouseLeave={closeFaculty}>
                 <button
@@ -450,7 +494,7 @@ export function Navbar() {
                   aria-expanded={facultyOpen}
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all nav-link-premium",
-                    pathname.startsWith("/faculty") || pathname === "/apply-for-job"
+                    pathname.startsWith("/faculty") || pathname === "/become-a-faculty" || pathname === "/apply-for-job"
                       ? "active text-[#D4AF37] bg-white/10"
                       : "text-white/80 hover:text-[#D4AF37] hover:bg-white/10"
                   )}
@@ -489,22 +533,14 @@ export function Navbar() {
                 </AnimatePresence>
               </div>
 
-              {/* Flat links */}
-              {FLAT_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  role="menuitem"
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap nav-link-premium",
-                    pathname.startsWith(link.href)
-                      ? "active text-[#D4AF37] bg-white/10"
-                      : "text-white/80 hover:text-[#D4AF37] hover:bg-white/10"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {/* Blog */}
+              {renderFlatLink("/blog", "Blog")}
+
+              {/* Gallery */}
+              {renderFlatLink("/gallery", "Gallery")}
+
+              {/* Contact */}
+              {renderFlatLink("/contact", "Contact")}
             </div>
 
             {/* Right side actions */}
@@ -709,6 +745,14 @@ export function Navbar() {
                     </AnimatePresence>
                   </div>
 
+
+
+                  {/* Notes */}
+                  {renderMobileFlatLink("/notes", "Notes")}
+
+                  {/* Test Series */}
+                  {renderMobileFlatLink("/test-series", "Test Series")}
+
                   {/* Faculty Accordion */}
                   <div>
                     <button
@@ -746,17 +790,14 @@ export function Navbar() {
                     </AnimatePresence>
                   </div>
 
-                  {/* Flat links */}
-                  {FLAT_LINKS.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-muted)] min-h-[44px]"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                  {/* Blog */}
+                  {renderMobileFlatLink("/blog", "Blog")}
+
+                  {/* Gallery */}
+                  {renderMobileFlatLink("/gallery", "Gallery")}
+
+                  {/* Contact */}
+                  {renderMobileFlatLink("/contact", "Contact")}
                 </div>
 
                 {/* Bottom actions */}

@@ -169,9 +169,19 @@ export function CourseTabs({
               <h3 className="text-lg font-bold mb-3" style={{ color: "var(--text-primary)" }}>
                 Personal Mentorship &amp; Support
               </h3>
-              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
-                {mentorship || "Get regular doubt-solving sessions, 1-on-1 mentorship with experts, and weekly practice worksheets tailored to your learning pace."}
-              </p>
+              <div className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                {renderFormattedOverview(`Our professional mentorship program is designed to guide you through every step of your academic journey under the direct supervision of expert faculty.
+
+- **One-on-One Mentorship**: Personalized 1-on-1 sessions to discuss your unique challenges, strength areas, and personal academic goals.
+- **Expert Faculty Guidance**: Direct, regular consultation with experienced professionals (CAs, CSs, and academic experts) who have a proven track record.
+- **Personalized Learning Plans**: Customized study schedules and strategies tailored to your learning pace and targets.
+- **Regular Doubt-Solving Sessions**: Live doubt-clearing sessions and rapid response channels to make sure you never get stuck.
+- **Continuous Progress Monitoring & Performance Tracking**: Detailed tracking of your syllabus completion and review checkpoints.
+- **Mock Tests & Assessments**: Simulated exam papers evaluated professionally with individualized feedback.
+- **Exam Strategy & Time Management Guidance**: Workshops on writing speed, managing stress, and exam-day planning.
+- **Motivation & Accountability**: Guided check-ins to maintain consistent momentum and keep you focused on your target.
+- **Career Guidance**: Practical guidance on future opportunities, professional pathways, and career development.`)}
+              </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 pt-4 border-t border-[var(--border)]">

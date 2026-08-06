@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, Search, Users, SlidersHorizontal, ArrowUpDown, Clock, ArrowRight } from "lucide-react";
+import { BookOpen, Search, Users, Clock, ArrowRight, Play } from "lucide-react";
 
 type Course = {
   id: string;
@@ -44,13 +44,30 @@ const categoryColors: Record<string, string> = {
   SCHOOL: "linear-gradient(135deg, #059669, #047857)",
 };
 
+function getCourseImage(slug: string, thumbnail: string | null | undefined): string {
+  if (thumbnail) return thumbnail;
+  const norm = slug.toLowerCase();
+  if (norm.includes("ca-foundation") || norm.includes("ca_foundation")) return "/bg/ca foundation.png";
+  if (norm.includes("ca-intermediate") || norm.includes("ca_intermediate")) return "/bg/ca intermediate.png";
+  if (norm.includes("ca-final") || norm.includes("ca_final")) return "/bg/ca final.png";
+  if (norm.includes("cs-foundation") || norm.includes("cs_foundation") || norm.includes("cseet")) return "/bg/cs foundation.png";
+  if (norm.includes("cs-executive") || norm.includes("cs_executive")) return "/bg/cs executive.png";
+  if (norm.includes("cs-professional") || norm.includes("cs_professional")) return "/bg/cs professional.png";
+  if (norm.includes("cma-foundation") || norm.includes("cma_foundation")) return "/bg/cma foundation.png";
+  if (norm.includes("cma-intermediate") || norm.includes("cma_intermediate")) return "/bg/cma intermediate.png";
+  if (norm.includes("cma-final") || norm.includes("cma_final")) return "/bg/cma final.png";
+  if (norm.includes("class-9") || norm.includes("class_9")) return "/bg/class 9.png";
+  if (norm.includes("class-10") || norm.includes("class_10")) return "/bg/class 10.png";
+  if (norm.includes("class-11") || norm.includes("class_11")) return "/bg/class 11.png";
+  if (norm.includes("class-12") || norm.includes("class_12")) return "/bg/class 12.png";
+  return "/bg/ca foundation.png";
+}
+
 export default function CoursesClient({ initialCourses, categories, faculty, initialCategory, initialSearch }: Props) {
   const [activeTab, setActiveTab] = useState(initialCategory || "ALL");
   const [search, setSearch] = useState(initialSearch || "");
   const [selectedFaculty, setSelectedFaculty] = useState("ALL");
-  const [maxPrice, setMaxPrice] = useState(60000);
   const [sortOrder, setSortOrder] = useState("DEFAULT");
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const filtered = initialCourses.filter((course) => {
     // Category match
@@ -63,11 +80,8 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
     
     // Faculty match
     const matchFaculty = selectedFaculty === "ALL" || (course.faculty && course.faculty.id === selectedFaculty);
-    
-    // Price match
-    const matchPrice = course.price <= maxPrice;
 
-    return matchCategory && matchSearch && matchFaculty && matchPrice;
+    return matchCategory && matchSearch && matchFaculty;
   });
 
   // Sort
@@ -97,9 +111,9 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
 
       {/* Search and Filters Bar */}
       <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-6 mb-8 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
           {/* Search */}
-          <div className="relative md:col-span-4">
+          <div className="relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               className="input pl-9"
@@ -110,7 +124,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
           </div>
 
           {/* Faculty Dropdown */}
-          <div className="md:col-span-3">
+          <div>
             <select
               value={selectedFaculty}
               onChange={(e) => setSelectedFaculty(e.target.value)}
@@ -126,7 +140,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
           </div>
 
           {/* Sort Dropdown */}
-          <div className="md:col-span-3">
+          <div>
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
@@ -137,41 +151,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
               <option value="PRICE_DESC">Price: High to Low</option>
             </select>
           </div>
-
-          {/* Filters Toggle Button (Mobile/Tablet) */}
-          <div className="md:col-span-2">
-            <button
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="btn-secondary w-full justify-center text-sm py-2.5 flex items-center gap-2"
-            >
-              <SlidersHorizontal size={14} /> Price Filter
-            </button>
-          </div>
         </div>
-
-        {/* Price Slider Overlay */}
-        {(showMobileFilters || true) && (
-          <div className="mt-5 pt-5 border-t border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex-1 max-w-md">
-              <div className="flex justify-between text-xs font-semibold text-[var(--text-secondary)] mb-2">
-                <span>Price Limit</span>
-                <span className="text-blue-600 dark:text-blue-400">Up to ₹{maxPrice.toLocaleString("en-IN")}</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="60000"
-                step="500"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
-              />
-            </div>
-            <div className="text-xs text-[var(--text-muted)] font-medium">
-              Showing {sorted.length} courses matching price limit
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Grid of Courses */}
@@ -181,19 +161,15 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
 
           return (
             <div key={course.id} className="card overflow-hidden group flex flex-col justify-between text-left">
-              <div>
+              <Link href={`/courses/${course.slug}`} className="block no-underline flex-1">
                 <div className="relative h-48 overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center">
-                  {course.thumbnail ? (
-                    <Image
-                      src={course.thumbnail}
-                      alt={course.title}
-                      fill
-                      className="object-cover transition-transform duration-75 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <BookOpen size={48} className="text-blue-500 opacity-30" />
-                  )}
+                  <Image
+                    src={getCourseImage(course.slug, course.thumbnail)}
+                    alt={course.title}
+                    fill
+                    className="object-cover transition-transform duration-75 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                   <div
                     className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-wider"
@@ -228,7 +204,7 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
 
               <div className="p-6 pt-0 border-t border-slate-100 dark:border-slate-900 mt-auto">
                 <div className="flex items-center justify-between py-4">
@@ -252,16 +228,16 @@ export default function CoursesClient({ initialCourses, categories, faculty, ini
 
                 <div className="flex gap-2">
                   <Link
-                    href={`/courses/${course.slug}`}
-                    className="flex-1 btn-secondary text-xs py-2.5 px-3 justify-center rounded-xl font-bold"
+                    href={`/demo-classes?course=${encodeURIComponent(course.title)}`}
+                    className="flex-1 btn-secondary text-xs py-2.5 px-3 justify-center rounded-xl font-bold flex items-center gap-1.5"
                   >
-                    Learn More <ArrowRight size={14} />
+                    <Play size={13} className="fill-current" /> Demo Classes
                   </Link>
                   <Link
                     href={`/checkout?type=course&id=${course.id}`}
                     className="flex-1 btn-primary text-xs py-2.5 px-3 justify-center rounded-xl font-bold"
                   >
-                    Enroll Now
+                    Purchase Now
                   </Link>
                 </div>
               </div>

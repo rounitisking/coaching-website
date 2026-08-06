@@ -41,16 +41,18 @@ export default async function CoursesPage({
   ];
 
   const FALLBACK_FACULTY = [
-    { id: "f1", name: "CA Rajesh Kumar" },
-    { id: "f2", name: "Prof. Priya Sharma" },
-    { id: "f3", name: "CA Amit Verma" },
+    { id: "vijay-sharma", name: "Vijay Sir" }
   ];
 
   const FALLBACK_COURSES = [
-    { id: "1", title: "CA Foundation", slug: "ca-foundation", description: "Complete preparation for CA Foundation exams with concept clarity.", price: 12000, mrp: 18000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "f1", name: "CA Rajesh Kumar" }, duration: "6 months", level: "Beginner" },
-    { id: "2", title: "CA Intermediate", slug: "ca-intermediate", description: "Master CA Intermediate with structured modules and mock tests.", price: 18000, mrp: 25000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "f3", name: "CA Amit Verma" }, duration: "12 months", level: "Intermediate" },
-    { id: "3", title: "IIT JEE Main & Advanced", slug: "iit-jee", description: "Cracking JEE Mains and Advanced with specialized math & physics coaches.", price: 45000, mrp: 60000, thumbnail: null, category: { type: "SCIENCE", name: "Science" }, faculty: { id: "f2", name: "Prof. Priya Sharma" }, duration: "2 years", level: "Advanced" },
-    { id: "4", title: "Class 12 Commerce Boards", slug: "class-12-commerce", description: "Class 12 board preparation for Accountancy, Economics & Business Studies.", price: 15000, mrp: 20000, thumbnail: null, category: { type: "SCHOOL", name: "School Coaching" }, faculty: { id: "f1", name: "CA Rajesh Kumar" }, duration: "1 year", level: "Boards" },
+    { id: "1", title: "CA Foundation", slug: "ca-foundation", description: "Complete preparation for CA Foundation exams with conceptual clarity.", price: 12000, mrp: 18000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "6 months", level: "Beginner" },
+    { id: "2", title: "CA Intermediate", slug: "ca-intermediate", description: "Master CA Intermediate with structured modules and mock tests.", price: 18000, mrp: 25000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "12 months", level: "Intermediate" },
+    { id: "3", title: "CS (CSEET)", slug: "cs-foundation", description: "All-in-one prep package for Company Secretary Executive Entrance Test.", price: 10000, mrp: 15000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "4 months", level: "Beginner" },
+    { id: "4", title: "CS Executive", slug: "cs-executive", description: "Step up your career with comprehensive CS Executive modules.", price: 22000, mrp: 30000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "10 months", level: "Intermediate" },
+    { id: "5", title: "CMA Foundation", slug: "cma-foundation", description: "Learn fundamentals of costing and financial accounting.", price: 11000, mrp: 16000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "5 months", level: "Beginner" },
+    { id: "6", title: "CMA Intermediate", slug: "cma-intermediate", description: "Prepare for CMA Intermediate with top faculty guidance.", price: 19000, mrp: 26000, thumbnail: null, category: { type: "COMMERCE", name: "Commerce" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "12 months", level: "Intermediate" },
+    { id: "7", title: "Class 11 Commerce", slug: "class-11-commerce", description: "Concept-building for class 11 Commerce boards & final exams.", price: 15000, mrp: 20000, thumbnail: null, category: { type: "SCHOOL", name: "School Coaching" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "1 year", level: "School" },
+    { id: "8", title: "Class 12 Commerce", slug: "class-12-commerce", description: "Excellence batch for Class 12 board exams preparation.", price: 16000, mrp: 22000, thumbnail: null, category: { type: "SCHOOL", name: "School Coaching" }, faculty: { id: "vijay-sharma", name: "Vijay Sir" }, duration: "1 year", level: "Boards" },
   ];
 
   // Original assignments commented out:

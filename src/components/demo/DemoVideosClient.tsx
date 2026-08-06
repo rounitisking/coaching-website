@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search, Filter, Play, Clock, User, BookOpen } from "lucide-react";
 import { YouTubeThumbnail } from "@/components/home/YouTubeThumbnail";
 
@@ -107,14 +108,32 @@ function DemoVideoCard({ video }: { video: DemoVideo }) {
             </div>
           )}
         </div>
+
+        <div className="mt-2 pt-2 border-t border-[var(--border)]/50">
+          <span className="btn-secondary w-full justify-center text-xs py-2 flex items-center gap-1.5 font-bold group-hover:bg-[var(--brand-secondary)] group-hover:text-white transition-all">
+            <Play size={12} className="fill-current" /> Watch Demo
+          </span>
+        </div>
       </div>
     </a>
   );
 }
 
 export function DemoVideosClient({ videos }: { videos: DemoVideo[] }) {
+  const searchParams = useSearchParams();
+  const initialCourse = useMemo(() => {
+    const p = searchParams.get("course");
+    if (!p) return "all";
+    const found = videos.find(
+      (v) =>
+        v.course?.slug?.toLowerCase() === p.toLowerCase() ||
+        v.course?.title?.toLowerCase() === p.toLowerCase()
+    );
+    return found?.course?.title || p;
+  }, [searchParams, videos]);
+
   const [search, setSearch] = useState("");
-  const [courseFilter, setCourseFilter] = useState("all");
+  const [courseFilter, setCourseFilter] = useState(initialCourse);
   const [subjectFilter, setSubjectFilter] = useState("all");
   const [facultyFilter, setFacultyFilter] = useState("all");
   const [visibleCount, setVisibleCount] = useState(6);
@@ -145,7 +164,10 @@ export function DemoVideosClient({ videos }: { videos: DemoVideo[] }) {
         v.subject?.toLowerCase().includes(search.toLowerCase()) ||
         v.description?.toLowerCase().includes(search.toLowerCase());
 
-      const matchCourse = courseFilter === "all" || v.course?.title === courseFilter;
+      const matchCourse = courseFilter === "all" || 
+        v.course?.title === courseFilter || 
+        v.course?.slug === courseFilter || 
+        v.title.toLowerCase().includes(courseFilter.toLowerCase());
       const matchSubject = subjectFilter === "all" || classifyVideoCategory(v) === subjectFilter;
       const matchFaculty = facultyFilter === "all" || v.faculty?.name === facultyFilter;
 
@@ -191,14 +213,14 @@ export function DemoVideosClient({ videos }: { videos: DemoVideo[] }) {
           ))}
         </select>
 
-        {/* Subject Filter */}
+        {/* Category Filter */}
         <select
           value={subjectFilter}
           onChange={(e) => setSubjectFilter(e.target.value)}
           className="px-3 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--brand-secondary)] transition-colors"
-          aria-label="Filter by subject"
+          aria-label="Filter by category"
         >
-          <option value="all">All Subjects</option>
+          <option value="all">All Categories</option>
           <option value="CA">CA</option>
           <option value="CS">CS</option>
           <option value="CMA">CMA</option>

@@ -389,16 +389,23 @@ export default async function CourseDetailPage({ params }: PageProps) {
                   href={`/checkout?type=course&id=${displayCourse.id}`}
                   className="btn-primary w-full justify-center font-bold py-3"
                 >
-                  Enroll Now
+                  Purchase Now
                 </Link>
               ) : (
                 <Link
                   href={`/auth?callbackUrl=/courses/${displayCourse.slug}`}
                   className="btn-primary w-full justify-center font-bold py-3"
                 >
-                  <Lock size={16} /> Login to Enroll
+                  <Lock size={16} /> Login to Purchase
                 </Link>
               )}
+
+              <Link
+                href={`/demo-classes?course=${encodeURIComponent(displayCourse.title)}`}
+                className="btn-accent w-full justify-center text-sm py-2.5 flex items-center gap-2 font-bold"
+              >
+                Watch Demo Classes
+              </Link>
 
               <Link
                 href="/contact"

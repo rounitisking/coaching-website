@@ -72,8 +72,8 @@ export async function FacultyListPage({ category, title, description, eyebrow }:
           <p className="text-blue-100 text-base md:text-lg max-w-xl mx-auto mb-8">{description}</p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/faculty" className="btn-accent btn-lg font-bold">All Faculty</Link>
-            <Link href="/apply-for-job" className="btn-lg" style={{ background: "rgba(255,255,255,0.1)", color: "#fff", border: "1.5px solid rgba(255,255,255,0.25)", borderRadius: "0.75rem" }}>
-              Apply For Job
+            <Link href="/become-a-faculty" className="btn-lg" style={{ background: "rgba(255,255,255,0.1)", color: "#fff", border: "1.5px solid rgba(255,255,255,0.25)", borderRadius: "0.75rem" }}>
+              Become a Faculty
             </Link>
           </div>
         </div>
